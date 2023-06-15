@@ -1,4 +1,4 @@
-package com.example.actionrecorder;
+package com.brnd08.action_recorder;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

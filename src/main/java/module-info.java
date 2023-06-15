@@ -3,6 +3,6 @@ module com.example.actionrecorder {
     requires javafx.fxml;
 
 
-    opens com.example.actionrecorder to javafx.fxml;
-    exports com.example.actionrecorder;
+    opens com.brnd08.action_recorder to javafx.fxml;
+    exports com.brnd08.action_recorder;
 }
