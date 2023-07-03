@@ -19,7 +19,7 @@
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="165.0" prefWidth="600.0" style="-fx-background-color: rgba(250,250,250,0.8); -fx-border-width: 3; -fx-border-color: black; -fx-border-radius: 5; -fx-background-radius: 5;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.brnd08.action_recorder.PrincipalViewController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="165.0" prefWidth="600.0" style="-fx-background-color: rgba(250,250,250,0.8); -fx-border-width: 3; -fx-border-color: black; -fx-border-radius: 5; -fx-background-radius: 5;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.brnd08.action_recorder.views.main_view.MainViewController">
     <children>
         <GridPane layoutX="-2.0" layoutY="-5.0" prefHeight="165.0" prefWidth="600.0" style="-fx-border-radius: 5;">
             <columnConstraints>
@@ -67,7 +67,7 @@
                                     <graphic>
                                         <ImageView fitHeight="25.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
                                             <image>
-                                                <Image url="@images/setting.png" />
+                                                <Image url="@../images/setting.png" />
                                             </image>
                                         </ImageView>
                                     </graphic>
@@ -88,7 +88,7 @@
                                     <children>
                                         <ImageView fitHeight="143.0" fitWidth="145.0" layoutX="27.0" layoutY="4.0" rotate="5.0">
                                             <image>
-                                                <Image url="@images/teclado-de-computadora.png" />
+                                                <Image url="@../images/keyboard.png" />
                                             </image>
                                             <effect>
                                                 <DropShadow blurType="GAUSSIAN" color="#26a3c6" offsetX="-5.0" offsetY="-6.0" />
@@ -96,7 +96,7 @@
                                         </ImageView>
                                         <ImageView fitHeight="77.0" fitWidth="106.0" layoutX="172.0" layoutY="37.0" opacity="0.79" rotate="-12.5">
                                             <image>
-                                                <Image url="@images/1089013.png" />
+                                                <Image url="@../images/mouse.png" />
                                             </image>
                                             <effect>
                                                 <DropShadow blurType="GAUSSIAN" color="#14ccff" offsetX="-5.0" offsetY="-2.0" spread="0.05" />

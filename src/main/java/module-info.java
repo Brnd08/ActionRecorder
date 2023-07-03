@@ -4,6 +4,7 @@ module com.example.actionrecorder {
     requires java.logging;
 
 
-    opens com.brnd08.action_recorder to javafx.fxml;
-    exports com.brnd08.action_recorder;
+    opens com.brnd08.action_recorder.views.main_view to javafx.fxml;
+
+    exports com.brnd08.action_recorder.views.main_view;
 }

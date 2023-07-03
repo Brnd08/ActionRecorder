@@ -1,4 +1,4 @@
-package com.brnd08.action_recorder;
+package com.brnd08.action_recorder.views.main_view;
 
 import com.brnd08.action_recorder.utils.StagePosition;
 import com.brnd08.action_recorder.utils.StagePositioner;
@@ -29,7 +29,7 @@ public class Main extends Application {
         }
 
         // Load Fxml view
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("principal-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("mainView.fxml"));
         Parent principalRoot = fxmlLoader.load();
         // Add the fxml view to a new scene
         Scene principalScene = new Scene(principalRoot);
@@ -46,7 +46,7 @@ public class Main extends Application {
         principalStage.getIcons().add(0,
                 new Image(
                         Objects.requireNonNull(
-                                getClass().getResourceAsStream("actionRecorderIcon.gif")
+                                getClass().getResourceAsStream("appIcon.gif")
                         )
                 )
         );

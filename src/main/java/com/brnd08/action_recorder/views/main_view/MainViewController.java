@@ -1,4 +1,4 @@
-package com.brnd08.action_recorder;
+package com.brnd08.action_recorder.views.main_view;
 
 import com.brnd08.action_recorder.utils.StagePositioner;
 import javafx.event.ActionEvent;
@@ -8,7 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-public class PrincipalViewController {
+public class MainViewController {
 
     @FXML
     Button minimizeBttn, closeBttn;
