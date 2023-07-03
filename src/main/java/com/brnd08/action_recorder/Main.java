@@ -4,12 +4,10 @@ import com.brnd08.action_recorder.utils.StagePosition;
 import com.brnd08.action_recorder.utils.StagePositioner;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -44,8 +42,14 @@ public class Main extends Application {
         principalStage.setScene(principalScene);
         principalStage.setTitle("Action Recorder || By brdn");
         principalStage.setResizable(false);
-        // Adds System bar application icon
-        principalStage.getIcons().add(0, new Image(Objects.requireNonNull(getClass().getResourceAsStream("actionRecorderIcon.gif"))));
+        // Adds taskbar icon
+        principalStage.getIcons().add(0,
+                new Image(
+                        Objects.requireNonNull(
+                                getClass().getResourceAsStream("actionRecorderIcon.gif")
+                        )
+                )
+        );
 
         // makes stage draggable by mouse interaction
         stagePositioner.addStageDragFucntionallity(principalScene);
