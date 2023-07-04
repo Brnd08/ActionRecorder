@@ -7,22 +7,16 @@ import javafx.stage.Stage;
 
 public class StagePositioner {
 
-    private final Stage stage;
-    
-    
     // Coordinates Offsets for window drag action/motion
-    private double xOffset;
-    private double yOffset;
+    private static double xOffset;
+    private static double yOffset;
 
-    public StagePositioner(Stage stage) {
-        this.stage = stage;
-    }
 
     /**
      * Makes the specified Stage draggable based on given scene interactions
      * @param scene The scene to link to the drag motion/action
      */
-    public void addStageDragFucntionallity(Scene scene){
+    public static void addStageDragFucntionallity(Stage stage, Scene scene){
         scene.setOnMousePressed(event -> { // gets the offsets between mouse click and window screen coordinates
             xOffset = stage.getX() - event.getScreenX();
             yOffset = stage.getY() - event.getScreenY();
@@ -39,7 +33,7 @@ public class StagePositioner {
      *
      * @param position The position to be applied.
      */
-    public void setStagePosition( StagePosition position) {
+    public static void setStagePosition(Stage stage,  StagePosition position) {
         // Gets the visible bounds of the screen as a Rectangle2D object
         Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
 
@@ -48,8 +42,8 @@ public class StagePositioner {
         double screenWidth = screenBounds.getWidth();
 
         // Stage's height and width
-        double stageHeight = this.stage.getHeight();
-        double stageWidth = this.stage.getWidth();
+        double stageHeight = stage.getHeight();
+        double stageWidth = stage.getWidth();
 
         // Stage's coordinates to be applied
         double stageXCoordinate = 0d;
@@ -77,8 +71,8 @@ public class StagePositioner {
                 stageXCoordinate = (screenWidth - stageWidth)/2;
             }
         }
-        this.stage.setX(stageXCoordinate);
-        this.stage.setY(stageYCoordinate);
+        stage.setX(stageXCoordinate);
+        stage.setY(stageYCoordinate);
     }
 
 }
