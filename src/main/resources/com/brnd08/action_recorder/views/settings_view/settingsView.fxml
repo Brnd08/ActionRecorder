@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.effect.Light.Distant?>
+<?import javafx.scene.effect.Lighting?>
+<?import javafx.scene.effect.Reflection?>
+<?import javafx.scene.effect.Shadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.paint.RadialGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="165.0" prefWidth="600.0" style="-fx-background-color: rgba(250,250,250,0.8); -fx-border-width: 3; -fx-border-color: black; -fx-border-radius: 5; -fx-background-radius: 5;"
+            xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.brnd08.action_recorder.views.settings_view.SettingsViewController">
+    <children>
+        <GridPane layoutX="-2.0" layoutY="-5.0" prefHeight="165.0" prefWidth="600.0">
+            <columnConstraints>
+                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints maxHeight="160.0" minHeight="10.0" prefHeight="37.0" valignment="BOTTOM" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="179.0" minHeight="5.0" prefHeight="128.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+            <children>
+                <GridPane prefHeight="165.0" prefWidth="600.0" GridPane.rowIndex="1">
+                    <rowConstraints>
+                        <RowConstraints fillHeight="false" minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <columnConstraints>
+                        <ColumnConstraints />
+                    </columnConstraints>
+                    <children>
+                        <Pane prefHeight="128.0" prefWidth="598.0" style="-fx-background-color: rgba(250,250,250,0);">
+                            <children>
+                                <Text layoutX="44.0" layoutY="51.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Posicion inicial de la Ventana:">
+                                    <font>
+                                        <Font name="Georgia Italic" size="15.0" />
+                                    </font>
+<!--                                    <effect>-->
+<!--                                        <Lighting bumpInput="$null" diffuseConstant="0.86" specularConstant="0.0" specularExponent="40.0" surfaceScale="4.88">-->
+<!--                                            <light>-->
+<!--                                                <Light.Distant color="#d71919" />-->
+<!--                                            </light>-->
+<!--                                        </Lighting>-->
+<!--                                    </effect>-->
+                                </Text>
+                                <ChoiceBox fx:id="positionChoice" layoutX="281.0" layoutY="33.0" prefHeight="25.0" prefWidth="175.0">
+                                    <tooltip>
+                                        <Tooltip text="Posicion de la ventana al iniciar el Programa" />
+                                    </tooltip></ChoiceBox>
+                                <Button layoutX="496.0" layoutY="27.0" mnemonicParsing="false" onAction="#showMainView">
+                                    <graphic>
+                                        <ImageView fitHeight="47.0" fitWidth="47.0" pickOnBounds="true" preserveRatio="true">
+                                            <image>
+                                                <Image url="@../images/back.png" />
+                                            </image>
+                                        </ImageView>
+                                    </graphic>
+                                    <tooltip>
+                                        <Tooltip text="regresar a inicio" />
+                                    </tooltip>
+                                </Button>
+                            </children>
+                        </Pane>
+                    </children>
+                </GridPane>
+                <GridPane prefHeight="69.0" prefWidth="323.0">
+                    <columnConstraints>
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="545.0" minWidth="0.0" prefWidth="389.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="454.0" minWidth="0.0" prefWidth="157.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <children>
+                        <GridPane prefHeight="69.0" prefWidth="160.0" GridPane.columnIndex="1">
+                            <columnConstraints>
+                                <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                            </rowConstraints>
+                            <children>
+                                <Button fx:id="closeBttn" mnemonicParsing="false" onAction="#closeStage" style="-fx-background-color: rgba(0,0,0,0);" text="x" textAlignment="CENTER" textFill="#000000">
+                                    <font>
+                                        <Font name="Corbel" size="20.0" />
+                                    </font>
+                                    <cursor>
+                                        <Cursor fx:constant="HAND" />
+                                    </cursor>
+                                    <!--                                    <effect>-->
+                                    <!--                                        <Lighting diffuseConstant="1.05" specularConstant="0.51" specularExponent="0.0"-->
+                                    <!--                                                  surfaceScale="6.5">-->
+                                    <!--                                            <bumpInput>-->
+                                    <!--                                                <Shadow/>-->
+                                    <!--                                            </bumpInput>-->
+                                    <!--                                                                                        <light>-->
+                                    <!--                                                                                            <Light.Distant azimuth="360.0" color="#090eff" elevation="360.0" />-->
+                                    <!--                                                                                        </light>-->
+                                    <!--                                        </Lighting>-->
+                                    <!--                                    </effect>-->
+                                    <tooltip>
+                                        <Tooltip contentDisplay="TEXT_ONLY" text="Cerrar">
+                                            <font>
+                                                <Font size="9.0" />
+                                            </font>
+                                        </Tooltip>
+                                    </tooltip>
+                                </Button>
+                                <Button fx:id="minimizeBttn" alignment="TOP_CENTER" contentDisplay="TEXT_ONLY" ellipsisString="" mnemonicParsing="false" onAction="#minimizeStage" prefWidth="50.0" style="-fx-background-color: rgba(0,0,0,0); -fx-translate-x: -25px; -fx-translate-y: -7px;" text="_" textAlignment="CENTER" textFill="#000000">
+                                    <font>
+                                        <Font name="Corbel Bold" size="20.0" />
+                                    </font>
+                                    <cursor>
+                                        <Cursor fx:constant="HAND" />
+                                    </cursor>
+                                    <!--                                    <effect>-->
+                                    <!--                                        <Lighting diffuseConstant="1.05" specularConstant="0.51" specularExponent="0.0"-->
+                                    <!--                                                  surfaceScale="6.5">-->
+                                    <!--                                            <bumpInput>-->
+                                    <!--                                                <Shadow/>-->
+                                    <!--                                            </bumpInput>-->
+                                    <!--                                            <light>-->
+                                    <!--                                                <Light.Distant azimuth="360.0" color="#090eff" elevation="360.0"/>-->
+                                    <!--                                            </light>-->
+                                    <!--                                        </Lighting>-->
+                                    <!--                                    </effect>-->
+                                    <tooltip>
+                                        <Tooltip text="Minimizar">
+                                            <font>
+                                                <Font size="9.0" />
+                                            </font>
+                                        </Tooltip>
+                                    </tooltip>
+                                </Button>
+                            </children>
+                        </GridPane>
+                        <Label text="Grabadora de Acciones ">
+                            <font>
+                                <Font name="Leelawadee UI Bold" size="21.0" />
+                            </font>
+                            <textFill>
+                                <RadialGradient centerX="0.15555555555555556" centerY="0.2571428571428571" cycleMethod="REFLECT" focusAngle="-75.81" focusDistance="0.37209302325581395" radius="0.8604651162790697">
+                                    <stops>
+                                        <Stop color="BLACK" />
+                                        <Stop color="BLACK" offset="1.0" />
+                                    </stops>
+                                </RadialGradient>
+                            </textFill>
+                            <effect>
+                                <Reflection fraction="0.6" topOffset="-2.0" topOpacity="0.73" />
+                            </effect>
+                        </Label>
+                    </children>
+                </GridPane>
+            </children>
+        </GridPane>
+    </children>
+
+</AnchorPane>
