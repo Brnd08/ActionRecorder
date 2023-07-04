@@ -13,7 +13,7 @@ import javafx.stage.StageStyle;
 import java.io.IOException;
 import java.util.Objects;
 
-import static com.brnd08.action_recorder.utils.StagePositioner.addStageDragFucntionallity;
+import static com.brnd08.action_recorder.utils.StagePositioner.addStageDragFunctionality;
 import static com.brnd08.action_recorder.utils.StagePositioner.setStagePosition;
 
 public class Main extends Application {
@@ -50,7 +50,7 @@ public class Main extends Application {
         );
 
         // makes stage draggable by mouse interaction
-        addStageDragFucntionallity(mainStage, principalScene);
+        addStageDragFunctionality(mainStage, principalScene);
 
         // display the stage on the screen
         mainStage.show();

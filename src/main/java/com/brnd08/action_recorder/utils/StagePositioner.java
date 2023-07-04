@@ -16,7 +16,7 @@ public class StagePositioner {
      * Makes the specified Stage draggable based on given scene interactions
      * @param scene The scene to link to the drag motion/action
      */
-    public static void addStageDragFucntionallity(Stage stage, Scene scene){
+    public static void addStageDragFunctionality(Stage stage, Scene scene){
         scene.setOnMousePressed(event -> { // gets the offsets between mouse click and window screen coordinates
             xOffset = stage.getX() - event.getScreenX();
             yOffset = stage.getY() - event.getScreenY();
