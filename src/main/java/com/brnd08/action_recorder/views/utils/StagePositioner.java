@@ -1,11 +1,15 @@
-package com.brnd08.action_recorder.utils;
+package com.brnd08.action_recorder.views.utils;
 
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
-public class StagePositioner {
+public abstract class StagePositioner {
+
+    private StagePositioner() {
+        throw new IllegalStateException("Utility class");
+    }
 
     // Coordinates Offsets for window drag action/motion
     private static double xOffset;
@@ -16,7 +20,7 @@ public class StagePositioner {
      * Makes the specified Stage draggable based on given scene interactions
      * @param scene The scene to link to the drag motion/action
      */
-    public static void addStageDragFunctionality(Stage stage, Scene scene){
+    public static void addDragFunctionalityToStage(Stage stage, Scene scene){
         scene.setOnMousePressed(event -> { // gets the offsets between mouse click and window screen coordinates
             xOffset = stage.getX() - event.getScreenX();
             yOffset = stage.getY() - event.getScreenY();
@@ -33,7 +37,7 @@ public class StagePositioner {
      *
      * @param position The position to be applied.
      */
-    public static void setStagePosition(Stage stage,  StagePosition position) {
+    public static void setStageLocation(Stage stage, StageLocation position) {
         // Gets the visible bounds of the screen as a Rectangle2D object
         Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
 

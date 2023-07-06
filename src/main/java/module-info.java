@@ -9,4 +9,5 @@ module com.example.actionrecorder {
 
     exports com.brnd08.action_recorder.views.main_view;
     exports com.brnd08.action_recorder.views.settings_view;
+    exports com.brnd08.action_recorder.views.utils;
 }

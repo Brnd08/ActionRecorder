@@ -1,6 +1,6 @@
 package com.brnd08.action_recorder.views.settings_view;
 
-import com.brnd08.action_recorder.utils.StagePosition;
+import com.brnd08.action_recorder.views.utils.StageLocation;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -14,7 +14,7 @@ import java.util.ResourceBundle;
 
 public class SettingsViewController implements Initializable {
 
-    StagePosition actualWindowPosition;
+    StageLocation actualWindowPosition;
 
     @FXML
     Button minimizeBttn, closeBttn;
@@ -22,16 +22,16 @@ public class SettingsViewController implements Initializable {
     @FXML
     ChoiceBox<String> positionChoice;
 
-    private StagePosition getSavedPositionFromDatabase() {
+    private StageLocation getSavedPositionFromDatabase() {
         // here you should retrieve the Stage Position from the database
-        return StagePosition.LOWER_RIGHT_CORNER;
+        return StageLocation.LOWER_RIGHT_CORNER;
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // adds the list containing the toShowStrings from the StagePosition constants
         positionChoice.getItems().addAll(
-                Arrays.stream(StagePosition.values()).map(StagePosition::getToShowString).toList()
+                Arrays.stream(StageLocation.values()).map(StageLocation::getToShowString).toList()
         );
 
         // gets the initial Stage Position
@@ -43,7 +43,7 @@ public class SettingsViewController implements Initializable {
             String choice = positionChoice.getValue();
             //obtains the enum constant based on his toShowString value and the choice value.
             actualWindowPosition =
-                    Arrays.stream(StagePosition.values())
+                    Arrays.stream(StageLocation.values())
                             .filter(
                                     stagePosition -> stagePosition.getToShowString().equals(choice)
                             ).findFirst().orElseThrow();

@@ -13,7 +13,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Objects;
 
-import static com.brnd08.action_recorder.utils.StagePositioner.addStageDragFunctionality;
+import static com.brnd08.action_recorder.views.utils.StagePositioner.addDragFunctionalityToStage;
 
 public class MainViewController {
 
@@ -79,7 +79,7 @@ public class MainViewController {
         // Modify the stage title
         previousStage.setTitle("Settings || Action Recorder");
 
-        addStageDragFunctionality(previousStage, newScene);
+        addDragFunctionalityToStage(previousStage, newScene);
         // display the stage on the screen
         previousStage.show();
     }

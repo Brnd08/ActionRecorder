@@ -1,6 +1,6 @@
 package com.brnd08.action_recorder.views.main_view;
 
-import com.brnd08.action_recorder.utils.StagePosition;
+import com.brnd08.action_recorder.views.utils.StageLocation;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,8 +13,9 @@ import javafx.stage.StageStyle;
 import java.io.IOException;
 import java.util.Objects;
 
-import static com.brnd08.action_recorder.utils.StagePositioner.addStageDragFunctionality;
-import static com.brnd08.action_recorder.utils.StagePositioner.setStagePosition;
+import static com.brnd08.action_recorder.views.utils.StagePositioner.addDragFunctionalityToStage;
+import static com.brnd08.action_recorder.views.utils.StagePositioner.setStageLocation;
+
 
 public class Main extends Application {
 
@@ -50,12 +51,12 @@ public class Main extends Application {
         );
 
         // makes stage draggable by mouse interaction
-        addStageDragFunctionality(mainStage, principalScene);
+        addDragFunctionalityToStage(mainStage, principalScene);
 
         // display the stage on the screen
         mainStage.show();
 
         // sets the initial position of the stage
-        setStagePosition( mainStage , StagePosition.CENTER);
+        setStageLocation( mainStage , StageLocation.CENTER);
     }
 }
