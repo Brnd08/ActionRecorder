@@ -1,0 +1,24 @@
+.primaryButton {
+    -fx-background-color: #e0e0e0;
+    -fx-border-color: #03a9f4;
+    -fx-border-width: 4px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 12px;
+}
+
+#closeStageButton, #minimizeStageButton {
+    -fx-background-color: rgba(0, 0, 0, 0);
+}
+
+#minimizeStageButton {
+    -fx-translate-x: -25px;
+    -fx-translate-y: -7px;
+}
+
+#mainPane {
+    -fx-background-color: rgba(250, 250, 250, 0.8);
+    -fx-border-width: 3;
+    -fx-border-color: black;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}

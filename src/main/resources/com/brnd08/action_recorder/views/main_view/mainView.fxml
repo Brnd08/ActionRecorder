@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import java.lang.String?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.Group?>
 <?import javafx.scene.control.Button?>
@@ -19,7 +20,7 @@
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="165.0" prefWidth="600.0" style="-fx-background-color: rgba(250,250,250,0.8); -fx-border-width: 3; -fx-border-color: black; -fx-border-radius: 5; -fx-background-radius: 5;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.brnd08.action_recorder.views.main_view.MainViewController">
+<AnchorPane id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="165.0" prefWidth="600.0" stylesheets="@../css/common.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.brnd08.action_recorder.views.main_view.MainViewController">
     <children>
         <GridPane layoutX="-2.0" layoutY="-5.0" prefHeight="165.0" prefWidth="600.0" style="-fx-border-radius: 5;">
             <columnConstraints>
@@ -53,15 +54,21 @@
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
-                                <Button fx:id="playBttn" mnemonicParsing="false" onAction="#navigateToReplayView" prefHeight="33.0" prefWidth="159.0" style="-fx-background-color: #e0e0e0; -fx-border-color: #03a9f4; -fx-border-width: 4px; -fx-border-radius: 8px; -fx-background-radius: 12px;" text="Reproducir Grabacion" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                <Button fx:id="playBttn" mnemonicParsing="false" onAction="#navigateToReplayView" prefHeight="33.0" prefWidth="159.0" text="Reproducir Grabacion" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                     <cursor>
                                         <Cursor fx:constant="HAND" />
                                     </cursor>
+                                    <styleClass>
+                                        <String fx:value="primaryButton" />
+                                    </styleClass>
                                 </Button>
-                                <Button fx:id="recordBttn" mnemonicParsing="false" onMouseClicked="#navigateToRecordView" prefHeight="33.0" prefWidth="159.0" style="-fx-background-color: #e0e0e0; -fx-border-color: #03a9f4; -fx-border-width: 4px; -fx-border-radius: 8px; -fx-background-radius: 12px;" text="Crear Nueva Grabacion" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                <Button fx:id="recordBttn" mnemonicParsing="false" onMouseClicked="#navigateToRecordView" prefHeight="33.0" prefWidth="159.0" text="Crear Nueva Grabacion" GridPane.columnIndex="1" GridPane.rowIndex="3">
                                     <cursor>
                                         <Cursor fx:constant="HAND" />
                                     </cursor>
+                                    <styleClass>
+                                        <String fx:value="primaryButton" />
+                                    </styleClass>
                                 </Button>
                                 <Button fx:id="settingsBttn" mnemonicParsing="false" onMouseClicked="#navigateToSettingsView" prefHeight="29.0" prefWidth="40.0" GridPane.columnIndex="2" GridPane.rowIndex="4">
                                     <graphic>
@@ -125,7 +132,7 @@
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
-                                <Button fx:id="closeBttn" mnemonicParsing="false" onAction="#closeStage" style="-fx-background-color: rgba(0,0,0,0);" text="x" textAlignment="CENTER" textFill="#000000">
+                                <Button id="closeStageButton" fx:id="closeBttn" mnemonicParsing="false" onAction="#closeStage"  text="x" textAlignment="CENTER" textFill="#000000">
                                     <font>
                                         <Font name="Corbel" size="20.0" />
                                     </font>
@@ -151,7 +158,7 @@
                                         </Tooltip>
                                     </tooltip>
                                 </Button>
-                                <Button fx:id="minimizeBttn" alignment="TOP_CENTER" contentDisplay="TEXT_ONLY" ellipsisString="" mnemonicParsing="false" onAction="#minimizeStage" prefWidth="50.0" style="-fx-background-color: rgba(0,0,0,0); -fx-translate-x: -25px; -fx-translate-y: -7px;" text="_" textAlignment="CENTER" textFill="#000000">
+                                <Button id="minimizeStageButton" fx:id="minimizeBttn" alignment="TOP_CENTER" contentDisplay="TEXT_ONLY" ellipsisString="" mnemonicParsing="false" onAction="#minimizeStage" prefWidth="50.0" text="_" textAlignment="CENTER" textFill="#000000">
                                     <font>
                                         <Font name="Corbel Bold" size="20.0" />
                                     </font>
