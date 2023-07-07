@@ -7,8 +7,8 @@ import javafx.stage.Stage;
 
 public abstract class StagePositioner {
 
-    private StagePositioner() {
-        throw new IllegalStateException("Utility class");
+    private StagePositioner() { // To prevent class instantiation in utility classes
+        throw new UnsupportedOperationException("Utility class can not be instantiated");
     }
 
     // Coordinates Offsets for window drag action/motion
