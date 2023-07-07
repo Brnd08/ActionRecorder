@@ -1,47 +1,51 @@
 package com.brnd08.action_recorder.views.main_view;
 
-import com.brnd08.action_recorder.views.utils.ViewEnum;
+import com.brnd08.action_recorder.views.utils.ViewController;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 
-import static com.brnd08.action_recorder.views.utils.CommonViewUtils.navigateToView;
-
-public class MainViewController {
-
+public class MainViewController implements ViewController {
     @FXML
-    Button minimizeBttn, closeBttn;
+    Button playBttn;
     @FXML
-    Button playBttn, recordBttn, settingsBttn;
+    Button recordBttn;
+    @FXML
+    Button settingsBttn;
+    @FXML
+    Button closeBttn;
+    @FXML
+    Button minimizeBttn;
 
-    @FXML
+    @Override
     public void minimizeStage(Event event) {
-        ((Stage) (((Button) event.getSource()).getScene().getWindow())).setIconified(true);
+        ViewController.super.minimizeStage(event);
     }
 
-    @FXML
+    @Override
     public void closeStage(Event event) {
-        ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
+        ViewController.super.closeStage(event);
     }
 
-    public void showNewRecordScene(Event event) {
-        System.out.println("You should be able to see New Record scene now");
+    @Override
+    public void navigateToSettingsView(Event event) throws IOException {
+        ViewController.super.navigateToSettingsView(event);
     }
 
-    public void showSettingsScene(Event event) throws IOException {
-        navigateToView(event, ViewEnum.SETTINGS);
+    @Override
+    public void navigateToReplayView(Event event) throws IOException {
+        ViewController.super.navigateToReplayView(event);
     }
 
-    public void showPlayRecordScene(Event event) {
-        System.out.println("You should be able to see Play Record scene now");
+    @Override
+    public void navigateToRecordView(Event event) throws IOException {
+        ViewController.super.navigateToRecordView(event);
     }
 
+    @Override
     public void enableCoordinatesMode(Event event) {
-        System.out.println("You should be in Coordinates mode now");
+        ViewController.super.enableCoordinatesMode(event);
     }
-
-
 }

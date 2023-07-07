@@ -53,17 +53,17 @@
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
-                                <Button fx:id="playBttn" mnemonicParsing="false" onAction="#showPlayRecordScene" prefHeight="33.0" prefWidth="159.0" style="-fx-background-color: #e0e0e0; -fx-border-color: #03a9f4; -fx-border-width: 4px; -fx-border-radius: 8px; -fx-background-radius: 12px;" text="Reproducir Grabacion" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                <Button fx:id="playBttn" mnemonicParsing="false" onAction="#navigateToReplayView" prefHeight="33.0" prefWidth="159.0" style="-fx-background-color: #e0e0e0; -fx-border-color: #03a9f4; -fx-border-width: 4px; -fx-border-radius: 8px; -fx-background-radius: 12px;" text="Reproducir Grabacion" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                     <cursor>
                                         <Cursor fx:constant="HAND" />
                                     </cursor>
                                 </Button>
-                                <Button fx:id="recordBttn" mnemonicParsing="false" onMouseClicked="#showNewRecordScene" prefHeight="33.0" prefWidth="159.0" style="-fx-background-color: #e0e0e0; -fx-border-color: #03a9f4; -fx-border-width: 4px; -fx-border-radius: 8px; -fx-background-radius: 12px;" text="Crear Nueva Grabacion" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                <Button fx:id="recordBttn" mnemonicParsing="false" onMouseClicked="#navigateToRecordView" prefHeight="33.0" prefWidth="159.0" style="-fx-background-color: #e0e0e0; -fx-border-color: #03a9f4; -fx-border-width: 4px; -fx-border-radius: 8px; -fx-background-radius: 12px;" text="Crear Nueva Grabacion" GridPane.columnIndex="1" GridPane.rowIndex="3">
                                     <cursor>
                                         <Cursor fx:constant="HAND" />
                                     </cursor>
                                 </Button>
-                                <Button fx:id="settingsBttn" mnemonicParsing="false" onMouseClicked="#showSettingsScene" prefHeight="29.0" prefWidth="40.0" GridPane.columnIndex="2" GridPane.rowIndex="4">
+                                <Button fx:id="settingsBttn" mnemonicParsing="false" onMouseClicked="#navigateToSettingsView" prefHeight="29.0" prefWidth="40.0" GridPane.columnIndex="2" GridPane.rowIndex="4">
                                     <graphic>
                                         <ImageView fitHeight="25.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
                                             <image>

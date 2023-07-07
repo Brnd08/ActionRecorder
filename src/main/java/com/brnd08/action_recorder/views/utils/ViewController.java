@@ -1,6 +1,7 @@
 package com.brnd08.action_recorder.views.utils;
 
 import javafx.event.Event;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -8,19 +9,44 @@ import javafx.scene.control.Button;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+
 import java.io.IOException;
 import java.util.Objects;
 
-import static com.brnd08.action_recorder.views.utils.StagePositioner.addDragFunctionalityToStage;
-
-public abstract class CommonViewUtils {
 
 
-    private CommonViewUtils(){
-        // to prevent class instantiation
-        throw new UnsupportedOperationException("Utility class can not be instantiated");
+public interface ViewController {
+
+    @FXML
+    public default void minimizeStage(Event event) {
+        ((Stage) (((Button) event.getSource()).getScene().getWindow())).setIconified(true);
     }
-    
+
+    @FXML
+    public default void closeStage(Event event) {
+        ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
+    }
+    @FXML
+    public default void navigateToMainView(Event event) throws IOException {
+        navigateToView(event, ViewEnum.MAIN);
+    }
+    @FXML
+    public default void navigateToSettingsView(Event event) throws IOException {
+        navigateToView(event, ViewEnum.SETTINGS);
+    }
+    @FXML
+    public default void navigateToReplayView(Event event) throws IOException {
+        System.out.println("You should be able to see Replay Scene.");
+    }
+    @FXML
+    public default void navigateToRecordView(Event event) throws IOException {
+        System.out.println("You should be able to see Record Scene.");
+    }
+    @FXML
+    public default void enableCoordinatesMode(Event event) {
+        System.out.println("You should be in Coordinates mode now");
+    }
+
     public static void openView(Stage stage, ViewEnum nextView) throws IOException {
         // Load Fxml view
         FXMLLoader fxmlLoader;
@@ -62,23 +88,21 @@ public abstract class CommonViewUtils {
 
 
         // makes stage draggable by mouse interaction
-        addDragFunctionalityToStage(stage, newScene);
+        StagePositioner.addDragFunctionalityToStage(stage, newScene);
 
         // display the stage on the screen
         stage.show();
-        
+
     }
 
-    public static void navigateToView(Event clickEvent, ViewEnum nextView) throws IOException, NullPointerException {
-
+    private static void navigateToView(Event clickEvent, ViewEnum nextView) throws IOException, NullPointerException {
         Stage previousStage =
                 (Stage) ((Button) clickEvent.getSource())
                         .getScene()
                         .getWindow();
 
         previousStage.close();
-
         openView(new Stage(), nextView);
-
     }
+
 }
