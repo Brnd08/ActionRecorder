@@ -26,5 +26,9 @@ This app has:
 ### Main View from the taskbar
 ![Main view from taskbar](images/at_taskbar_pov.png)
 
+### Settings view
+![Settings view](images/settings_view.png)
+
+
 
 
