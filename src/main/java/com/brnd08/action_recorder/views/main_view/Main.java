@@ -1,19 +1,13 @@
 package com.brnd08.action_recorder.views.main_view;
 
 import com.brnd08.action_recorder.views.utils.StageLocation;
+import com.brnd08.action_recorder.views.utils.ViewEnum;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 import java.io.IOException;
-import java.util.Objects;
 
-import static com.brnd08.action_recorder.views.utils.StagePositioner.addDragFunctionalityToStage;
+import static com.brnd08.action_recorder.views.utils.CommonViewUtils.openView;
 import static com.brnd08.action_recorder.views.utils.StagePositioner.setStageLocation;
 
 
@@ -25,38 +19,12 @@ public class Main extends Application {
     }
 
     @Override
-    public void start(Stage mainStage) throws IOException {
+    public void start(Stage stage) throws IOException {
 
-        // Load Fxml view
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("mainView.fxml"));
-        Parent principalRoot = fxmlLoader.load();
-        // Add the fxml view to a new scene
-        Scene principalScene = new Scene(principalRoot);
-
-        // Needed configuration to make the application background transparent
-        mainStage.initStyle(StageStyle.TRANSPARENT);
-        principalScene.setFill(Color.TRANSPARENT);
-
-        // Adds the scene content to the application's window
-        mainStage.setScene(principalScene);
-        mainStage.setTitle("Action Recorder || By brdn");
-        mainStage.setResizable(false);
-        // Adds taskbar icon
-        mainStage.getIcons().add(0,
-                new Image(
-                        Objects.requireNonNull(
-                                getClass().getResourceAsStream("appIcon.gif")
-                        )
-                )
-        );
-
-        // makes stage draggable by mouse interaction
-        addDragFunctionalityToStage(mainStage, principalScene);
-
-        // display the stage on the screen
-        mainStage.show();
+        // shows the main view
+        openView(stage, ViewEnum.MAIN);
 
         // sets the initial position of the stage
-        setStageLocation( mainStage , StageLocation.CENTER);
+        setStageLocation( stage , StageLocation.CENTER);
     }
 }

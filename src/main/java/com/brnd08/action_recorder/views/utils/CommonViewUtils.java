@@ -1,19 +1,15 @@
 package com.brnd08.action_recorder.views.utils;
 
-import com.brnd08.action_recorder.views.settings_view.SettingsViewController;
 import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-
 import java.io.IOException;
 import java.util.Objects;
-import java.util.Optional;
 
 import static com.brnd08.action_recorder.views.utils.StagePositioner.addDragFunctionalityToStage;
 

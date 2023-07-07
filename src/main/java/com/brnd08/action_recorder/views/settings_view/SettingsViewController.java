@@ -1,6 +1,5 @@
 package com.brnd08.action_recorder.views.settings_view;
 
-import com.brnd08.action_recorder.views.utils.StageLocation;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -8,9 +7,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.ResourceBundle;
+
+import com.brnd08.action_recorder.views.utils.ViewEnum;
+import com.brnd08.action_recorder.views.utils.StageLocation;
+import static com.brnd08.action_recorder.views.utils.CommonViewUtils.navigateToView;
 
 public class SettingsViewController implements Initializable {
 
@@ -63,7 +67,7 @@ public class SettingsViewController implements Initializable {
 
 
     @FXML
-    public void showMainView(Event event) {
-        System.out.println("Now you should be able to see the main-view scene.");
+    public void showMainView(Event event) throws IOException {
+        navigateToView(event, ViewEnum.MAIN);
     }
 }
