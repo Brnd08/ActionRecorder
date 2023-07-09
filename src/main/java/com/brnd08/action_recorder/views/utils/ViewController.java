@@ -14,7 +14,10 @@ import java.io.IOException;
 import java.util.Objects;
 
 
-
+/**
+ * This interface is intended to be implemented by Scene controllers in order to reduce repetitive
+ * code, by providing methods for views navigation and related methods.
+ */
 public interface ViewController {
 
     @FXML

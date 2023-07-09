@@ -4,6 +4,11 @@ import javafx.scene.image.Image;
 
 import java.util.Objects;
 
+/**
+ * This enum contains constants for the views in the project, each constant has attributes as
+ * path to fxml file and the stage title for the view. The class contains an Image containing the
+ * app Icon
+ */
 public enum ViewEnum {
 
     MAIN(
@@ -44,7 +49,7 @@ public enum ViewEnum {
         return this.fxmlPath;
     }
 
-    public Image getAppIcon() {
+    public static Image getAppIcon() {
         return APP_ICON;
     }
 

@@ -1,5 +1,9 @@
 package com.brnd08.action_recorder.views.utils;
 
+/**
+ * This enum contains constants for each available position of the Stages relative to
+ * the screen bounds
+ */
 public enum StageLocation {
     UPPER_RIGHT_CORNER("Esquina superior derecha."),
     UPPER_LEFT_CORNER("Esquina superior izquierda."),

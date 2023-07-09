@@ -5,6 +5,10 @@ import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
+/**
+ * This class provides methods for Window positioning, as window drag implementation or
+ * positioning the stage based on specified location
+ */
 public abstract class StagePositioner {
 
     private StagePositioner() { // To prevent class instantiation in utility classes
