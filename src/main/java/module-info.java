@@ -6,7 +6,7 @@ module com.example.actionrecorder {
 
     opens com.brnd08.action_recorder.views.main_view to javafx.fxml;
     opens com.brnd08.action_recorder.views.settings_view to javafx.fxml;
-    opens com.brnd08.action_recorder.views.utils;
+    opens com.brnd08.action_recorder.views.utils to javafx.fxml;
 
     exports com.brnd08.action_recorder.views.main_view;
     exports com.brnd08.action_recorder.views.settings_view;

@@ -1,5 +1,7 @@
 package com.brnd08.action_recorder.views.settings_view;
 
+import com.brnd08.action_recorder.views.utils.StageLocation;
+import com.brnd08.action_recorder.views.utils.ViewController;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -12,8 +14,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.ResourceBundle;
-
-import com.brnd08.action_recorder.views.utils.*;
 
 public class SettingsViewController implements ViewController, Initializable {
     @FXML

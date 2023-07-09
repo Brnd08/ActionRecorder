@@ -54,21 +54,15 @@
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
-                                <Button fx:id="playBttn" mnemonicParsing="false" onAction="#navigateToReplayView" prefHeight="33.0" prefWidth="159.0" text="Reproducir Grabacion" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                <Button styleClass="primaryButton" fx:id="playBttn" mnemonicParsing="false" onAction="#navigateToReplayView" prefHeight="33.0" prefWidth="159.0" text="Reproducir Grabacion" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                     <cursor>
                                         <Cursor fx:constant="HAND" />
                                     </cursor>
-                                    <styleClass>
-                                        <String fx:value="primaryButton" />
-                                    </styleClass>
                                 </Button>
-                                <Button fx:id="recordBttn" mnemonicParsing="false" onMouseClicked="#navigateToRecordView" prefHeight="33.0" prefWidth="159.0" text="Crear Nueva Grabacion" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                <Button styleClass="primaryButton" fx:id="recordBttn" mnemonicParsing="false" onMouseClicked="#navigateToRecordView" prefHeight="33.0" prefWidth="159.0" text="Crear Nueva Grabacion" GridPane.columnIndex="1" GridPane.rowIndex="3">
                                     <cursor>
                                         <Cursor fx:constant="HAND" />
                                     </cursor>
-                                    <styleClass>
-                                        <String fx:value="primaryButton" />
-                                    </styleClass>
                                 </Button>
                                 <Button fx:id="settingsBttn" mnemonicParsing="false" onMouseClicked="#navigateToSettingsView" prefHeight="29.0" prefWidth="40.0" GridPane.columnIndex="2" GridPane.rowIndex="4">
                                     <graphic>
