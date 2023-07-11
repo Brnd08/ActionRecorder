@@ -16,14 +16,16 @@ import java.util.Arrays;
 import java.util.ResourceBundle;
 
 public class SettingsViewController implements ViewController, Initializable {
+    private static StageLocation initialStagePosition;
+    private static boolean showAlwaysOnTop;
     @FXML
-    Button browseBttn;
+    Button browseButton;
     @FXML
-    Button saveBttn;
+    Button saveConfigsButton;
     @FXML
-    Button minimizeBttn;
+    Button minimizeButton;
     @FXML
-    Button closeBttn;
+    Button closeButton;
     @FXML
     TextField directoryTxt;
     @FXML
@@ -31,58 +33,101 @@ public class SettingsViewController implements ViewController, Initializable {
     @FXML
     ChoiceBox<String> positionChoiceBox;
 
-    private StageLocation actualWindowPosition;
-
-    private StageLocation getSavedPositionFromDatabase() {
-        // here you should retrieve the Stage Position from the database
-        return StageLocation.LOWER_RIGHT_CORNER;
-    }
-
+    /**
+     * Configure the settings functionalities at class instantiation
+     *
+     * @param location
+     * @param resources
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        configurePositionChoiceFunctionality();
+        configureAlwaysOnTopFunctionality();
+    }
+
+    /**
+     * Sets the needed configuration for the position choice functionality
+     */
+    private void configurePositionChoiceFunctionality() {
         // adds the list containing the toShowStrings from the StagePosition constants
-        positionChoiceBox.getItems().addAll(
-                Arrays.stream(StageLocation.values()).map(StageLocation::getToShowString).toList()
-        );
+        positionChoiceBox.getItems().addAll(StageLocation.getToShowStringsList());
 
-        // gets the initial Stage Position
-        actualWindowPosition = getSavedPositionFromDatabase();
+        // sets the initial Position
+        SettingsViewController.setInitialStagePosition(retrieveSavedPositionFromDatabase());
+
         // makes the option corresponding to the actual Position selected in the choice box
-        positionChoiceBox.getSelectionModel().select(actualWindowPosition.getToShowString());
+        positionChoiceBox.getSelectionModel().select(initialStagePosition.getToShowString());
 
+        // configure a listener for the positionChoiceBox
         positionChoiceBox.setOnAction(event -> {
-            String choice = positionChoiceBox.getValue();
-            //obtains the enum constant based on his toShowString value and the choice value.
-            actualWindowPosition =
-                    Arrays.stream(StageLocation.values())
-                            .filter(
-                                    stagePosition -> stagePosition.getToShowString().equals(choice)
-                            ).findFirst().orElseThrow();
-            System.out.println(actualWindowPosition);
+            //obtains the enum constant based on the selected value from the position ChoiceBox
+            SettingsViewController.setInitialStagePosition(
+                    StageLocation.stageLocationFromToShowString(positionChoiceBox.getValue())
+            );
+            System.out.println(initialStagePosition);
         });
     }
 
-    @FXML
-    public void saveConfiguration(Event event){
-        System.out.println("Here the app should have saved the selected configuration.");
+    /**
+     * Sets the needed configuration for the show always on top feature
+     */
+    private void configureAlwaysOnTopFunctionality() {
+        // assign the value from the database to the static variable
+        setShowAlwaysOnTop(retrieveShowAlwaysOnTopFromDatabase());
+
+        // sets selecting depending on showAlways on top value
+        alwaysOnTopCheckBox.setSelected(showAlwaysOnTop);
+
+        // configure listener for the checkbox
+        alwaysOnTopCheckBox.setOnAction(actionEvent -> {
+            setShowAlwaysOnTop(alwaysOnTopCheckBox.isSelected());
+            System.out.println("Always on top: " + showAlwaysOnTop);
+        });
+
     }
 
     @FXML
-    public void browseDirectories(Event event){
+    public void saveConfigurationOnDatabase() {
+        System.out.println("Here the app should have saved the selected configuration.");
+
+        System.out.format("%n STAGE POSITION => %s %n ALWAYS ON TOP => %s",
+                getInitialStagePosition(), isShowAlwaysOnTopEnabled());
+    }
+    @FXML
+    public void browseDirectories() {
         System.out.println("You should be able to select a directory from the explorer.");
     }
 
+    private StageLocation retrieveSavedPositionFromDatabase() {
+        // here you should retrieve the Stage Position from the database
+        return StageLocation.LOWER_RIGHT_CORNER;
+    }
+    private boolean retrieveShowAlwaysOnTopFromDatabase() {
+        // here you should retrieve the always on top boolean from the database
+        return true;
+    }
+
+    public static synchronized StageLocation getInitialStagePosition() {
+        return initialStagePosition;
+    }
+    private static synchronized void setInitialStagePosition(StageLocation newLocation) {
+        initialStagePosition = newLocation;
+    }
+    public static synchronized boolean isShowAlwaysOnTopEnabled() {
+        return showAlwaysOnTop;
+    }
+    public static synchronized void setShowAlwaysOnTop(boolean showAlwaysOnTopValue) {
+        showAlwaysOnTop = showAlwaysOnTopValue;
+    }
 
     @Override
     public void minimizeStage(Event event) {
         ViewController.super.minimizeStage(event);
     }
-
     @Override
     public void closeStage(Event event) {
         ViewController.super.closeStage(event);
     }
-
     @Override
     public void navigateToMainView(Event event) throws IOException {
         ViewController.super.navigateToMainView(event);

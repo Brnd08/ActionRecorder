@@ -19,8 +19,7 @@
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="165.0" prefWidth="600.0"  stylesheets="@../css/common.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.brnd08.action_recorder.views.settings_view.SettingsViewController">
+<AnchorPane id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="165.0" prefWidth="600.0" stylesheets="@../css/common.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.brnd08.action_recorder.views.settings_view.SettingsViewController">
     <children>
         <GridPane layoutX="-2.0" layoutY="-5.0" prefHeight="165.0" prefWidth="600.0">
             <columnConstraints>
@@ -48,7 +47,7 @@
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
-                                <Button id="closeStageButton" fx:id="closeBttn" mnemonicParsing="false" onAction="#closeStage" text="x" textAlignment="CENTER" textFill="#000000">
+                                <Button id="closeStageButton" fx:id="closeButton" mnemonicParsing="false" onAction="#closeStage" text="x" textAlignment="CENTER" textFill="#000000">
                                     <font>
                                         <Font name="Corbel" size="20.0" />
                                     </font>
@@ -74,7 +73,7 @@
                                         </Tooltip>
                                     </tooltip>
                                 </Button>
-                                <Button id="minimizeStageButton" fx:id="minimizeBttn" alignment="TOP_CENTER" contentDisplay="TEXT_ONLY" ellipsisString="" mnemonicParsing="false" onAction="#minimizeStage" prefWidth="50.0" text="_" textAlignment="CENTER" textFill="#000000">
+                                <Button id="minimizeStageButton" fx:id="minimizeButton" alignment="TOP_CENTER" contentDisplay="TEXT_ONLY" ellipsisString="" mnemonicParsing="false" onAction="#minimizeStage" prefWidth="50.0" text="_" textAlignment="CENTER" textFill="#000000">
                                     <font>
                                         <Font name="Corbel Bold" size="20.0" />
                                     </font>
@@ -162,7 +161,7 @@
                               <Font name="Georgia Bold Italic" size="15.0" />
                            </font>
                         </Label>
-                        <CheckBox fx:id="alwaysOnTopCheckBox" blendMode="RED" ellipsisString="" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="17.0" prefWidth="17.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <CheckBox fx:id="alwaysOnTopCheckBox" ellipsisString="" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="17.0" prefWidth="17.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <tooltip>
                               <Tooltip text="Mostrar sobre los demas programas" />
                            </tooltip>
@@ -175,7 +174,7 @@
                               <Font name="Georgia Bold Italic" size="15.0" />
                            </font>
                         </Label>
-                        <Button fx:id="browseBttn" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#browseDirectories" prefHeight="32.0" prefWidth="72.0" styleClass="primaryButton" text="Examinar" translateX="176.0" GridPane.rowIndex="2">
+                        <Button fx:id="browseButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#browseDirectories" prefHeight="32.0" prefWidth="72.0" styleClass="primaryButton" text="Examinar" translateX="176.0" GridPane.rowIndex="2">
                            <tooltip>
                               <Tooltip text="Seleccionar carpeta" />
                            </tooltip>
@@ -219,7 +218,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </Button>
-                        <Button fx:id="saveBttn" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#saveConfiguration" prefHeight="33.0" prefWidth="105.0" styleClass="primaryButton" text="Guardar y Salir" translateX="-5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                        <Button fx:id="saveConfigsButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#saveConfigurationOnDatabase" prefHeight="33.0" prefWidth="105.0" styleClass="primaryButton" text="Guardar y Salir" translateX="-5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
