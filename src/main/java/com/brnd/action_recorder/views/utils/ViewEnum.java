@@ -1,4 +1,4 @@
-package com.brnd08.action_recorder.views.utils;
+package com.brnd.action_recorder.views.utils;
 
 import javafx.scene.image.Image;
 
@@ -21,7 +21,7 @@ public enum ViewEnum {
     );
 
     private static final String PATH_TO_VIEWS_PACKAGE_FROM_SOURCE_ROOT
-            = "/com/brnd08/action_recorder/views";
+            = "/com/brnd/action_recorder/views";
 
     private static final Image APP_ICON =
             new Image(

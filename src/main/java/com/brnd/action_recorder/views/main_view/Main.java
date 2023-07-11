@@ -1,9 +1,9 @@
-package com.brnd08.action_recorder.views.main_view;
+package com.brnd.action_recorder.views.main_view;
 
-import com.brnd08.action_recorder.views.utils.StageLocation;
-import com.brnd08.action_recorder.views.utils.StagePositioner;
-import com.brnd08.action_recorder.views.utils.ViewController;
-import com.brnd08.action_recorder.views.utils.ViewEnum;
+import com.brnd.action_recorder.views.utils.StageLocation;
+import com.brnd.action_recorder.views.utils.StagePositioner;
+import com.brnd.action_recorder.views.utils.ViewController;
+import com.brnd.action_recorder.views.utils.ViewEnum;
 import javafx.application.Application;
 import javafx.stage.Stage;
 

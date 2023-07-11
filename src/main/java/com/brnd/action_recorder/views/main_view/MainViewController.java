@@ -1,6 +1,6 @@
-package com.brnd08.action_recorder.views.main_view;
+package com.brnd.action_recorder.views.main_view;
 
-import com.brnd08.action_recorder.views.utils.ViewController;
+import com.brnd.action_recorder.views.utils.ViewController;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;

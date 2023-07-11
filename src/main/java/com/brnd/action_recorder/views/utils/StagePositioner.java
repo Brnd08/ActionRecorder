@@ -1,4 +1,4 @@
-package com.brnd08.action_recorder.views.utils;
+package com.brnd.action_recorder.views.utils;
 
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
