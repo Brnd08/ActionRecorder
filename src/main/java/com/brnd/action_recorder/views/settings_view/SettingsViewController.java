@@ -20,6 +20,7 @@ import static com.brnd.action_recorder.views.main_view.Main.logger;
 public class SettingsViewController implements ViewController, Initializable {
     private static StageLocation initialStagePosition;
     private static boolean showAlwaysOnTop;
+    private final SettingsService settingsService = new SettingsService();
     @FXML
     Button browseButton;
     @FXML
@@ -55,7 +56,7 @@ public class SettingsViewController implements ViewController, Initializable {
         positionChoiceBox.getItems().addAll(StageLocation.getToShowStringsList());
 
         // sets the initial Position
-        SettingsViewController.setInitialStagePosition(retrieveSavedPositionFromDatabase());
+        SettingsViewController.setInitialStagePosition(settingsService.retrieveSavedPosition());
 
         // makes the option corresponding to the actual Position selected in the choice box
         positionChoiceBox.getSelectionModel().select(initialStagePosition.getToShowString());
@@ -75,7 +76,7 @@ public class SettingsViewController implements ViewController, Initializable {
      */
     private void configureAlwaysOnTopFunctionality() {
         // assign the value from the database to the static variable
-        setShowAlwaysOnTop(retrieveShowAlwaysOnTopFromDatabase());
+        setShowAlwaysOnTop(settingsService.retrieveShowAlwaysOnTop());
 
         // sets selecting depending on showAlways on top value
         alwaysOnTopCheckBox.setSelected(showAlwaysOnTop);
@@ -92,6 +93,10 @@ public class SettingsViewController implements ViewController, Initializable {
     public void saveConfigurationOnDatabase() {
         logger.log(Level.ALL, "Unimplemented functionality" );
 
+        Settings newConfigs = new Settings(getInitialStagePosition(), isShowAlwaysOnTopEnabled());
+
+        settingsService.saveConfiguration(newConfigs);
+
         logger.log(Level.INFO, "STAGE POSITION => {},  ALWAYS ON TOP => {}",
                 getInitialStagePosition(), isShowAlwaysOnTopEnabled());
     }
@@ -100,14 +105,6 @@ public class SettingsViewController implements ViewController, Initializable {
         logger.log(Level.ALL, "Unimplemented functionality" );
     }
 
-    private StageLocation retrieveSavedPositionFromDatabase() {
-        // here you should retrieve the Stage Position from the database
-        return StageLocation.LOWER_RIGHT_CORNER;
-    }
-    private boolean retrieveShowAlwaysOnTopFromDatabase() {
-        // here you should retrieve the always on top boolean from the database
-        return true;
-    }
 
     public static synchronized StageLocation getInitialStagePosition() {
         return initialStagePosition;
