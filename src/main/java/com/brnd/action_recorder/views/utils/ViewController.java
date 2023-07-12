@@ -50,6 +50,7 @@ public interface ViewController {
         System.out.println("You should be in Coordinates mode now");
     }
 
+
     public static void openView(Stage stage, ViewEnum nextView) throws IOException {
         // Load Fxml view
         FXMLLoader fxmlLoader;
@@ -81,7 +82,7 @@ public interface ViewController {
         stage.setResizable(false);
 
         // Adds taskbar icon
-        stage.getIcons().add(0, nextView.getAppIcon() );
+        stage.getIcons().add(0, ViewEnum.getAppIcon() );
         // Modify the stage title
         stage.setTitle(nextView.getStageTitle());
 
@@ -104,8 +105,14 @@ public interface ViewController {
                         .getScene()
                         .getWindow();
 
+
+        Stage nextStage = new Stage(); // instantiates the new stage
+
+        openView(nextStage, nextView); // configures and displays the new stage
+        // positions the new stage in the same place as the previous stage
+        nextStage.setX(previousStage.getX());
+        nextStage.setY(previousStage.getY());
         previousStage.close();
-        openView(new Stage(), nextView);
     }
 
 }
