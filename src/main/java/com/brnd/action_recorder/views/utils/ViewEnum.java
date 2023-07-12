@@ -2,6 +2,7 @@ package com.brnd.action_recorder.views.utils;
 
 import javafx.scene.image.Image;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -51,6 +52,13 @@ public enum ViewEnum {
 
     public static Image getAppIcon() {
         return APP_ICON;
+    }
+
+    public static ViewEnum fromTitle(String title){
+        return Arrays.stream(ViewEnum.values())
+                .filter(viewEnum -> viewEnum.getStageTitle().equals(title))
+                .findFirst().orElseThrow();
+
     }
 
 }

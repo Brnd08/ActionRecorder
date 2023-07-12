@@ -3,6 +3,8 @@ module com.brnd.action_recorder {
     requires javafx.fxml;
     requires java.logging;
     requires javafx.base;
+    requires org.apache.logging.log4j.core;
+    requires org.apache.logging.log4j;
 
     opens com.brnd.action_recorder.views.main_view to javafx.fxml;
     opens com.brnd.action_recorder.views.settings_view to javafx.fxml;

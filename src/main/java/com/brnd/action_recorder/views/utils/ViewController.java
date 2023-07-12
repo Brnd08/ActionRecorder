@@ -9,9 +9,12 @@ import javafx.scene.control.Button;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.apache.logging.log4j.Level;
 
 import java.io.IOException;
 import java.util.Objects;
+
+import static com.brnd.action_recorder.views.main_view.Main.logger;
 
 
 /**
@@ -20,41 +23,11 @@ import java.util.Objects;
  */
 public interface ViewController {
 
-    @FXML
-    public default void minimizeStage(Event event) {
-        ((Stage) (((Button) event.getSource()).getScene().getWindow())).setIconified(true);
-    }
-
-    @FXML
-    public default void closeStage(Event event) {
-        ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
-    }
-    @FXML
-    public default void navigateToMainView(Event event) throws IOException {
-        navigateToView(event, ViewEnum.MAIN);
-    }
-    @FXML
-    public default void navigateToSettingsView(Event event) throws IOException {
-        navigateToView(event, ViewEnum.SETTINGS);
-    }
-    @FXML
-    public default void navigateToReplayView(Event event) throws IOException {
-        System.out.println("You should be able to see Replay Scene.");
-    }
-    @FXML
-    public default void navigateToRecordView(Event event) throws IOException {
-        System.out.println("You should be able to see Record Scene.");
-    }
-    @FXML
-    public default void enableCoordinatesMode(Event event) {
-        System.out.println("You should be in Coordinates mode now");
-    }
-
-
     public static void openView(Stage stage, ViewEnum nextView) throws IOException {
+        logger.log(Level.TRACE, "Opening {} view", nextView.name());
         // Load Fxml view
         FXMLLoader fxmlLoader;
-
+        logger.log(Level.TRACE, "Creating FXMLLoader for {} view with fxml path {}", nextView.name(), nextView.getFxmlPath());
         try {
             fxmlLoader =
                     new FXMLLoader(
@@ -65,12 +38,12 @@ public interface ViewController {
                             )
                     );
         } catch (NullPointerException e) {
-            System.out.println("No se encontro el archivo settingsView.fxml");
+            logger.log(Level.FATAL, "Could not find settingsView.fxml file", e);
             throw e;
         }
 
         Parent root = fxmlLoader.load();
-
+        logger.log(Level.TRACE, "Configuring {} view", nextView.name());
         // Add the fxml view to a new scene with the previous scene width and height
         Scene newScene = new Scene(root);
 
@@ -82,7 +55,7 @@ public interface ViewController {
         stage.setResizable(false);
 
         // Adds taskbar icon
-        stage.getIcons().add(0, ViewEnum.getAppIcon() );
+        stage.getIcons().add(0, ViewEnum.getAppIcon());
         // Modify the stage title
         stage.setTitle(nextView.getStageTitle());
 
@@ -94,8 +67,10 @@ public interface ViewController {
         // makes stage draggable by mouse interaction
         StagePositioner.addDragFunctionalityToStage(stage, newScene);
 
+        logger.log(Level.TRACE, "Showing {} view", nextView.name());
         // display the stage on the screen
         stage.show();
+
 
     }
 
@@ -105,6 +80,8 @@ public interface ViewController {
                         .getScene()
                         .getWindow();
 
+        logger.log(Level.TRACE, "Navigating to {} view from {} view", nextView.name(), ViewEnum.fromTitle(previousStage.getTitle()));
+
 
         Stage nextStage = new Stage(); // instantiates the new stage
 
@@ -112,7 +89,45 @@ public interface ViewController {
         // positions the new stage in the same place as the previous stage
         nextStage.setX(previousStage.getX());
         nextStage.setY(previousStage.getY());
+        logger.log(Level.TRACE, "Closing {} view ", ViewEnum.fromTitle(previousStage.getTitle()));
         previousStage.close();
+    }
+
+    @FXML
+    public default void minimizeStage(Event event) {
+        ((Stage) (((Button) event.getSource()).getScene().getWindow())).setIconified(true);
+        logger.log(Level.TRACE, "Minimizing view" );
+    }
+
+    @FXML
+    public default void closeStage(Event event) {
+        ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
+        logger.log(Level.TRACE, "Closing view and stopping app execution" );
+    }
+
+    @FXML
+    public default void navigateToMainView(Event event) throws IOException {
+        navigateToView(event, ViewEnum.MAIN);
+    }
+
+    @FXML
+    public default void navigateToSettingsView(Event event) throws IOException {
+        navigateToView(event, ViewEnum.SETTINGS);
+    }
+
+    @FXML
+    public default void navigateToReplayView(Event event) throws IOException {
+        logger.log(Level.ALL, "Unimplemented functionality" );
+    }
+
+    @FXML
+    public default void navigateToRecordView(Event event) throws IOException {
+        logger.log(Level.ALL, "Unimplemented functionality" );
+    }
+
+    @FXML
+    public default void enableCoordinatesMode(Event event) {
+        logger.log(Level.ALL, "Unimplemented functionality" );
     }
 
 }

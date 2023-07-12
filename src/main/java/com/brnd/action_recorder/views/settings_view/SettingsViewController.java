@@ -9,10 +9,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
+import org.apache.logging.log4j.Level;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import static com.brnd.action_recorder.views.main_view.Main.logger;
 
 public class SettingsViewController implements ViewController, Initializable {
     private static StageLocation initialStagePosition;
@@ -63,7 +66,7 @@ public class SettingsViewController implements ViewController, Initializable {
             SettingsViewController.setInitialStagePosition(
                     StageLocation.stageLocationFromToShowString(positionChoiceBox.getValue())
             );
-            System.out.println(initialStagePosition);
+            logger.log(Level.INFO, "Initial Stage Position selected value: {}", initialStagePosition );
         });
     }
 
@@ -80,21 +83,21 @@ public class SettingsViewController implements ViewController, Initializable {
         // configure listener for the checkbox
         alwaysOnTopCheckBox.setOnAction(actionEvent -> {
             setShowAlwaysOnTop(alwaysOnTopCheckBox.isSelected());
-            System.out.println("Always on top: " + showAlwaysOnTop);
+            logger.log(Level.INFO, "Always on top selected value: {}" , showAlwaysOnTop );
         });
 
     }
 
     @FXML
     public void saveConfigurationOnDatabase() {
-        System.out.println("Here the app should have saved the selected configuration.");
+        logger.log(Level.ALL, "Unimplemented functionality" );
 
-        System.out.format("%n STAGE POSITION => %s %n ALWAYS ON TOP => %s",
+        logger.log(Level.INFO, "STAGE POSITION => {},  ALWAYS ON TOP => {}",
                 getInitialStagePosition(), isShowAlwaysOnTopEnabled());
     }
     @FXML
     public void browseDirectories() {
-        System.out.println("You should be able to select a directory from the explorer.");
+        logger.log(Level.ALL, "Unimplemented functionality" );
     }
 
     private StageLocation retrieveSavedPositionFromDatabase() {
