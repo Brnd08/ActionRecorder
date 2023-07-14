@@ -1,5 +1,6 @@
 package com.brnd.action_recorder.views.main_view;
 
+import com.brnd.action_recorder.views.settings_view.SettingsService;
 import com.brnd.action_recorder.views.settings_view.SettingsViewController;
 import com.brnd.action_recorder.views.utils.StageLocation;
 import com.brnd.action_recorder.views.utils.StagePositioner;
@@ -30,6 +31,6 @@ public class Main extends Application {
 
 
         // sets the initial position of the stage
-        StagePositioner.setStageLocation( stage , SettingsViewController.getInitialStageLocation());
+        StagePositioner.setStageLocation( stage , ViewController.settingsService.getSavedSettings().getInitialViewLocation());
     }
 }

@@ -18,8 +18,8 @@ import java.util.ResourceBundle;
 import static com.brnd.action_recorder.views.main_view.Main.logger;
 
 public class SettingsViewController implements ViewController, Initializable {
-    private static final SettingsService settingsService = new SettingsService();
-    private static Settings currentSettings = settingsService.retrieveLastSavedSettings();
+
+    private Settings currentSettings = settingsService.getSavedSettings();
     @FXML
     Button browseButton;
     @FXML
@@ -60,7 +60,7 @@ public class SettingsViewController implements ViewController, Initializable {
         // configure a listener for the positionChoiceBox
         positionChoiceBox.setOnAction(event -> {
             //obtains the enum constant based on the selected value from the position ChoiceBox
-            SettingsViewController.setInitialStageLocation(
+            currentSettings.setInitialViewLocation(
                     StageLocation.stageLocationFromToShowString(positionChoiceBox.getValue())
             );
             logger.log(Level.INFO, "Initial Stage Position selected value: {}", currentSettings.getInitialViewLocation() );
@@ -77,7 +77,7 @@ public class SettingsViewController implements ViewController, Initializable {
 
         // configure listener for the checkbox
         alwaysOnTopCheckBox.setOnAction(actionEvent -> {
-            setShowAlwaysOnTop(alwaysOnTopCheckBox.isSelected());
+            currentSettings.setShowAlwaysOnTop(alwaysOnTopCheckBox.isSelected());
             logger.log(Level.INFO, "Always on top selected value: {}" , currentSettings.isShowAlwaysOnTopEnabled() );
         });
 
@@ -87,33 +87,13 @@ public class SettingsViewController implements ViewController, Initializable {
     public void saveConfigurationOnDatabase() {
         logger.log(Level.ALL, "Unimplemented functionality" );
 
-        Settings newSettings = new Settings(getInitialStageLocation(), isShowAlwaysOnTopEnabled());
+        settingsService.saveSettings(currentSettings);
 
-        settingsService.saveSettings(newSettings);
-
-        logger.log(Level.INFO, "SAVES SETTINGS {}", newSettings);
+        logger.log(Level.INFO, "SAVED SETTINGS {}", currentSettings);
     }
     @FXML
     public void browseDirectories() {
         logger.log(Level.ALL, "Unimplemented functionality" );
-    }
-
-    private static synchronized void setCurrentSettings(Settings newCurrentSettings){
-        currentSettings = newCurrentSettings;
-
-    }
-
-    public static StageLocation getInitialStageLocation() {
-        return currentSettings.getInitialViewLocation();
-    }
-    private static void setInitialStageLocation(StageLocation newLocation) {
-        currentSettings.setInitialViewLocation( newLocation);
-    }
-    public static  boolean isShowAlwaysOnTopEnabled() {
-        return currentSettings.isShowAlwaysOnTopEnabled();
-    }
-    public static  void setShowAlwaysOnTop(boolean showAlwaysOnTopValue) {
-        currentSettings.setShowAlwaysOnTop(showAlwaysOnTopValue);
     }
 
     @Override
