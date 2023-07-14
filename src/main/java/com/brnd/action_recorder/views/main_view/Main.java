@@ -1,5 +1,6 @@
 package com.brnd.action_recorder.views.main_view;
 
+import com.brnd.action_recorder.views.settings_view.SettingsViewController;
 import com.brnd.action_recorder.views.utils.StageLocation;
 import com.brnd.action_recorder.views.utils.StagePositioner;
 import com.brnd.action_recorder.views.utils.ViewController;
@@ -14,7 +15,7 @@ import java.io.IOException;
 
 
 public class Main extends Application {
-    public static Logger logger = LogManager.getLogger(Main.class);
+    public static final Logger logger = LogManager.getLogger(Main.class);
 
     public static void main(String[] args) {
         launch();
@@ -29,6 +30,6 @@ public class Main extends Application {
 
 
         // sets the initial position of the stage
-        StagePositioner.setStageLocation( stage , StageLocation.CENTER);
+        StagePositioner.setStageLocation( stage , SettingsViewController.getInitialStageLocation());
     }
 }

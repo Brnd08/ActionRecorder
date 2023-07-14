@@ -1,5 +1,6 @@
 package com.brnd.action_recorder.views.utils;
 
+import com.brnd.action_recorder.views.settings_view.SettingsViewController;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -62,6 +63,8 @@ public interface ViewController {
 
         // Adds the new scene to the Stage
         stage.setScene(newScene);
+        // Sets show on view enabled or disabled depending on specific value
+        stage.setAlwaysOnTop(SettingsViewController.isShowAlwaysOnTopEnabled());
 
 
         // makes stage draggable by mouse interaction

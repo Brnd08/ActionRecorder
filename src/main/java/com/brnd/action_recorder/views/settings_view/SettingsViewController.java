@@ -18,9 +18,8 @@ import java.util.ResourceBundle;
 import static com.brnd.action_recorder.views.main_view.Main.logger;
 
 public class SettingsViewController implements ViewController, Initializable {
-    private static StageLocation initialStagePosition;
-    private static boolean showAlwaysOnTop;
-    private final SettingsService settingsService = new SettingsService();
+    private static final SettingsService settingsService = new SettingsService();
+    private static Settings currentSettings = settingsService.retrieveLastSavedSettings();
     @FXML
     Button browseButton;
     @FXML
@@ -55,19 +54,16 @@ public class SettingsViewController implements ViewController, Initializable {
         // adds the list containing the toShowStrings from the StagePosition constants
         positionChoiceBox.getItems().addAll(StageLocation.getToShowStringsList());
 
-        // sets the initial Position
-        SettingsViewController.setInitialStagePosition(settingsService.retrieveSavedPosition());
-
         // makes the option corresponding to the actual Position selected in the choice box
-        positionChoiceBox.getSelectionModel().select(initialStagePosition.getToShowString());
+        positionChoiceBox.getSelectionModel().select(currentSettings.getInitialViewLocation().getToShowString());
 
         // configure a listener for the positionChoiceBox
         positionChoiceBox.setOnAction(event -> {
             //obtains the enum constant based on the selected value from the position ChoiceBox
-            SettingsViewController.setInitialStagePosition(
+            SettingsViewController.setInitialStageLocation(
                     StageLocation.stageLocationFromToShowString(positionChoiceBox.getValue())
             );
-            logger.log(Level.INFO, "Initial Stage Position selected value: {}", initialStagePosition );
+            logger.log(Level.INFO, "Initial Stage Position selected value: {}", currentSettings.getInitialViewLocation() );
         });
     }
 
@@ -75,16 +71,14 @@ public class SettingsViewController implements ViewController, Initializable {
      * Sets the needed configuration for the show always on top feature
      */
     private void configureAlwaysOnTopFunctionality() {
-        // assign the value from the database to the static variable
-        setShowAlwaysOnTop(settingsService.retrieveShowAlwaysOnTop());
 
         // sets selecting depending on showAlways on top value
-        alwaysOnTopCheckBox.setSelected(showAlwaysOnTop);
+        alwaysOnTopCheckBox.setSelected(currentSettings.isShowAlwaysOnTopEnabled());
 
         // configure listener for the checkbox
         alwaysOnTopCheckBox.setOnAction(actionEvent -> {
             setShowAlwaysOnTop(alwaysOnTopCheckBox.isSelected());
-            logger.log(Level.INFO, "Always on top selected value: {}" , showAlwaysOnTop );
+            logger.log(Level.INFO, "Always on top selected value: {}" , currentSettings.isShowAlwaysOnTopEnabled() );
         });
 
     }
@@ -93,30 +87,33 @@ public class SettingsViewController implements ViewController, Initializable {
     public void saveConfigurationOnDatabase() {
         logger.log(Level.ALL, "Unimplemented functionality" );
 
-        Settings newConfigs = new Settings(getInitialStagePosition(), isShowAlwaysOnTopEnabled());
+        Settings newSettings = new Settings(getInitialStageLocation(), isShowAlwaysOnTopEnabled());
 
-        settingsService.saveConfiguration(newConfigs);
+        settingsService.saveSettings(newSettings);
 
-        logger.log(Level.INFO, "STAGE POSITION => {},  ALWAYS ON TOP => {}",
-                getInitialStagePosition(), isShowAlwaysOnTopEnabled());
+        logger.log(Level.INFO, "SAVES SETTINGS {}", newSettings);
     }
     @FXML
     public void browseDirectories() {
         logger.log(Level.ALL, "Unimplemented functionality" );
     }
 
+    private static synchronized void setCurrentSettings(Settings newCurrentSettings){
+        currentSettings = newCurrentSettings;
 
-    public static synchronized StageLocation getInitialStagePosition() {
-        return initialStagePosition;
     }
-    private static synchronized void setInitialStagePosition(StageLocation newLocation) {
-        initialStagePosition = newLocation;
+
+    public static StageLocation getInitialStageLocation() {
+        return currentSettings.getInitialViewLocation();
     }
-    public static synchronized boolean isShowAlwaysOnTopEnabled() {
-        return showAlwaysOnTop;
+    private static void setInitialStageLocation(StageLocation newLocation) {
+        currentSettings.setInitialViewLocation( newLocation);
     }
-    public static synchronized void setShowAlwaysOnTop(boolean showAlwaysOnTopValue) {
-        showAlwaysOnTop = showAlwaysOnTopValue;
+    public static  boolean isShowAlwaysOnTopEnabled() {
+        return currentSettings.isShowAlwaysOnTopEnabled();
+    }
+    public static  void setShowAlwaysOnTop(boolean showAlwaysOnTopValue) {
+        currentSettings.setShowAlwaysOnTop(showAlwaysOnTopValue);
     }
 
     @Override

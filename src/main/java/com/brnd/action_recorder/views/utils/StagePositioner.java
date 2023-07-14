@@ -1,5 +1,6 @@
 package com.brnd.action_recorder.views.utils;
 
+import com.brnd.action_recorder.views.settings_view.SettingsService;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.stage.Screen;
@@ -10,21 +11,21 @@ import javafx.stage.Stage;
  * positioning the stage based on specified location
  */
 public abstract class StagePositioner {
+    // Coordinates Offsets for window drag action/motion
+    private static double xOffset;
+    private static double yOffset;
 
     private StagePositioner() { // To prevent class instantiation in utility classes
         throw new UnsupportedOperationException("Utility class can not be instantiated");
     }
 
-    // Coordinates Offsets for window drag action/motion
-    private static double xOffset;
-    private static double yOffset;
-
 
     /**
      * Makes the specified Stage draggable based on given scene interactions
+     *
      * @param scene The scene to link to the drag motion/action
      */
-    public static void addDragFunctionalityToStage(Stage stage, Scene scene){
+    public static void addDragFunctionalityToStage(Stage stage, Scene scene) {
         scene.setOnMousePressed(event -> { // gets the offsets between mouse click and window screen coordinates
             xOffset = stage.getX() - event.getScreenX();
             yOffset = stage.getY() - event.getScreenY();
@@ -33,7 +34,7 @@ public abstract class StagePositioner {
             stage.setX(event.getScreenX() + xOffset);
             stage.setY(event.getScreenY() + yOffset);
         });
-        
+
     }
 
     /**
@@ -57,7 +58,7 @@ public abstract class StagePositioner {
         double stageXCoordinate = 0d;
         double stageYCoordinate = 0d;
 
-        switch(position){
+        switch (position) {
             case LOWER_LEFT_CORNER -> {
                 stageYCoordinate = screenHeight - stageHeight;
                 stageXCoordinate = 0d;
@@ -75,8 +76,8 @@ public abstract class StagePositioner {
                 stageXCoordinate = screenWidth - stageWidth;
             }
             case CENTER -> {
-                stageYCoordinate = (screenHeight - stageHeight)/2;
-                stageXCoordinate = (screenWidth - stageWidth)/2;
+                stageYCoordinate = (screenHeight - stageHeight) / 2;
+                stageXCoordinate = (screenWidth - stageWidth) / 2;
             }
         }
         stage.setX(stageXCoordinate);
