@@ -1,8 +1,5 @@
 package com.brnd.action_recorder.views.main_view;
 
-import com.brnd.action_recorder.views.settings_view.SettingsService;
-import com.brnd.action_recorder.views.settings_view.SettingsViewController;
-import com.brnd.action_recorder.views.utils.StageLocation;
 import com.brnd.action_recorder.views.utils.StagePositioner;
 import com.brnd.action_recorder.views.utils.ViewController;
 import com.brnd.action_recorder.views.utils.ViewEnum;

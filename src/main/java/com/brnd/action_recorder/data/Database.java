@@ -23,7 +23,6 @@ public class Database {
      */
     public static synchronized Connection getSqliteConnection() throws SQLException, ClassNotFoundException {
 
-        String.format("");
         try {
             if (sqliteConnection == null || sqliteConnection.isClosed()) {
                 Class.forName(SQLITE_JDBC_CLASS);

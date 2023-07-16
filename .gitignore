@@ -26,6 +26,7 @@ target/
 *.iws
 *.iml
 *.ipr
+ActionRecorder.eml
 
 ### NetBeans ###
 /nbproject/private/
