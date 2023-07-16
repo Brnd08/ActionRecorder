@@ -6,6 +6,7 @@
 .settings
 .springBeans
 .sts4-cache
+/bin/
 
 ### VS Code ###
 .vscode/
@@ -32,10 +33,14 @@ target/
 /dist/
 /nbdist/
 /.nb-gradle/
-build/
+/build
 !**/src/main/**/build/
 !**/src/test/**/build/
 **/nbactions.xml
+/target
+/build.xml
+/manifest.mf
+
 
 ### Other files ###
 **/*.class
