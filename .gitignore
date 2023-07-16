@@ -40,6 +40,8 @@ target/
 /target
 /build.xml
 /manifest.mf
+/lib
+/nbproject
 
 
 ### Other files ###
