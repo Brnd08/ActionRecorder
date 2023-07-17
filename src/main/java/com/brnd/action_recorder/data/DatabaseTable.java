@@ -17,10 +17,26 @@ public enum DatabaseTable {
     private final String selectAllSentence;
     private final String insertNewRowSentence;
 
+    public String getCreateTableSentence() {
+        return createTableSentence;
+    }
+
+    public String getSelectByIdSentence() {
+        return selectByIdSentence;
+    }
+
+    public String getSelectAllSentence() {
+        return selectAllSentence;
+    }
+
+    public String getInsertNewRowSentence() {
+        return insertNewRowSentence;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("DatabaseTable{");
+        sb.append("DatabaseTable.").append(this.name()) .append('{');
         sb.append("fieldsMap=").append(fieldsMap);
         sb.append(", createTableSentence=").append(createTableSentence);
         sb.append(", selectByIdSentence=").append(selectByIdSentence);
@@ -29,12 +45,11 @@ public enum DatabaseTable {
         sb.append('}');
         return sb.toString();
     }
-    
 
     private DatabaseTable(String[]... fields) {
         selectAllSentence = "SELECT * FROM " + this.name() + ";";
         selectByIdSentence = "SELECT * FROM " + this.name() + " WHERE " + fields[0][0] + " = ?;";
-        
+
         StringBuilder insertSentence = new StringBuilder("INSERT INTO " + this.name() + " VALUES (");
         StringBuilder createSentence = new StringBuilder("CREATE TABLE " + this.name() + "(");
 
@@ -44,24 +59,24 @@ public enum DatabaseTable {
                     .append(" ")
                     .append(field[1])
                     .append(",");
-            
+
             insertSentence.append("?,");
 
             fieldsMap.put(field[0], field[1]);
         }
-        
+
         createTableSentence = createSentence
-                                .deleteCharAt(createSentence.length())
-                                .append(");")
-                                .toString();
+                .deleteCharAt(createSentence.length())
+                .append(");")
+                .toString();
         insertNewRowSentence = insertSentence
-                                .deleteCharAt(insertSentence.length())
-                                .append(");")
-                                .toString();   
-        logger.log(Level.TRACE
-                ,"Table {} created with following configuration %n \t{}"
-                , this.name(), this.toString());
-        
+                .deleteCharAt(insertSentence.length())
+                .append(");")
+                .toString();
+        logger.log(Level.TRACE,
+                "Table {} created with following configuration %n \t{}",
+                this.name(), this.toString());
+
     }
 
 }
