@@ -51,7 +51,7 @@ public enum DatabaseTable {
         selectByIdSentence = "SELECT * FROM " + this.name() + " WHERE " + fields[0][0] + " = ?;";
 
         StringBuilder insertSentence = new StringBuilder("INSERT INTO " + this.name() + " VALUES (");
-        StringBuilder createSentence = new StringBuilder("CREATE TABLE " + this.name() + "(");
+        StringBuilder createSentence = new StringBuilder("CREATE TABLE IF NOT EXISTS " + this.name() + "(");
 
         for (String[] field : fields) {
             createSentence
