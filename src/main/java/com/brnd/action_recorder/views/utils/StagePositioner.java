@@ -1,6 +1,5 @@
 package com.brnd.action_recorder.views.utils;
 
-import com.brnd.action_recorder.views.settings_view.SettingsService;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.stage.Screen;

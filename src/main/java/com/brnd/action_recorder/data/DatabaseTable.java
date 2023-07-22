@@ -66,11 +66,11 @@ public enum DatabaseTable {
         }
 
         createTableSentence = createSentence
-                .deleteCharAt(createSentence.length())
+                .deleteCharAt(createSentence.length()-1)
                 .append(");")
                 .toString();
         insertNewRowSentence = insertSentence
-                .deleteCharAt(insertSentence.length())
+                .deleteCharAt(insertSentence.length()-1)
                 .append(");")
                 .toString();
         logger.log(Level.TRACE,

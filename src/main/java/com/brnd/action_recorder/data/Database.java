@@ -11,22 +11,30 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class Database {
-
+    
     public static final Logger logger = LogManager.getLogger(Database.class);
-
     private static final String SQLITE_JDBC_CLASS = "org.sqlite.JDBC";
 
     private static final String APP_FOLDER
             = System.getenv("LOCALAPPDATA")
-            + File.pathSeparator + "Brnd08"
-            + File.pathSeparator + "Action Rcorder";
+            + File.separator + "Brnd08"
+            + File.separator + "ActionRecorder";
+    
+    private static final String DATA_FOLDER
+            = APP_FOLDER
+            + File.separator + "data";
 
     private static final String DB_FILE_PATH
-            = APP_FOLDER
-            + File.pathSeparator + "data"
-            + File.pathSeparator + "action_recorder.db";
+            = DATA_FOLDER
+            + File.separator + "action_recorder.db";
 
-    private static final String DB_URL = "jdbc:sqlite:" + File.pathSeparator + DB_FILE_PATH;
+    private static final String DB_URL = "jdbc:sqlite:" + File.separator + DB_FILE_PATH;
+        
+    
+    private Database() { // To prevent class instantiation in utility classes
+        throw new UnsupportedOperationException("Utility class can not be instantiated");
+    }
+
 
     private static Connection sqliteConnection;
 
@@ -37,6 +45,35 @@ public class Database {
      * @return {@link Connection}
      */
     public static synchronized Connection getSqliteConnection() throws SQLException {
+        initializeConnection();
+        return sqliteConnection;
+    }
+
+    /**
+     * This method initializes the SQLite database by creating the tables
+     * specified in the {@link DatabaseTable} enumeration class
+     *
+     * @throws SQLException either if Could not get the database
+     * {@link Connection} instance or if an error occurs during a table creation
+     * process
+     */
+    public static void initializeDatabase() throws SQLException {
+        createAppDirs();
+        initializeConnection();
+
+        for (DatabaseTable table : DatabaseTable.values()) {
+            logger.log(Level.TRACE, "Creating {} table ", table.name());
+            createTable(table);
+            logger.log(Level.TRACE, "Table {} created successfully ", table.name());
+        }
+
+    }
+    
+    /**
+     * Method to instantiate the singleton {@link Connection} instance
+     * @throws SQLException 
+     */
+    private static void initializeConnection() throws SQLException{
         try {
             if (sqliteConnection == null || sqliteConnection.isClosed()) {
                 Class.forName(SQLITE_JDBC_CLASS);
@@ -51,28 +88,24 @@ public class Database {
             logger.log(Level.ERROR, e);
             throw e;
         }
-
-        return sqliteConnection;
     }
+    
+    private static void createAppDirs(){
+        
+        File programRootDir = new File(APP_FOLDER);
+        if (!programRootDir.exists())
+            logger.log(Level.INFO, " The program root directory '{}' {}.",APP_FOLDER, (programRootDir.mkdirs() ? "was created" : "couldn't be created") );
+        else
+            logger.log(Level.INFO, " The program root directory '{}' alreadyExists.",APP_FOLDER);
 
-    /**
-     * This method initializes the SQLite database by creating the tables
-     * specified in the {@link DatabaseTable} enumeration class
-     *
-     * @throws SQLException either if Could not get the database
-     * {@link Connection} instance or if an error occurs during a table creation
-     * process
-     */
-    public static void initializeDatabase() throws SQLException {
-
-        for (DatabaseTable table : DatabaseTable.values()) {
-            logger.log(Level.TRACE, "Creating {} table ", table.name());
-            createTable(table);
-            logger.log(Level.TRACE, "Table {} created successfully ", table.name());
-
-        }
+        File programDataDir = new File(DATA_FOLDER);
+        if (!programDataDir.exists())
+            logger.log(Level.INFO, " The program data directory '{}' {}.",DATA_FOLDER, (programDataDir.mkdirs() ? "was created" : "couldn't be created") );
+        else
+            logger.log(Level.INFO, " The program data directory '{}' alreadyExists.",DATA_FOLDER);
 
     }
+    
 
     /**
      * This method creates the specified table in the app database
@@ -99,6 +132,4 @@ public class Database {
             }
         }
     }
-;
-
 }
