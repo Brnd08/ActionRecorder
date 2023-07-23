@@ -94,15 +94,15 @@ public class Database {
         
         File programRootDir = new File(APP_FOLDER);
         if (!programRootDir.exists())
-            logger.log(Level.INFO, " The program root directory '{}' {}.",APP_FOLDER, (programRootDir.mkdirs() ? "was created" : "couldn't be created") );
+            logger.log(Level.INFO, "The program root directory '{}' {}.",APP_FOLDER, (programRootDir.mkdirs() ? "was created" : "couldn't be created") );
         else
-            logger.log(Level.INFO, " The program root directory '{}' alreadyExists.",APP_FOLDER);
+            logger.log(Level.INFO, "The program root directory '{}' alreadyExists.",APP_FOLDER);
 
         File programDataDir = new File(DATA_FOLDER);
         if (!programDataDir.exists())
-            logger.log(Level.INFO, " The program data directory '{}' {}.",DATA_FOLDER, (programDataDir.mkdirs() ? "was created" : "couldn't be created") );
+            logger.log(Level.INFO, "The program data directory '{}' {}.",DATA_FOLDER, (programDataDir.mkdirs() ? "was created" : "couldn't be created") );
         else
-            logger.log(Level.INFO, " The program data directory '{}' alreadyExists.",DATA_FOLDER);
+            logger.log(Level.INFO, "The program data directory '{}' alreadyExists.",DATA_FOLDER);
 
     }
     

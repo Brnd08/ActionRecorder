@@ -1,7 +1,9 @@
 package com.brnd.action_recorder.data;
 
 import static com.brnd.action_recorder.data.Database.logger;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import org.apache.logging.log4j.Level;
 
 public enum DatabaseTable {
@@ -16,6 +18,7 @@ public enum DatabaseTable {
     private final String selectByIdSentence;
     private final String selectAllSentence;
     private final String insertNewRowSentence;
+    
 
     public String getCreateTableSentence() {
         return createTableSentence;
@@ -37,8 +40,7 @@ public enum DatabaseTable {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("DatabaseTable.").append(this.name()) .append('{');
-        sb.append("fieldsMap=").append(fieldsMap);
-        sb.append(", createTableSentence=").append(createTableSentence);
+        sb.append("createTableSentence=").append(createTableSentence);
         sb.append(", selectByIdSentence=").append(selectByIdSentence);
         sb.append(", selectAllSentence=").append(selectAllSentence);
         sb.append(", insertNewRowSentence=").append(insertNewRowSentence);
@@ -52,7 +54,6 @@ public enum DatabaseTable {
 
         StringBuilder insertSentence = new StringBuilder("INSERT INTO " + this.name() + " VALUES (");
         StringBuilder createSentence = new StringBuilder("CREATE TABLE IF NOT EXISTS " + this.name() + "(");
-
         for (String[] field : fields) {
             createSentence
                     .append(field[0])
@@ -74,7 +75,7 @@ public enum DatabaseTable {
                 .append(");")
                 .toString();
         logger.log(Level.TRACE,
-                "Table {} created with following configuration %n \t{}",
+                "Table {} created with following configuration: \t{}",
                 this.name(), this.toString());
 
     }
