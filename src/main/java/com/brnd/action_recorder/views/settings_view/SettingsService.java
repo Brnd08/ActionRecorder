@@ -10,7 +10,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Logger;
 
 public class SettingsService {
 
@@ -47,6 +46,21 @@ public class SettingsService {
                 = String.format("SELECT %s FROM %s WHERE %s = %d;",
                         SHOW_ON_TOP_FIELD,
                         DatabaseTable.SETTINGS.name(),
+                        SETTINGS_ID_FIELD,
+                        0
+                );
+        private static final String UPDATE_INITIAL_STAGE_LOCATION_SENTENCE
+                = String.format("UPDATE %s SET %s = (?) WHERE %s = %d;",
+                        DatabaseTable.SETTINGS.name(),
+                        INITIAL_STAGE_LOCATION_FIELD,
+                        SETTINGS_ID_FIELD,
+                        0
+                );
+        
+        private static final String UPDATE_SHOW_ON_TOP_SENTENCE
+                = String.format("UPDATE %s SET %s = (?) WHERE %s = %d;",
+                        DatabaseTable.SETTINGS.name(),
+                        SHOW_ON_TOP_FIELD,
                         SETTINGS_ID_FIELD,
                         0
                 );
@@ -102,17 +116,16 @@ public class SettingsService {
                 showOnTop = resultSet.getBoolean(1);
 
             } catch (SQLException e) {
-                logger.log(Level.ERROR, "Could not retrieve Initial Stage Location value from database with following query {}", SELECT_INITIAL_STAGE_LOCATION_SENTENCE);
+                logger.log(Level.ERROR, "Could not retrieve show on top value from database with following query {}", SELECT_SHOW_ON_TOP_FIELD_SENTENCE);
                 logger.log(Level.ERROR, e);
-
-                logger.log(Level.ALL, "No saved Initial Stage Location value found in database, using default value {}", StageLocation.LOWER_LEFT_CORNER.name());
+                logger.log(Level.ALL, "No saved obtain show on top value found in database, using default value {}", true);
                 showOnTop = true;
             } finally {
                 if (preparedStatement != null) {
                     try {
                         preparedStatement.close();
                     } catch (SQLException ex) {
-                        logger.log(Level.ERROR, "Could not close PrepareStament on {} method", "SettingsService.SettingsRepository.obtainInitialStageLocation()");
+                        logger.log(Level.ERROR, "Could not close PrepareStament on {} method", "SettingsService.SettingsRepository.obtainShowOnTopValue()");
                     }
                 }
             }
@@ -126,11 +139,48 @@ public class SettingsService {
         }
 
         public void saveInitialStageLocation(StageLocation newInitialStageLocation) {
-            logger.log(Level.ALL, "Unimplemented SettingsRepository.saveInitialStageLocation(StageLocation) method functionality");
+            PreparedStatement preparedStatement = null;
+            
+            try {
+                preparedStatement = connection.prepareStatement(UPDATE_INITIAL_STAGE_LOCATION_SENTENCE);
+                preparedStatement.setString(1, newInitialStageLocation.name());
+                int modifiedRows  = preparedStatement.executeUpdate();                
+
+                logger.log(Level.ALL, "Save Initial Stage Location value ({}) in database with {} modified rows.", newInitialStageLocation.name(), modifiedRows);
+
+            } catch (SQLException e) {
+                logger.log(Level.ERROR, "Could not save Initial Stage Location value ({}) in database following query {}",  UPDATE_INITIAL_STAGE_LOCATION_SENTENCE);
+                logger.log(Level.ERROR, e);
+            } finally {
+                if (preparedStatement != null) {
+                    try {
+                        preparedStatement.close();
+                    } catch (SQLException ex) {
+                        logger.log(Level.ERROR, "Could not close PrepareStament on {} method", "SettingsService.SettingsRepository.saveInitialStageLocation()");
+                    }
+                }
+            }
         }
 
         public void saveShowOnTopValue(boolean newShowOnTopValue) {
-            logger.log(Level.ALL, "Unimplemented SettingsRepository.saveShowOnTopValue(boolean) method functionality");
+            PreparedStatement preparedStatement = null;
+            try {
+                preparedStatement = connection.prepareStatement(UPDATE_SHOW_ON_TOP_SENTENCE);
+                preparedStatement.setBoolean(1, newShowOnTopValue);
+                int modifiedRows  = preparedStatement.executeUpdate();                
+                logger.log(Level.ALL, "Save Show on top value ({}) in database with {} modified rows.", newShowOnTopValue, modifiedRows);
+            } catch (SQLException e) {
+                logger.log(Level.ERROR, "Could not save Show on top value ({}) in database following query {}",  UPDATE_INITIAL_STAGE_LOCATION_SENTENCE);
+                logger.log(Level.ERROR, e);
+            } finally {
+                if (preparedStatement != null) {
+                    try {
+                        preparedStatement.close();
+                    } catch (SQLException ex) {
+                        logger.log(Level.ERROR, "Could not close PrepareStament on {} method", "SettingsService.SettingsRepository.saveShowOnTopValue()");
+                    }
+                }
+            }
         }
 
         public void saveExportDirectoryPath(String newPath) {
