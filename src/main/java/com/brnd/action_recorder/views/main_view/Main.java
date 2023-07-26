@@ -43,7 +43,7 @@ public class Main extends Application {
 
         // sets the initial position of the stage
         StageLocation initialStageLocation = settingsRepository.obtainInitialStageLocation();
-        logger.log(Level.TRACE, "Setting view location to  {}.", initialStageLocation);
+        logger.log(Level.TRACE, "Setting view location to {}.", initialStageLocation);
         StagePositioner.setStageLocation( stage , initialStageLocation);
     }
 }
