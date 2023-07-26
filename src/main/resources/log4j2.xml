@@ -2,7 +2,7 @@
 <Configuration>
     <Appenders>
         <Console name="Console">
-            <PatternLayout pattern="||%-5level || %-100.100l || %msg %n"/>
+		<PatternLayout pattern="%highlight{[%-5level]} %style{%c{10}.%M()}{yellow} %style{(%c{1}:%L)}{cyan} %n\t >>> %msg %n" disableAnsi="false"/>
         </Console>
     </Appenders>
     <Loggers>
