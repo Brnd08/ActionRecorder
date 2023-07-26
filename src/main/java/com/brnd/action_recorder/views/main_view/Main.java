@@ -1,6 +1,8 @@
 package com.brnd.action_recorder.views.main_view;
 
 import static com.brnd.action_recorder.data.Database.initializeDatabase;
+import com.brnd.action_recorder.views.settings_view.SettingsRepository;
+import com.brnd.action_recorder.views.utils.StageLocation;
 import com.brnd.action_recorder.views.utils.StagePositioner;
 import com.brnd.action_recorder.views.utils.ViewController;
 import com.brnd.action_recorder.views.utils.ViewEnum;
@@ -15,7 +17,9 @@ import java.sql.SQLException;
 
 
 public class Main extends Application {
+    
     public static final Logger logger = LogManager.getLogger(Main.class);
+    public static final SettingsRepository settingsRepository = new SettingsRepository();
 
     public static void main(String[] args) {
         launch();
@@ -38,6 +42,8 @@ public class Main extends Application {
 
 
         // sets the initial position of the stage
-        StagePositioner.setStageLocation( stage , ViewController.settingsService.getSavedSettings().getInitialViewLocation());
+        StageLocation initialStageLocation = settingsRepository.obtainInitialStageLocation();
+        logger.log(Level.TRACE, "Setting view location to  {}.", initialStageLocation);
+        StagePositioner.setStageLocation( stage , initialStageLocation);
     }
 }

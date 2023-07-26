@@ -10,7 +10,7 @@ public enum DatabaseTable {
     SETTINGS(
             new String[]{"settings_id", "INT PRIMARYKEY AUTO_INCREMENT"},
             new String[]{"always_on_top", "BOOLEAN NOT NULL DEFAULT FALSE"},
-            new String[]{"initial_stage_location", "VARCHAR(30) NOT NULL DEFAULT CENTER"}
+            new String[]{"initial_stage_location", "VARCHAR(30) NOT NULL DEFAULT 'CENTER'"}
     );
 
     private final LinkedHashMap<String, String> fieldsMap = new LinkedHashMap<>();
@@ -41,9 +41,9 @@ public enum DatabaseTable {
         StringBuilder sb = new StringBuilder();
         sb.append("DatabaseTable.").append(this.name()) .append('{');
         sb.append("createTableSentence=").append(createTableSentence);
-        sb.append(", selectByIdSentence=").append(selectByIdSentence);
-        sb.append(", selectAllSentence=").append(selectAllSentence);
-        sb.append(", insertNewRowSentence=").append(insertNewRowSentence);
+//        sb.append(", selectByIdSentence=").append(selectByIdSentence);
+//        sb.append(", selectAllSentence=").append(selectAllSentence);
+//        sb.append(", insertNewRowSentence=").append(insertNewRowSentence);
         sb.append('}');
         return sb.toString();
     }
@@ -75,7 +75,7 @@ public enum DatabaseTable {
                 .append(");")
                 .toString();
         logger.log(Level.TRACE,
-                "Table {} created with following configuration: \t{}",
+                "Table {} created with following configuration: {}",
                 this.name(), this.toString());
 
     }

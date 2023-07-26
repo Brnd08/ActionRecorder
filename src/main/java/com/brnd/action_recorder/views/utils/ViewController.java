@@ -1,8 +1,6 @@
 package com.brnd.action_recorder.views.utils;
 
-import com.brnd.action_recorder.views.settings_view.Settings;
-import com.brnd.action_recorder.views.settings_view.SettingsService;
-import com.brnd.action_recorder.views.settings_view.SettingsViewController;
+import com.brnd.action_recorder.views.main_view.Main;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -25,7 +23,6 @@ import static com.brnd.action_recorder.views.main_view.Main.logger;
  * code, by providing methods for views navigation and related methods.
  */
 public interface ViewController {
-    public static final SettingsService settingsService = new SettingsService();
 
     public static void openView(Stage stage, ViewEnum nextView) throws IOException {
         logger.log(Level.TRACE, "Opening {} view", nextView.name());
@@ -68,7 +65,11 @@ public interface ViewController {
         stage.setScene(newScene);
 
         // Sets show on view enabled or disabled depending on specific value
-        stage.setAlwaysOnTop(settingsService.getSavedSettings().isShowAlwaysOnTopEnabled());
+
+        boolean alwaysOnTop  = Main.settingsRepository.obtainShowOnTopValue();
+        
+        logger.log(Level.TRACE, "Using alwaysOnTop value {} for the view.", alwaysOnTop);
+        stage.setAlwaysOnTop(alwaysOnTop);
 
 
         // makes stage draggable by mouse interaction
