@@ -1,5 +1,6 @@
 package com.brnd.action_recorder.views.settings_view;
 
+import com.brnd.action_recorder.views.main_view.Main;
 import com.brnd.action_recorder.views.utils.StageLocation;
 import com.brnd.action_recorder.views.utils.ViewController;
 import javafx.event.Event;
@@ -19,7 +20,7 @@ import static com.brnd.action_recorder.views.main_view.Main.logger;
 
 public class SettingsViewController implements ViewController, Initializable {
 
-    private Settings currentSettings = settingsService.getSavedSettings();
+    private Settings currentSettings;
     @FXML
     Button browseButton;
     @FXML
@@ -35,14 +36,10 @@ public class SettingsViewController implements ViewController, Initializable {
     @FXML
     ChoiceBox<String> positionChoiceBox;
 
-    /**
-     * Configure the settings functionalities at class instantiation
-     *
-     * @param location
-     * @param resources
-     */
+    
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        loadSavedSettings();
         configurePositionChoiceFunctionality();
         configureAlwaysOnTopFunctionality();
     }
@@ -85,11 +82,23 @@ public class SettingsViewController implements ViewController, Initializable {
 
     @FXML
     public void saveConfigurationOnDatabase() {
-        logger.log(Level.ALL, "Unimplemented functionality" );
 
-        settingsService.saveSettings(currentSettings);
+        saveSettings(currentSettings);
 
         logger.log(Level.INFO, "SAVED SETTINGS {}", currentSettings);
+    }
+    
+    
+    private void saveSettings(Settings settings){
+        Main.settingsRepository.saveInitialStageLocation(settings.getInitialViewLocation());
+        Main.settingsRepository.saveShowOnTopValue(settings.isShowAlwaysOnTopEnabled());        
+    }
+    
+    private void loadSavedSettings(){
+        this.currentSettings = new Settings (
+                Main.settingsRepository.obtainInitialStageLocation()
+                ,Main.settingsRepository.obtainShowOnTopValue()
+        );
     }
     @FXML
     public void browseDirectories() {

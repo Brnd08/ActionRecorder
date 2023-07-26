@@ -3,6 +3,7 @@ package com.brnd.action_recorder.views.settings_view;
 import com.brnd.action_recorder.views.utils.StageLocation;
 
 public class Settings {
+    public static final Settings DEFAULT_SETTINGS = new Settings(StageLocation.CENTER, true);
     private StageLocation initialViewLocation;
     private boolean showAlwaysOnTop;
 
