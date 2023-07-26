@@ -24,21 +24,21 @@ public class SettingsRepository {
                     INITIAL_STAGE_LOCATION_FIELD,
                     DatabaseTable.SETTINGS.name(),
                     SETTINGS_ID_FIELD,
-                    0
+                    1
             );
     private static final String SELECT_SHOW_ON_TOP_FIELD_SENTENCE
             = String.format("SELECT %s FROM %s WHERE %s = %d;",
                     SHOW_ON_TOP_FIELD,
                     DatabaseTable.SETTINGS.name(),
                     SETTINGS_ID_FIELD,
-                    0
+                    1
             );
     private static final String UPDATE_INITIAL_STAGE_LOCATION_SENTENCE
             = String.format("UPDATE %s SET %s = (?) WHERE %s = %d;",
                     DatabaseTable.SETTINGS.name(),
                     INITIAL_STAGE_LOCATION_FIELD,
                     SETTINGS_ID_FIELD,
-                    0
+                    1
             );
 
     private static final String UPDATE_SHOW_ON_TOP_SENTENCE
@@ -46,7 +46,7 @@ public class SettingsRepository {
                     DatabaseTable.SETTINGS.name(),
                     SHOW_ON_TOP_FIELD,
                     SETTINGS_ID_FIELD,
-                    0
+                    1
             );
 
     public SettingsRepository() {
@@ -112,7 +112,8 @@ public class SettingsRepository {
                 try {
                     preparedStatement.close();
                 } catch (SQLException ex) {
-                    logger.log(Level.ERROR, "Could not close PrepareStament on {} method", "SettingsService.SettingsRepository.obtainShowOnTopValue()");
+                    logger.log(Level.ERROR, "Could not close PrepareStament on {} method. Error msg: {}"
+                            , "SettingsService.SettingsRepository.obtainShowOnTopValue()", ex.getMessage());
                 }
             }
         }
@@ -129,21 +130,26 @@ public class SettingsRepository {
         PreparedStatement preparedStatement = null;
 
         try {
+            logger.log(Level.ALL, "Saving Initial Stage Location value ({}) in database with script {}"
+                    , newInitialStageLocation.name(), UPDATE_INITIAL_STAGE_LOCATION_SENTENCE);
             preparedStatement = connection.prepareStatement(UPDATE_INITIAL_STAGE_LOCATION_SENTENCE);
             preparedStatement.setString(1, newInitialStageLocation.name());
             int modifiedRows = preparedStatement.executeUpdate();
+            logger.log(Level.ALL, "Succesfully execute script with a {} modified rows count"
+                    , modifiedRows);
 
-            logger.log(Level.ALL, "Save Initial Stage Location value ({}) in database with {} modified rows.", newInitialStageLocation.name(), modifiedRows);
 
         } catch (SQLException e) {
-            logger.log(Level.ERROR, "Could not save Initial Stage Location value ({}) in database following query {}", UPDATE_INITIAL_STAGE_LOCATION_SENTENCE);
+            logger.log(Level.ERROR, "Could not save Initial Stage Location value ({}) in database following query {}"
+                    , UPDATE_INITIAL_STAGE_LOCATION_SENTENCE);
             logger.log(Level.ERROR, e);
         } finally {
             if (preparedStatement != null) {
                 try {
                     preparedStatement.close();
                 } catch (SQLException ex) {
-                    logger.log(Level.ERROR, "Could not close PrepareStament on {} method", "SettingsService.SettingsRepository.saveInitialStageLocation()");
+                    logger.log(Level.ERROR, "Could not close PrepareStament on {} method. Exception msg: {}"
+                            , "SettingsService.SettingsRepository.saveInitialStageLocation()", ex.getMessage());
                 }
             }
         }
@@ -152,10 +158,13 @@ public class SettingsRepository {
     public void saveShowOnTopValue(boolean newShowOnTopValue) {
         PreparedStatement preparedStatement = null;
         try {
+            logger.log(Level.ALL, "Saving show on top value ({}) in database with script {}"
+                    , newShowOnTopValue, UPDATE_SHOW_ON_TOP_SENTENCE);
             preparedStatement = connection.prepareStatement(UPDATE_SHOW_ON_TOP_SENTENCE);
             preparedStatement.setBoolean(1, newShowOnTopValue);
             int modifiedRows = preparedStatement.executeUpdate();
-            logger.log(Level.ALL, "Save Show on top value ({}) in database with {} modified rows.", newShowOnTopValue, modifiedRows);
+            logger.log(Level.ALL, "Succesfully execute script with a {} modified rows count"
+                    , modifiedRows);
         } catch (SQLException e) {
             logger.log(Level.ERROR, "Could not save Show on top value ({}) in database following query {}", UPDATE_INITIAL_STAGE_LOCATION_SENTENCE);
             logger.log(Level.ERROR, e);
