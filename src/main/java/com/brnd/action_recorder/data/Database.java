@@ -1,5 +1,8 @@
 package com.brnd.action_recorder.data;
 
+import static com.brnd.action_recorder.data.DatabaseTable.SETTINGS;
+import com.brnd.action_recorder.views.settings_view.Settings;
+import com.brnd.action_recorder.views.utils.StageLocation;
 import java.io.File;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -60,14 +63,52 @@ public class Database {
     public static void initializeDatabase() throws SQLException {
         createAppDirs();
         initializeConnection();
-
+        
         for (DatabaseTable table : DatabaseTable.values()) {
             logger.log(Level.TRACE, "Creating {} table ", table.name());
             createTable(table);
             logger.log(Level.TRACE, "Table {} created successfully ", table.name());
         }
+        
+        insertDefaultSettingsValues();
+        
 
     }
+    
+    private static void insertDefaultSettingsValues(){
+        PreparedStatement preparedStatement = null;
+            String insertScript = SETTINGS.getInsertFirst();
+            Settings defaultSettings = Settings.DEFAULT_SETTINGS;
+        try {
+            logger.log(Level.ALL, "Adding default Settings to database with script: {}"
+                    , insertScript);
+            preparedStatement = sqliteConnection.prepareStatement( insertScript);
+            preparedStatement.setInt(1, 1);
+            preparedStatement.setBoolean(2, defaultSettings.isShowAlwaysOnTopEnabled());
+            preparedStatement.setString(3, defaultSettings.getInitialViewLocation().name());
+            int modifiedRows = preparedStatement.executeUpdate();
+            if (modifiedRows ==0){
+                logger.log(Level.ALL, "Already configured settings were found. No need to add default values.");
+            }else{
+                logger.log(Level.ALL, "Default settings values got added: {}.", defaultSettings);
+            }
+            
+        } catch (SQLException e) {
+            logger.log(Level.ERROR, "Could not save Show on top value ({}) in database following query {}"
+                    , insertScript);
+            logger.log(Level.ERROR, e);
+        } finally {
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException ex) {
+                    logger.log(Level.ERROR, "Could not close PrepareStament on {} method. Exception msg: {}"
+                            , "SettingsService.SettingsRepository.saveShowOnTopValue()", ex.getMessage());
+                }
+            }
+        }
+    }
+    
     
     /**
      * Method to instantiate the singleton {@link Connection} instance
@@ -94,13 +135,15 @@ public class Database {
         
         File programRootDir = new File(APP_FOLDER);
         if (!programRootDir.exists())
-            logger.log(Level.INFO, "The program root directory '{}' {}.",APP_FOLDER, (programRootDir.mkdirs() ? "was created" : "couldn't be created") );
+            logger.log(Level.INFO, "The program root directory '{}' {}."
+                    ,APP_FOLDER, (programRootDir.mkdirs() ? "was created" : "couldn't be created") );
         else
             logger.log(Level.INFO, "The program root directory '{}' alreadyExists.",APP_FOLDER);
 
         File programDataDir = new File(DATA_FOLDER);
         if (!programDataDir.exists())
-            logger.log(Level.INFO, "The program data directory '{}' {}.",DATA_FOLDER, (programDataDir.mkdirs() ? "was created" : "couldn't be created") );
+            logger.log(Level.INFO, "The program data directory '{}' {}."
+                    ,DATA_FOLDER, (programDataDir.mkdirs() ? "was created" : "couldn't be created") );
         else
             logger.log(Level.INFO, "The program data directory '{}' alreadyExists.",DATA_FOLDER);
 
