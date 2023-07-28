@@ -12,6 +12,9 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.9.1</junit.version>
+		<maven.compiler.source>19.0.2</maven.compiler.source>
+		<maven.compiler.target>19.0.2</maven.compiler.target>
+		<exec.mainClass>com.brnd.action_recorder.views.main_view.Main</exec.mainClass>
     </properties>
 
     <dependencies>
@@ -43,12 +46,14 @@
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
-            <version>2.20.0</version>
+			<!-- Needed version for log4j-core 3.0.0-alpha1 -->
+            <version>3.0.0-alpha1</version>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
-            <version>2.20.0</version>
+			<!-- This version has module descriptor included needed for jlink images creation -->
+            <version>3.0.0-alpha1</version> 
         </dependency>
 		<!--	Colorized outputs dependencies -->
 		<dependency>
@@ -95,9 +100,8 @@
                         <configuration>
                             <mainClass>com.brnd.action_recorder.views.main_view.Main
                             </mainClass>
-                            <launcher>app</launcher>
-                            <jlinkZipName>app</jlinkZipName>
-                            <jlinkImageName>app</jlinkImageName>
+                            <launcher>ActionRecorder</launcher>
+                            <jlinkImageName>ActionRecorder</jlinkImageName>
                             <noManPages>true</noManPages>
                             <stripDebug>true</stripDebug>
                             <noHeaderFiles>true</noHeaderFiles>
