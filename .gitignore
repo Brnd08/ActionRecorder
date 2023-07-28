@@ -47,7 +47,11 @@ ActionRecorder.eml
 
 ### Other files ###
 **/*.class
+images/releases
+**/*.bak
 
 ### mvn files ###
 .mvn/timing.properties
 .mvn/wrapper/maven-wrapper.jar
+
+
