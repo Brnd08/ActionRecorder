@@ -1,4 +1,4 @@
-package com.brnd.action_recorder.record;
+package com.brnd.action_recorder.record.capturing;
 
 import com.github.kwhat.jnativehook.NativeHookException;
 import org.apache.logging.log4j.Level;
@@ -6,7 +6,7 @@ import org.apache.logging.log4j.Level;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static com.brnd.action_recorder.record.InteractionRecorder.logger;
+import static com.brnd.action_recorder.record.capturing.InteractionRecorder.logger;
 
 public class RecorderTest {
 

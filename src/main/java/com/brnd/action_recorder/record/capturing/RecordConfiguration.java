@@ -1,4 +1,4 @@
-package com.brnd.action_recorder.record;
+package com.brnd.action_recorder.record.capturing;
 
 public class RecordConfiguration {
     private boolean recordingKeyboardInteractions;
