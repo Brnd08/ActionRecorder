@@ -5,6 +5,8 @@ import com.github.kwhat.jnativehook.NativeInputEvent;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Recording implements Serializable {
     private final int id;
@@ -21,8 +23,21 @@ public class Recording implements Serializable {
         return id;
     }
 
-    public LinkedHashMap<Long, NativeInputEvent> getInteractions() {
+    public Map<Long, NativeInputEvent> getInteractions() {
         return interactions;
+    }
+
+    public String interactionsString() {
+
+        return
+                interactions.entrySet()
+                        .stream()
+                        .map(entry -> {
+                            long time = entry.getKey();
+                            String event = entry.getValue().paramString();
+                            return String.format("time: %d -> %s %n", time, event);
+                        })
+                        .collect(Collectors.joining());
     }
 
     public long getRecordingStartTime() {
