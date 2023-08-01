@@ -1,10 +1,12 @@
 package com.brnd.action_recorder.record;
 
-import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
+import org.apache.logging.log4j.Level;
 
 import java.util.Timer;
 import java.util.TimerTask;
+
+import static com.brnd.action_recorder.record.InteractionRecorder.logger;
 
 public class RecorderTest {
 
@@ -12,21 +14,24 @@ public class RecorderTest {
 
         InteractionRecorder interactionRecorder = new InteractionRecorder();
 
-
-        RecordConfiguration recordConfiguration = new RecordConfiguration(false, false, true, false);
+        RecordConfiguration recordConfiguration = new RecordConfiguration(
+                false
+                , false
+                , true
+                , false
+        );
 
         interactionRecorder.setRecordConfiguration(recordConfiguration);
-        System.out.println("Start recording");
         interactionRecorder.startRecording();
 
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             public void run() {
                 interactionRecorder.stopRecording();
-                System.out.println(interactionRecorder.getRecording().getInteractions());
+                logger.log(Level.TRACE, "Recorded actions: \n{}", interactionRecorder.getlastRecording().interactionsString());
                 System.exit(0);
             }
-        }, 15 * 1000);
+        }, (long) 15 * 1000);
 
     }
 }
