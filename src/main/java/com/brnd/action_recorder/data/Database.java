@@ -94,7 +94,7 @@ public class Database {
             }
             
         } catch (SQLException e) {
-            logger.log(Level.ERROR, "Could not save Show on top value ({}) in database following query {}"
+            logger.log(Level.ERROR, "Fail to insert Default Settings in database with the following query {}"
                     , insertScript);
             logger.log(Level.ERROR, e);
         } finally {

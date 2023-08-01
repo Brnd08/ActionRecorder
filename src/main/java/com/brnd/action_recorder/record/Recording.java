@@ -2,12 +2,15 @@ package com.brnd.action_recorder.record;
 
 import com.github.kwhat.jnativehook.NativeInputEvent;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Recording implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 4265898901141738551L;
     private final int id;
     private final LinkedHashMap<Long, NativeInputEvent> interactions;
     private final long recordingStartTime;
