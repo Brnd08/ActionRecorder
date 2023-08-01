@@ -3,7 +3,6 @@ package com.brnd.action_recorder.record;
 import com.github.kwhat.jnativehook.NativeInputEvent;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;

@@ -1,7 +1,6 @@
 package com.brnd.action_recorder.views.settings_view;
 
 import com.brnd.action_recorder.data.Database;
-import static com.brnd.action_recorder.data.Database.logger;
 import com.brnd.action_recorder.data.DatabaseTable;
 import com.brnd.action_recorder.views.utils.StageLocation;
 import org.apache.logging.log4j.Level;
@@ -10,6 +9,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import static com.brnd.action_recorder.data.Database.logger;
 
 public class SettingsRepository {
 

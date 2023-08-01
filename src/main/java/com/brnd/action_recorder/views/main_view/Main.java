@@ -1,6 +1,5 @@
 package com.brnd.action_recorder.views.main_view;
 
-import static com.brnd.action_recorder.data.Database.initializeDatabase;
 import com.brnd.action_recorder.views.settings_view.SettingsRepository;
 import com.brnd.action_recorder.views.utils.StageLocation;
 import com.brnd.action_recorder.views.utils.StagePositioner;
@@ -14,6 +13,8 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.sql.SQLException;
+
+import static com.brnd.action_recorder.data.Database.initializeDatabase;
 
 
 public class Main extends Application {

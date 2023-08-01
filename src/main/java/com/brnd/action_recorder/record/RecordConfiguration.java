@@ -8,7 +8,7 @@ public class RecordConfiguration {
         return recordingKeyboardInteractions;
     }
 
-    public void setRecordingKeyboardInteractions(boolean recordingKeyboardInteractions) {
+    public void setIsRecordingKeyboardInteractions(boolean recordingKeyboardInteractions) {
         this.recordingKeyboardInteractions = recordingKeyboardInteractions;
     }
 
@@ -16,7 +16,7 @@ public class RecordConfiguration {
         return recordingMouseMotionInteractions;
     }
 
-    public void setRecordingMouseMotionInteractions(boolean recordingMouseMotionInteractions) {
+    public void setIsRecordingMouseMotionInteractions(boolean recordingMouseMotionInteractions) {
         this.recordingMouseMotionInteractions = recordingMouseMotionInteractions;
     }
 
@@ -24,7 +24,7 @@ public class RecordConfiguration {
         return recordingMouseClickInteractions;
     }
 
-    public void setRecordingMouseClickInteractions(boolean recordingMouseClickInteractions) {
+    public void setIsRecordingMouseClickInteractions(boolean recordingMouseClickInteractions) {
         this.recordingMouseClickInteractions = recordingMouseClickInteractions;
     }
 
@@ -32,7 +32,7 @@ public class RecordConfiguration {
         return recordingMouseWheelInteractions;
     }
 
-    public void setRecordingMouseWheelInteractions(boolean recordingMouseWheelInteractions) {
+    public void setIsRecordingMouseWheelInteractions(boolean recordingMouseWheelInteractions) {
         this.recordingMouseWheelInteractions = recordingMouseWheelInteractions;
     }
 

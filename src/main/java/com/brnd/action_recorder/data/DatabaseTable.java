@@ -1,8 +1,10 @@
 package com.brnd.action_recorder.data;
 
-import static com.brnd.action_recorder.data.Database.logger;
-import java.util.LinkedHashMap;
 import org.apache.logging.log4j.Level;
+
+import java.util.LinkedHashMap;
+
+import static com.brnd.action_recorder.data.Database.logger;
 
 public enum DatabaseTable {
     SETTINGS(

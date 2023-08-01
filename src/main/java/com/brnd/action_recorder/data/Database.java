@@ -1,17 +1,17 @@
 package com.brnd.action_recorder.data;
 
-import static com.brnd.action_recorder.data.DatabaseTable.SETTINGS;
 import com.brnd.action_recorder.views.settings_view.Settings;
-import com.brnd.action_recorder.views.utils.StageLocation;
-import java.io.File;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+
+import static com.brnd.action_recorder.data.DatabaseTable.SETTINGS;
 
 public class Database {
     
