@@ -10,48 +10,67 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class InteractionRecorder implements NativeKeyListener, NativeMouseListener, NativeMouseMotionListener, NativeMouseWheelListener {
+public class InteractionRecorder {
     public static final Logger logger = LogManager.getLogger(InteractionRecorder.class);
     private Recording recording;
     private RecordConfiguration recordConfiguration;
+    private final KeyBoardListener keyboardListener = new KeyBoardListener();
+    private final MouseClicksListener mouseClicksListener = new MouseClicksListener();
+    private final MouseMotionListener mouseMotionListener = new MouseMotionListener();
+    private final MouseWheelListener mouseWheelListener = new MouseWheelListener();
 
-    private void loadRecordConfiguration() {
+    private void loadRecordConfiguration(){
 
-        if (recordConfiguration.isRecordingKeyboardInteractions())
-            GlobalScreen.addNativeKeyListener(this);
-        else
-            GlobalScreen.removeNativeKeyListener(this);
+        if (recordConfiguration == null){
+            logger.log(Level.FATAL, "No Record configuration has been set");
+            throw new NullPointerException();
+        }
 
-        if (recordConfiguration.isRecordingMouseWheelInteractions())
-            GlobalScreen.addNativeMouseWheelListener(this);
-        else
-            GlobalScreen.removeNativeMouseWheelListener(this);
+        // Keyboard interactions
+        if (recordConfiguration.isRecordingKeyboardInteractions()) {
+            GlobalScreen.addNativeKeyListener(keyboardListener);
+        } else {
+            GlobalScreen.removeNativeKeyListener(keyboardListener);
+        }
 
-        if (recordConfiguration.isRecordingMouseMotionInteractions())
-            GlobalScreen.addNativeMouseMotionListener(this);
-        else
-            GlobalScreen.removeNativeMouseMotionListener(this);
+        // Mouse click interactions
+        if (recordConfiguration.isRecordingMouseClickInteractions()) {
+            GlobalScreen.addNativeMouseListener(mouseClicksListener);
+        } else {
+            GlobalScreen.removeNativeMouseListener(mouseClicksListener);
+        }
 
-        if (recordConfiguration.isRecordingMouseClickInteractions())
-            GlobalScreen.addNativeMouseListener(this);
-        else
-            GlobalScreen.removeNativeMouseListener(this);
+        // Mouse motion interactions
+        if (recordConfiguration.isRecordingMouseMotionInteractions()) {
+            GlobalScreen.addNativeMouseMotionListener(mouseMotionListener);
+        } else {
+            GlobalScreen.removeNativeMouseMotionListener(mouseMotionListener);
+        }
 
+        // Mouse wheel interactions
+
+        if (recordConfiguration.isRecordingMouseWheelInteractions()) {
+            GlobalScreen.addNativeMouseWheelListener(mouseWheelListener);
+        } else {
+            GlobalScreen.removeNativeMouseWheelListener(mouseWheelListener);
+        }
     }
 
-    public InteractionRecorder(Recording recording, RecordConfiguration recordConfiguration) throws NativeHookException {
-        this.recording = recording;
-        this.recordConfiguration = recordConfiguration;
-
-        GlobalScreen.registerNativeHook();
-    }
     public void startRecording() throws NativeHookException {
+
+        logger.log(Level.TRACE, "Creating new Recording");
         this.recording = new Recording();
+
         GlobalScreen.registerNativeHook();
-        loadRecordConfiguration();
+
+        logger.log(Level.TRACE, "Loading configuration: {}", this.recordConfiguration);
+
+            loadRecordConfiguration();
+
+        logger.log(Level.TRACE, "Recording Started");
     }
 
-    public InteractionRecorder() throws NativeHookException {
+    public InteractionRecorder()  {
         /* Do nothing */
     }
 
@@ -72,127 +91,133 @@ public class InteractionRecorder implements NativeKeyListener, NativeMouseListen
                 , false
         );
         loadRecordConfiguration();
+
+        logger.log(Level.TRACE, "Recording Stopped");
+
     }
 
-    public Recording getRecording() {
+    public Recording getlastRecording() {
         return recording;
     }
 
-    /*      KEYBOARD INTERACTIONS       */
 
-    /**
-     * Invoked when a key has been typed.
-     *
-     * @param nativeEvent the native key event.
-     * @since 1.1
-     */
-    @Override
-    public void nativeKeyTyped(NativeKeyEvent nativeEvent) {
-        System.out.println(nativeEvent.paramString());
-        /* Do nothing */
-    }
+    private class KeyBoardListener implements NativeKeyListener{
+        /**
+         * Invoked when a key has been typed.
+         *
+         * @param nativeEvent the native key event.
+         * @since 1.1
+         */
+        @Override
+        public void nativeKeyTyped(NativeKeyEvent nativeEvent) {
+            /* Do nothing */
+        }
 
-    /**
-     * Invoked when a key has been pressed.
-     *
-     * @param nativeEvent the native key event.
-     */
-    @Override
-    public void nativeKeyPressed(NativeKeyEvent nativeEvent) {
-        if (recordConfiguration.isRecordingKeyboardInteractions()) {
-            addNativeEventToRecording(nativeEvent);
+        /**
+         * Invoked when a key has been pressed.
+         *
+         * @param nativeEvent the native key event.
+         */
+        @Override
+        public void nativeKeyPressed(NativeKeyEvent nativeEvent) {
+            if (recordConfiguration.isRecordingKeyboardInteractions()) {
+                addNativeEventToRecording(nativeEvent);
+            }
+        }
+
+        /**
+         * Invoked when a key has been released.
+         *
+         * @param nativeEvent the native key event.
+         */
+        @Override
+        public void nativeKeyReleased(NativeKeyEvent nativeEvent) {
+            if (recordConfiguration.isRecordingKeyboardInteractions()) {
+                addNativeEventToRecording(nativeEvent);
+            }
         }
     }
 
-    /**
-     * Invoked when a key has been released.
-     *
-     * @param nativeEvent the native key event.
-     */
-    @Override
-    public void nativeKeyReleased(NativeKeyEvent nativeEvent) {
-        if (recordConfiguration.isRecordingKeyboardInteractions()) {
-            addNativeEventToRecording(nativeEvent);
+    public class MouseClicksListener implements NativeMouseListener{
+
+        /**
+         * Invoked when a mouse button has been clicked (pressed and released) without being moved.
+         *
+         * @param nativeEvent the native mouse event.
+         */
+        @Override
+        public void nativeMouseClicked(NativeMouseEvent nativeEvent) {
+            /* Do Nothing */
+        }
+
+        /**
+         * Invoked when a mouse button has been pressed
+         *
+         * @param nativeEvent the native mouse event.
+         */
+        @Override
+        public void nativeMousePressed(NativeMouseEvent nativeEvent) {
+            if (recordConfiguration.isRecordingMouseClickInteractions()) {
+                addNativeEventToRecording(nativeEvent);
+            }
+        }
+
+        /**
+         * Invoked when a mouse button has been released
+         *
+         * @param nativeEvent the native mouse event.
+         */
+        @Override
+        public void nativeMouseReleased(NativeMouseEvent nativeEvent) {
+            if (recordConfiguration.isRecordingMouseClickInteractions()) {
+                addNativeEventToRecording(nativeEvent);
+            }
         }
     }
 
 
-    /*      MOUSE-CLICK INTERACTIONS       */
-
-    /**
-     * Invoked when a mouse button has been clicked (pressed and released) without being moved.
-     *
-     * @param nativeEvent the native mouse event.
-     */
-    @Override
-    public void nativeMouseClicked(NativeMouseEvent nativeEvent) {
-        /* Do Nothing */
-    }
-
-    /**
-     * Invoked when a mouse button has been pressed
-     *
-     * @param nativeEvent the native mouse event.
-     */
-    @Override
-    public void nativeMousePressed(NativeMouseEvent nativeEvent) {
-        if (recordConfiguration.isRecordingMouseClickInteractions()) {
-            addNativeEventToRecording(nativeEvent);
-        }
-    }
-
-    /**
-     * Invoked when a mouse button has been released
-     *
-     * @param nativeEvent the native mouse event.
-     */
-    @Override
-    public void nativeMouseReleased(NativeMouseEvent nativeEvent) {
-        if (recordConfiguration.isRecordingMouseClickInteractions()) {
-            addNativeEventToRecording(nativeEvent);
-        }
-    }
 
     /*      MOUSE-MOTION INTERACTIONS       */
+    private class MouseMotionListener implements NativeMouseMotionListener{
+        /**
+         * Invoked when the mouse has been moved.
+         *
+         * @param nativeEvent the native mouse event.
+         */
+        @Override
+        public void nativeMouseMoved(NativeMouseEvent nativeEvent) {
+            if (recordConfiguration.isRecordingMouseMotionInteractions()) {
+                addNativeEventToRecording(nativeEvent);
+            }
+        }
 
-
-    /**
-     * Invoked when the mouse has been moved.
-     *
-     * @param nativeEvent the native mouse event.
-     */
-    @Override
-    public void nativeMouseMoved(NativeMouseEvent nativeEvent) {
-        if (recordConfiguration.isRecordingMouseMotionInteractions()) {
-            addNativeEventToRecording(nativeEvent);
+        /**
+         * Invoked when the mouse has been moved while a button is depressed.
+         *
+         * @param nativeEvent the native mouse event
+         * @since 1.1
+         */
+        @Override
+        public void nativeMouseDragged(NativeMouseEvent nativeEvent) {
+            /* Do nothing */
         }
     }
 
-    /**
-     * Invoked when the mouse has been moved while a button is depressed.
-     *
-     * @param nativeEvent the native mouse event
-     * @since 1.1
-     */
-    @Override
-    public void nativeMouseDragged(NativeMouseEvent nativeEvent) {
-        /* Do nothing */
-    }
+    private class MouseWheelListener implements NativeMouseWheelListener{
 
-
-    /*      MOUSE-WHEEL INTERACTIONS       */
-
-    /**
-     * Invoked when the mouse wheel is rotated.
-     *
-     * @param nativeEvent the native mouse wheel event.
-     */
-    @Override
-    public void nativeMouseWheelMoved(NativeMouseWheelEvent nativeEvent) {
-        if (recordConfiguration.isRecordingMouseWheelInteractions()) {
-            addNativeEventToRecording(nativeEvent);
+        /**
+         * Invoked when the mouse wheel is rotated.
+         *
+         * @param nativeEvent the native mouse wheel event.
+         */
+        @Override
+        public void nativeMouseWheelMoved(NativeMouseWheelEvent nativeEvent) {
+            if (recordConfiguration.isRecordingMouseWheelInteractions()) {
+                addNativeEventToRecording(nativeEvent);
+            }
         }
     }
+
 
     private void addNativeEventToRecording(NativeInputEvent event) {
         try {
@@ -201,11 +226,13 @@ public class InteractionRecorder implements NativeKeyListener, NativeMouseListen
                 throw new NullPointerException();
             } else {
                 this.recording.getInteractions().put(System.nanoTime(), event);
-                logger.log(Level.INFO, "Recorded : {}", event.paramString());
+                String paramString = event.paramString();
+                logger.log(Level.INFO, "Recorded : {}", paramString);
             }
 
         } catch (NullPointerException nullPointerException) {
             logger.log(Level.FATAL, nullPointerException);
         }
     }
+
 }
