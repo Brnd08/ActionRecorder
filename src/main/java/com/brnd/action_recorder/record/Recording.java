@@ -4,35 +4,48 @@ import com.github.kwhat.jnativehook.NativeInputEvent;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Recording implements Serializable {
+    public static final DateTimeFormatter DATE_FORMATER = DateTimeFormatter.ofPattern("yyyy-MM-DD");
     @Serial
     private static final long serialVersionUID = 4265898901141738551L;
-    private final int id;
-    private final LinkedHashMap<Long, NativeInputEvent> interactions;
+    private int id;
+    private final LinkedHashMap<Long, NativeInputEvent> inputEvents;
+    private final LocalDate recordingDate = LocalDate.now();
+    private String recordingTitle;
+    /**
+     * Recording Execution start time in nanoseconds.
+     */
     private final long recordingStartTime;
+    /**
+     * Recording Execution stop time in nanoseconds.
+     */
+    private long recordingStopTime;
+    /**
+     * Recording Duration in seconds.
+     */
+    private float recordingDuration;
 
-    public Recording() {
-        this.recordingStartTime = System.nanoTime();
-        this.interactions = new LinkedHashMap<>();
-        this.id = 1;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public Map<Long, NativeInputEvent> getInteractions() {
-        return interactions;
+    /**
+     * This method is intended to be called in Recording finalization
+     * Sets the stopTime and calculates Recording duration.
+     */
+    public void closeRecording() {
+        this.recordingStopTime = System.nanoTime();
+        float nanoSecondsInOneSecond = 1_000_000_000.0f;// 1 second = 1x10^9 nanoseconds.
+        this.recordingDuration = (recordingStopTime - recordingStartTime) / nanoSecondsInOneSecond;
     }
 
     public String interactionsString() {
 
         return
-                interactions.entrySet()
+                inputEvents.entrySet()
                         .stream()
                         .map(entry -> {
                             long time = entry.getKey();
@@ -42,8 +55,53 @@ public class Recording implements Serializable {
                         .collect(Collectors.joining());
     }
 
+
+    public Recording() {
+        this.recordingStartTime = System.nanoTime();
+        this.inputEvents = new LinkedHashMap<>();
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public LinkedHashMap<Long, NativeInputEvent> getInputEvents() {
+        return inputEvents;
+    }
+
+    public LocalDate getRecordingDate() {
+        return recordingDate;
+    }
+
     public long getRecordingStartTime() {
         return recordingStartTime;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getRecordingTitle() {
+        return recordingTitle;
+    }
+
+    public long getRecordingStopTime() {
+        return recordingStopTime;
+    }
+
+    public void setRecordingStopTime(long recordingStopTime) {
+        this.recordingStopTime = recordingStopTime;
+    }
+
+    public float getRecordingDuration() {
+        return recordingDuration;
+    }
+
+    public void setRecordingDuration(float recordingDuration) {
+        this.recordingDuration = recordingDuration;
+    }
+
+    public void setRecordingTitle(String recordingTitle) {
+        this.recordingTitle = recordingTitle;
+    }
 }
