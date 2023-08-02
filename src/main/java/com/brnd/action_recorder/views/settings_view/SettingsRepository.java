@@ -142,7 +142,7 @@ public class SettingsRepository {
 
         } catch (SQLException e) {
             logger.log(Level.ERROR, "Could not save Initial Stage Location value ({}) in database following query {}"
-                    , UPDATE_INITIAL_STAGE_LOCATION_SENTENCE);
+                    ,newInitialStageLocation, UPDATE_INITIAL_STAGE_LOCATION_SENTENCE);
             logger.log(Level.ERROR, e);
         } finally {
             if (preparedStatement != null) {

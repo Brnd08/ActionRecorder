@@ -11,6 +11,13 @@ public enum DatabaseTable {
             new String[]{"settings_id", "INT PRIMARYKEY UNIQUE"},
             new String[]{"always_on_top", "BOOLEAN NOT NULL DEFAULT FALSE"},
             new String[]{"initial_stage_location", "VARCHAR(30) NOT NULL DEFAULT 'CENTER'"}
+    ),
+    RECORDINGS(
+            new String[]{"recording_id", "INT PRIMARYKEY UNIQUE"},
+            new String[]{"recording_title", "VARCHAR(30)"},
+            new String[]{"recording_date", "VARCHAR(20)"},
+            new String[]{"recording_duration", "FLOAT"},
+            new String[]{"recording_input_events", "BLOB"}
     );
 
     private final LinkedHashMap<String, String> fieldsMap = new LinkedHashMap<>();
@@ -19,6 +26,12 @@ public enum DatabaseTable {
     private final String selectAllSentence;
     private final String insertNewRowSentence;
     private final String insertFirst;
+    private final String selectCount;  
+    private final String insertDefault;
+
+    public String getSelectCount() {
+        return selectCount;
+    }
 
     public String getInsertFirst() {
         return insertFirst;
@@ -26,6 +39,10 @@ public enum DatabaseTable {
 
     public String getCreateTableSentence() {
         return createTableSentence;
+    }
+
+    public String getInsertDefault() {
+        return insertDefault;
     }
 
     public String getSelectByIdSentence() {
@@ -53,8 +70,11 @@ public enum DatabaseTable {
     }
 
     private DatabaseTable(String[]... fields) {
+        String idField = fields[0][0];
         selectAllSentence = "SELECT * FROM " + this.name() + ";";
-        selectByIdSentence = "SELECT * FROM " + this.name() + " WHERE " + fields[0][0] + " = ?;";
+        selectByIdSentence = "SELECT * FROM " + this.name() + " WHERE " + idField + " = ?;";
+        selectCount = "SELECT COUNT(*) FROM " + this.name() + ";";
+        insertDefault = "INSERT INTO " + this.name() + " DEFAULT VALUES RETURNING "+ idField +";";
 
         StringBuilder insertSentence = new StringBuilder("INSERT INTO " + this.name() + " VALUES (");
         StringBuilder createSentence = new StringBuilder("CREATE TABLE IF NOT EXISTS " + this.name() + "(");

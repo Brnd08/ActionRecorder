@@ -24,6 +24,7 @@ public class ObjectBytesConverter {
      * @see Serializable
      */
     public static <T extends Serializable> T objectFromBytes(byte[] byteArray, Class<T> clazz) throws IOException, ClassNotFoundException {
+        logger.log(Level.INFO, "Deserializing {} object from byte array", clazz.getName());
         T genericObject;
         try {
             ByteArrayInputStream bin = new ByteArrayInputStream(byteArray);
@@ -51,6 +52,7 @@ public class ObjectBytesConverter {
      * @see Serializable
      */
     public static <T extends Serializable> byte[] toBytes(  T genericObject) throws IOException {
+        logger.log(Level.INFO, "Serializing {} object into byte array", genericObject.getClass().getName());
         byte[] bytes ;
         try {
             ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
