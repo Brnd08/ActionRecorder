@@ -22,7 +22,7 @@ public class RecorderTest {
         );
 
         interactionRecorder.setRecordConfiguration(recordConfiguration);
-        interactionRecorder.startRecording();
+        interactionRecorder.startRecording("Recording Test");
 
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {

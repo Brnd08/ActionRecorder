@@ -1,6 +1,7 @@
 package com.brnd.action_recorder.record.capturing;
 
 import com.brnd.action_recorder.record.Recording;
+import com.brnd.action_recorder.record.RecordingsRepository;
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
 import com.github.kwhat.jnativehook.NativeInputEvent;
@@ -19,6 +20,7 @@ public class InteractionRecorder {
     private final MouseClicksListener mouseClicksListener = new MouseClicksListener();
     private final MouseMotionListener mouseMotionListener = new MouseMotionListener();
     private final MouseWheelListener mouseWheelListener = new MouseWheelListener();
+    private final RecordingsRepository recordingsRepository = new RecordingsRepository();
 
     private void loadRecordConfiguration(){
 
@@ -57,10 +59,11 @@ public class InteractionRecorder {
         }
     }
 
-    public void startRecording() throws NativeHookException {
+    public void startRecording(String recordingTitle) throws NativeHookException {
 
         logger.log(Level.TRACE, "Creating new Recording");
         this.recording = new Recording();
+        recording.setRecordingTitle(recordingTitle);
 
         GlobalScreen.registerNativeHook();
 
@@ -92,8 +95,9 @@ public class InteractionRecorder {
                 , false
         );
         loadRecordConfiguration();
-
-        logger.log(Level.TRACE, "Recording Stopped");
+        this.recording.closeRecording();
+        recordingsRepository.insertRecording(recording);
+        logger.log(Level.TRACE, "Recording Stopped and saved in database");
 
     }
 
@@ -226,7 +230,7 @@ public class InteractionRecorder {
                 logger.log(Level.ERROR, "No available recording object to store events");
                 throw new NullPointerException();
             } else {
-                this.recording.getInteractions().put(System.nanoTime(), event);
+                this.recording.getInputEvents().put(System.nanoTime(), event);
                 String paramString = event.paramString();
                 logger.log(Level.INFO, "Recorded : {}", paramString);
             }
