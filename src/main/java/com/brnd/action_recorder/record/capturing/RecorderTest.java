@@ -1,6 +1,8 @@
 package com.brnd.action_recorder.record.capturing;
 
 import static com.brnd.action_recorder.data.Database.initializeDatabase;
+import com.brnd.action_recorder.record.Recording;
+import com.brnd.action_recorder.record.RecordingsRepository;
 import com.github.kwhat.jnativehook.NativeHookException;
 import org.apache.logging.log4j.Level;
 
@@ -16,6 +18,7 @@ public class RecorderTest {
         initializeDatabase(); // Initialize database
 
         InteractionRecorder interactionRecorder = new InteractionRecorder();
+        RecordingsRepository recordingsRepository = new RecordingsRepository();
 
         RecordConfiguration recordConfiguration = new RecordConfiguration(
                 true
@@ -26,12 +29,21 @@ public class RecorderTest {
 
         interactionRecorder.setRecordConfiguration(recordConfiguration);
         interactionRecorder.startRecording("Recording Test");
-
+        
+        
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             public void run() {
                 interactionRecorder.stopRecording();
-                logger.log(Level.TRACE, "Recorded actions: \n{}", interactionRecorder.getlastRecording().interactionsString());
+                
+                Recording recordedRecording = interactionRecorder.getlastRecording();
+                logger.log(Level.TRACE, "Recorded actions: {}", recordedRecording.interactionsString());
+                
+                Recording retrievedRecording = recordingsRepository.getRecordingById(recordedRecording.getId());
+                logger.log(Level.TRACE, "Retrieved Recording from database: {}"
+                        , retrievedRecording
+                );
+                
                 System.exit(0);
             }
         }, (long) 5 * 1000);
