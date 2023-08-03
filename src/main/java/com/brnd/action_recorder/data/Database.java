@@ -77,7 +77,7 @@ public class Database {
     
     private static void insertDefaultSettingsValues(){
         PreparedStatement preparedStatement = null;
-            String insertScript = SETTINGS.getInsertFirst();
+            String insertScript = SETTINGS.getInsertFirstSentence();
             Settings defaultSettings = Settings.DEFAULT_SETTINGS;
         try {
             logger.log(Level.ALL, "Adding default Settings to database with script: {}"
