@@ -60,19 +60,19 @@ public class RecordingsRepository {
             RECORDING_ID_FIELD
     );
     private static final String UPDATE_RECORDING_DATE_WHERE_ID_SENTENCE
-            = String.format("SELECT %s FROM %s WHERE %s =  (?);",
+            = String.format("UPDATE %s SET %s = (?) WHERE %s = (?);",
             DatabaseTable.RECORDINGS.name(),
             RECORDING_DATE_FIELD,
             RECORDING_ID_FIELD
     );
     private static final String UPDATE_RECORDING_DURATION_WHERE_ID_SENTENCE
-            = String.format("SELECT %s FROM %s WHERE %s =  (?);",
+            = String.format("UPDATE %s SET %s = (?) WHERE %s = (?);",
             DatabaseTable.RECORDINGS.name(),
             RECORDING_DURATION_FIELD,
             RECORDING_ID_FIELD
     );
     private static final String UPDATE_INPUT_EVENTS_WHERE_ID_SENTENCE
-            = String.format("SELECT %s FROM %s WHERE %s =  (?);",
+            = String.format("UPDATE %s SET %s = (?) WHERE %s = (?);",
             DatabaseTable.RECORDINGS.name(),
             RECORDING_INPUT_EVENTS_FIELD,
             RECORDING_ID_FIELD
@@ -272,7 +272,7 @@ public class RecordingsRepository {
 
 
         } catch (SQLException e) {
-            logger.log(Level.ERROR, "Could Recording duration ({}) in database with following query {}"
+            logger.log(Level.ERROR, "Could not update Recording duration ({}) in database with following query {}"
                     ,duration, UPDATE_RECORDING_DURATION_WHERE_ID_SENTENCE);
             logger.log(Level.ERROR, e);
         } finally {
@@ -357,28 +357,31 @@ public class RecordingsRepository {
     
     public void insertRecording (Recording recordingToInsert){
          PreparedStatement preparedStatement = null;
-         String insertSentence = DatabaseTable.RECORDINGS.getInsertDefault();
+         String insertSentence = DatabaseTable.RECORDINGS.getInsertDefaultSentence();
         try {
             logger.log(Level.ALL, "Inserting new Empty row in {} database table with script {}"
-                    , DatabaseTable.RECORDINGS
+                    , DatabaseTable.RECORDINGS.name()
                     , insertSentence);
             
             preparedStatement = connection.prepareStatement(insertSentence);
             ResultSet resultSet = preparedStatement.executeQuery();
-            int newRowId = resultSet.getInt(RECORDING_ID_FIELD);
             
-            logger.log(Level.ALL, "Succesfully add a new row with {} as id"
-                    , newRowId);
+            
+            int newRowId = resultSet.getInt(1);
+            if(newRowId ==0) newRowId = resultSet.getInt(RECORDING_ID_FIELD);
+            
+            /* Need to close pstmt and rst to prevent sqlite Busy exception*/
+            preparedStatement.close();
+            resultSet.close();
             
             this.updateRecordingTitle(recordingToInsert.getRecordingTitle(), newRowId);
             this.updateRecordingDate(recordingToInsert.getRecordingDate(), newRowId);
             this.updateRecordingDuration(recordingToInsert.getRecordingDuration(), newRowId);
             this.updateRecordingInputEvents(recordingToInsert.getInputEvents(), newRowId);
-            
-
-
+            logger.log(Level.ALL, "Succesfully add a new Record with id: {} "
+                    , newRowId);
         } catch (SQLException  e) {
-            logger.log(Level.ERROR, "Could not insert new Recording in database");
+            logger.log(Level.ERROR, "Could not insert the Recording in database");
             logger.log(Level.ERROR, e);
         } finally {
             if (preparedStatement != null) {
@@ -391,25 +394,4 @@ public class RecordingsRepository {
             }
         }
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
 }
