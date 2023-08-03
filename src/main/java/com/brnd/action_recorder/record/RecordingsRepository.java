@@ -2,6 +2,7 @@ package com.brnd.action_recorder.record;
 
 import com.brnd.action_recorder.data.Database;
 import com.brnd.action_recorder.data.DatabaseTable;
+import static com.brnd.action_recorder.record.RecordingsRepository.RecordingMapper.mapRecordingFromResultset;
 import org.apache.logging.log4j.Level;
 
 import java.sql.Connection;
@@ -9,17 +10,20 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static com.brnd.action_recorder.data.Database.logger;
 import com.brnd.action_recorder.record.utils.ObjectBytesConverter;
 import com.github.kwhat.jnativehook.NativeInputEvent;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class RecordingsRepository {
 
+    private static Logger logger = LogManager.getLogger(RecordingsRepository.class);
     private final Connection connection;
 
     private static final String RECORDING_ID_FIELD = "recording_id";
@@ -27,57 +31,56 @@ public class RecordingsRepository {
     private static final String RECORDING_DATE_FIELD = "recording_date";
     private static final String RECORDING_DURATION_FIELD = "recording_duration";
     private static final String RECORDING_INPUT_EVENTS_FIELD = "recording_input_events";
-    
+
     private static final String SELECT_RECORDING_TITLE_BY_ID_SENTENCE
             = String.format("SELECT %s FROM %s WHERE %s = (?);",
-            RECORDING_TITLE_FIELD,
-            DatabaseTable.RECORDINGS.name(),
-            RECORDING_ID_FIELD
-    );
+                    RECORDING_TITLE_FIELD,
+                    DatabaseTable.RECORDINGS.name(),
+                    RECORDING_ID_FIELD
+            );
     private static final String SELECT_RECORDING_DATE_BY_ID_SENTENCE
             = String.format("SELECT %s FROM %s WHERE %s = (?);",
-            RECORDING_DATE_FIELD,
-            DatabaseTable.RECORDINGS.name(),
-            RECORDING_ID_FIELD
-    );
+                    RECORDING_DATE_FIELD,
+                    DatabaseTable.RECORDINGS.name(),
+                    RECORDING_ID_FIELD
+            );
     private static final String SELECT_RECORDING_DURATION_BY_ID_SENTENCE
             = String.format("SELECT %s FROM %s WHERE %s = (?);",
-            RECORDING_DURATION_FIELD,
-            DatabaseTable.RECORDINGS.name(),
-            RECORDING_ID_FIELD
-    );
+                    RECORDING_DURATION_FIELD,
+                    DatabaseTable.RECORDINGS.name(),
+                    RECORDING_ID_FIELD
+            );
     private static final String SELECT_INPUT_EVENTS_BY_ID_SENTENCE
             = String.format("SELECT %s FROM %s WHERE %s = (?);",
-            RECORDING_INPUT_EVENTS_FIELD,
-            DatabaseTable.RECORDINGS.name(),
-            RECORDING_ID_FIELD
-    );
+                    RECORDING_INPUT_EVENTS_FIELD,
+                    DatabaseTable.RECORDINGS.name(),
+                    RECORDING_ID_FIELD
+            );
 
     private static final String UPDATE_RECORDING_TITLE_WHERE_ID_SENTENCE
             = String.format("UPDATE %s SET %s = (?) WHERE %s = (?);",
-            DatabaseTable.RECORDINGS.name(),
-            RECORDING_TITLE_FIELD,
-            RECORDING_ID_FIELD
-    );
+                    DatabaseTable.RECORDINGS.name(),
+                    RECORDING_TITLE_FIELD,
+                    RECORDING_ID_FIELD
+            );
     private static final String UPDATE_RECORDING_DATE_WHERE_ID_SENTENCE
             = String.format("UPDATE %s SET %s = (?) WHERE %s = (?);",
-            DatabaseTable.RECORDINGS.name(),
-            RECORDING_DATE_FIELD,
-            RECORDING_ID_FIELD
-    );
+                    DatabaseTable.RECORDINGS.name(),
+                    RECORDING_DATE_FIELD,
+                    RECORDING_ID_FIELD
+            );
     private static final String UPDATE_RECORDING_DURATION_WHERE_ID_SENTENCE
             = String.format("UPDATE %s SET %s = (?) WHERE %s = (?);",
-            DatabaseTable.RECORDINGS.name(),
-            RECORDING_DURATION_FIELD,
-            RECORDING_ID_FIELD
-    );
+                    DatabaseTable.RECORDINGS.name(),
+                    RECORDING_DURATION_FIELD,
+                    RECORDING_ID_FIELD
+            );
     private static final String UPDATE_INPUT_EVENTS_WHERE_ID_SENTENCE
             = String.format("UPDATE %s SET %s = (?) WHERE %s = (?);",
-            DatabaseTable.RECORDINGS.name(),
-            RECORDING_INPUT_EVENTS_FIELD,
-            RECORDING_ID_FIELD
-    );
-
+                    DatabaseTable.RECORDINGS.name(),
+                    RECORDING_INPUT_EVENTS_FIELD,
+                    RECORDING_ID_FIELD
+            );
 
     public RecordingsRepository() {
         try {
@@ -86,7 +89,6 @@ public class RecordingsRepository {
             throw new RuntimeException(ex);
         }
     }
-
 
     public String obtainRecordingTitle(int recordingId) {
         PreparedStatement preparedStatement = null;
@@ -108,45 +110,43 @@ public class RecordingsRepository {
                 try {
                     preparedStatement.close();
                 } catch (SQLException ex) {
-                    logger.log(Level.ERROR, "Could not close PrepareStament on {} method. Error msg: {}"
-                            , "RecordingsRepository.obtainRecordingTitle(int)", ex.getMessage());
+                    logger.log(Level.ERROR, "Could not close PrepareStament on {} method. Error msg: {}",
+                             "RecordingsRepository.obtainRecordingTitle(int)", ex.getMessage());
                 }
             }
         }
 
         return recordingTitle;
     }
-    
-    
+
     public void updateRecordingTitle(String newTitle, int recordingId) {
         PreparedStatement preparedStatement = null;
 
         try {
-            logger.log(Level.ALL, "Updateing Recording title value ({}) in database with script {}"
-                    , newTitle, UPDATE_RECORDING_TITLE_WHERE_ID_SENTENCE);
-            
+            logger.log(Level.ALL, "Updateing Recording title value ({}) in database with script {}",
+                     newTitle, UPDATE_RECORDING_TITLE_WHERE_ID_SENTENCE);
+
             preparedStatement = connection.prepareStatement(UPDATE_RECORDING_TITLE_WHERE_ID_SENTENCE);
-            
+
             preparedStatement.setString(1, newTitle);
             preparedStatement.setInt(2, recordingId);
-            
-            int modifiedRows = preparedStatement.executeUpdate();
-            
-            logger.log(Level.ALL, "Succesfully execute script with a {} modified rows count"
-                    , modifiedRows);
 
+            int modifiedRows = preparedStatement.executeUpdate();
+
+            logger.log(Level.ALL, "Succesfully execute script with a {} modified rows count",
+                     modifiedRows);
 
         } catch (SQLException e) {
-            logger.log(Level.ERROR, "Could not update Initial Recording value ({}) in database with following query {}"
-                    ,newTitle, UPDATE_RECORDING_TITLE_WHERE_ID_SENTENCE);
+            logger.log(Level.ERROR, "Could not update Initial Recording value ({}) in database with following query {}",
+                     newTitle, UPDATE_RECORDING_TITLE_WHERE_ID_SENTENCE);
             logger.log(Level.ERROR, e);
         } finally {
             if (preparedStatement != null) {
                 try {
                     preparedStatement.close();
                 } catch (SQLException ex) {
-                    logger.log(Level.ERROR, "Could not close PrepareStament on {} method. Exception msg: {}"
-                            , "RecordingsRepository.updateInitialRecordingTitle(String, int)", ex.getMessage());
+                    logger.log(Level.ERROR, "Could not close PrepareStament on {} method. Exception msg: {}",
+                             "RecordingsRepository.updateInitialRecordingTitle(String, int)", ex.getMessage());
                 }
             }
         }
@@ -155,16 +155,14 @@ public class RecordingsRepository {
     public LocalDate obtainRecordingDate(int recordingId) {
         PreparedStatement preparedStatement = null;
         DateTimeFormatter dateFormater = Recording.DATE_FORMATER;
-        LocalDate recordingDate;       
+        LocalDate recordingDate;
 
         try {
             preparedStatement = connection.prepareStatement(SELECT_RECORDING_DATE_BY_ID_SENTENCE);
             preparedStatement.setInt(1, recordingId);
             ResultSet resultSet = preparedStatement.executeQuery();
-            preparedStatement.setInt(1, recordingId);
             String retrievedDate = resultSet.getString(1);
             recordingDate = LocalDate.parse(retrievedDate, dateFormater);
-                    
 
         } catch (SQLException e) {
             logger.log(Level.ERROR, "Could not retrieve the recording date with following query {}", SELECT_RECORDING_DATE_BY_ID_SENTENCE);
@@ -176,49 +174,46 @@ public class RecordingsRepository {
                 try {
                     preparedStatement.close();
                 } catch (SQLException ex) {
-                    logger.log(Level.ERROR, "Could not close PrepareStament on {} method. Error msg: {}"
-                            , "RecordingsRepository.obtainRecordingTitle(int)", ex.getMessage());
+                    logger.log(Level.ERROR, "Could not close PrepareStament on {} method. Error msg: {}",
+                             "RecordingsRepository.obtainRecordingTitle(int)", ex.getMessage());
                 }
             }
         }
 
         return recordingDate;
     }
-    
-    
-    
+
     public void updateRecordingDate(LocalDate newDate, int recordingId) {
         PreparedStatement preparedStatement = null;
 
         DateTimeFormatter dateFormatter = Recording.DATE_FORMATER;
         try {
-            logger.log(Level.ALL, "Updating Recording date value ({}) in database with script {}, and formatter {}"
-                    , newDate, UPDATE_RECORDING_DATE_WHERE_ID_SENTENCE, dateFormatter);
-            
+            logger.log(Level.ALL, "Updating Recording date value ({}) in database with script {}, and formatter {}",
+                     newDate, UPDATE_RECORDING_DATE_WHERE_ID_SENTENCE, dateFormatter);
+
             preparedStatement = connection.prepareStatement(UPDATE_RECORDING_DATE_WHERE_ID_SENTENCE);
-            
+
             String dateString = newDate.format(dateFormatter);
-            
+
             preparedStatement.setString(1, dateString);
             preparedStatement.setInt(2, recordingId);
-            
-            int modifiedRows = preparedStatement.executeUpdate();
-            
-            logger.log(Level.ALL, "Succesfully execute script with a {} modified rows count"
-                    , modifiedRows);
 
+            int modifiedRows = preparedStatement.executeUpdate();
+
+            logger.log(Level.ALL, "Succesfully execute script with a {} modified rows count",
+                     modifiedRows);
 
         } catch (SQLException e) {
-            logger.log(Level.ERROR, "Could not Recording date value ({}) in database with following query {} , and formatter {}"
-                    ,newDate, UPDATE_RECORDING_DATE_WHERE_ID_SENTENCE, dateFormatter);
+            logger.log(Level.ERROR, "Could not Recording date value ({}) in database with following query {} , and formatter {}",
+                     newDate, UPDATE_RECORDING_DATE_WHERE_ID_SENTENCE, dateFormatter);
             logger.log(Level.ERROR, e);
         } finally {
             if (preparedStatement != null) {
                 try {
                     preparedStatement.close();
                 } catch (SQLException ex) {
-                    logger.log(Level.ERROR, "Could not close PrepareStament on {} method. Exception msg: {}"
-                            , "RecordingsRepository.updateRecordingDate(String, int)", ex.getMessage());
+                    logger.log(Level.ERROR, "Could not close PrepareStament on {} method. Exception msg: {}",
+                             "RecordingsRepository.updateRecordingDate(String, int)", ex.getMessage());
                 }
             }
         }
@@ -244,44 +239,43 @@ public class RecordingsRepository {
                 try {
                     preparedStatement.close();
                 } catch (SQLException ex) {
-                    logger.log(Level.ERROR, "Could not close PrepareStament on {} method. Error msg: {}"
-                            , "RecordingsRepository.obtainRecordingDuration(int)", ex.getMessage());
+                    logger.log(Level.ERROR, "Could not close PrepareStament on {} method. Error msg: {}",
+                             "RecordingsRepository.obtainRecordingDuration(int)", ex.getMessage());
                 }
             }
         }
 
         return recordingDuration;
     }
-    
+
     public void updateRecordingDuration(float duration, int recordingId) {
         PreparedStatement preparedStatement = null;
 
         try {
-            logger.log(Level.ALL, "Updating Recording duration ({}) in database with script {}"
-                    , duration, UPDATE_RECORDING_DURATION_WHERE_ID_SENTENCE);
-            
+            logger.log(Level.ALL, "Updating Recording duration ({}) in database with script {}",
+                     duration, UPDATE_RECORDING_DURATION_WHERE_ID_SENTENCE);
+
             preparedStatement = connection.prepareStatement(UPDATE_RECORDING_DURATION_WHERE_ID_SENTENCE);
-            
+
             preparedStatement.setFloat(1, duration);
             preparedStatement.setInt(2, recordingId);
-            
-            int modifiedRows = preparedStatement.executeUpdate();
-            
-            logger.log(Level.ALL, "Succesfully execute script with a {} modified rows count"
-                    , modifiedRows);
 
+            int modifiedRows = preparedStatement.executeUpdate();
+
+            logger.log(Level.ALL, "Succesfully execute script with a {} modified rows count",
+                     modifiedRows);
 
         } catch (SQLException e) {
-            logger.log(Level.ERROR, "Could not update Recording duration ({}) in database with following query {}"
-                    ,duration, UPDATE_RECORDING_DURATION_WHERE_ID_SENTENCE);
+            logger.log(Level.ERROR, "Could not update Recording duration ({}) in database with following query {}",
+                     duration, UPDATE_RECORDING_DURATION_WHERE_ID_SENTENCE);
             logger.log(Level.ERROR, e);
         } finally {
             if (preparedStatement != null) {
                 try {
                     preparedStatement.close();
                 } catch (SQLException ex) {
-                    logger.log(Level.ERROR, "Could not close PrepareStament on {} method. Exception msg: {}"
-                            , "RecordingsRepository.updateInitialRecordingTitle(String, int)", ex.getMessage());
+                    logger.log(Level.ERROR, "Could not close PrepareStament on {} method. Exception msg: {}",
+                             "RecordingsRepository.updateInitialRecordingTitle(String, int)", ex.getMessage());
                 }
             }
         }
@@ -297,9 +291,9 @@ public class RecordingsRepository {
             preparedStatement.setInt(1, recordingId);
             ResultSet resultSet = preparedStatement.executeQuery();
             serializedInputEvent = resultSet.getBytes(1);
-            inputEvents =  ObjectBytesConverter.objectFromBytes(serializedInputEvent, LinkedHashMap.class);
+            inputEvents = ObjectBytesConverter.objectFromBytes(serializedInputEvent, LinkedHashMap.class);
 
-        } catch (SQLException | IOException | ClassNotFoundException  e) {
+        } catch (SQLException | IOException | ClassNotFoundException e) {
             logger.log(Level.ERROR, "Could not retrieve the recording duration with following query {}", SELECT_RECORDING_DURATION_BY_ID_SENTENCE);
             logger.log(Level.ERROR, e);
             logger.log(Level.ALL, "No saved recording duration value found in database, using default value {}", "null");
@@ -309,78 +303,118 @@ public class RecordingsRepository {
                 try {
                     preparedStatement.close();
                 } catch (SQLException ex) {
-                    logger.log(Level.ERROR, "Could not close PrepareStament on {} method. Error msg: {}"
-                            , "RecordingsRepository.obtainInputEvents(int)", ex.getMessage());
+                    logger.log(Level.ERROR, "Could not close PrepareStament on {} method. Error msg: {}",
+                             "RecordingsRepository.obtainInputEvents(int)", ex.getMessage());
                 }
             }
         }
 
         return inputEvents;
     }
-    
-    
-    
+
     public void updateRecordingInputEvents(LinkedHashMap<Long, NativeInputEvent> inputEvents, int recordingId) {
         PreparedStatement preparedStatement = null;
-        String inputEventsString =  inputEvents.values().stream().map(entry -> {return entry.paramString();}).collect(Collectors.joining("\t"));
+        String inputEventsString = inputEvents.values().stream().map(entry -> {
+            return entry.paramString();
+        }).collect(Collectors.joining("\t"));
         try {
-            logger.log(Level.ALL, "Updating Recording InputEvents: %n ({}) %n in database with script {}"
-                    , inputEventsString
-                    , UPDATE_INPUT_EVENTS_WHERE_ID_SENTENCE);
-            
+            logger.log(Level.ALL, "Updating Recording InputEvents: %n ({}) %n in database with script {}",
+                     inputEventsString,
+                     UPDATE_INPUT_EVENTS_WHERE_ID_SENTENCE);
+
             preparedStatement = connection.prepareStatement(UPDATE_INPUT_EVENTS_WHERE_ID_SENTENCE);
-            
+
             preparedStatement.setBytes(1, ObjectBytesConverter.toBytes(inputEvents));
             preparedStatement.setInt(2, recordingId);
-            
+
             int modifiedRows = preparedStatement.executeUpdate();
-            
-            logger.log(Level.ALL, "Succesfully execute script with a {} modified rows count"
-                    , modifiedRows);
 
+            logger.log(Level.ALL, "Succesfully execute script with a {} modified rows count",
+                     modifiedRows);
 
-        } catch (SQLException | IOException  e) {
-            logger.log(Level.ERROR, "Could not set Recording InputEvents in database with following query {}"
-                    , UPDATE_INPUT_EVENTS_WHERE_ID_SENTENCE);
+        } catch (SQLException | IOException e) {
+            logger.log(Level.ERROR, "Could not set Recording InputEvents in database with following query {}",
+                     UPDATE_INPUT_EVENTS_WHERE_ID_SENTENCE);
             logger.log(Level.ERROR, e);
         } finally {
             if (preparedStatement != null) {
                 try {
                     preparedStatement.close();
                 } catch (SQLException ex) {
-                    logger.log(Level.ERROR, "Could not close PrepareStament on {} method. Exception msg: {}"
-                            , "RecordingsRepository.updateRecordingInputEvents(String, int)", ex.getMessage());
+                    logger.log(Level.ERROR, "Could not close PrepareStament on {} method. Exception msg: {}",
+                             "RecordingsRepository.updateRecordingInputEvents(String, int)", ex.getMessage());
                 }
             }
         }
     }
-    
-    public void insertRecording (Recording recordingToInsert){
-         PreparedStatement preparedStatement = null;
-         String insertSentence = DatabaseTable.RECORDINGS.getInsertDefaultSentence();
+
+    public Recording getRecordingById(int recordingId) {
+
+        PreparedStatement preparedStatement = null;
+        String selectSentence = DatabaseTable.RECORDINGS.getSelectByIdSentence();
+        Recording retrievedRecording = null;
+        
+        logger.log(Level.ALL, "Trying to obtain Recording with id {} from database with the following script: {}",
+                 recordingId, selectSentence);
+        
         try {
-            logger.log(Level.ALL, "Inserting new Empty row in {} database table with script {}"
-                    , DatabaseTable.RECORDINGS.name()
-                    , insertSentence);
-            
+            preparedStatement = connection.prepareStatement(selectSentence);
+
+            preparedStatement.setInt(1, recordingId);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            retrievedRecording = mapRecordingFromResultset(resultSet);
+
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            logger.log(Level.ERROR, "Could not retrieve the recording duration with following query {}", SELECT_RECORDING_DURATION_BY_ID_SENTENCE);
+            logger.log(Level.ERROR, e);
+            logger.log(Level.ALL, "No saved recording duration value found in database, using default value {}", "'null'");
+            retrievedRecording = null;
+        } finally {
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException ex) {
+                    logger.log(Level.ERROR, "Could not close PrepareStament on {} method. Error msg: {}",
+                             "RecordingsRepository.obtainRecordingDuration(int)", ex.getMessage());
+                }
+            }
+        }
+        logger.log(Level.ALL, "Return retrieved Recording {} database table with primary key: {}",
+                 retrievedRecording, recordingId);
+
+        return retrievedRecording;
+    }
+
+    public void insertRecording(Recording recordingToInsert) {
+        PreparedStatement preparedStatement = null;
+        String insertSentence = DatabaseTable.RECORDINGS.getInsertDefaultSentence();
+        try {
+            logger.log(Level.ALL, "Inserting new Empty row in {} database table with script {}",
+                     DatabaseTable.RECORDINGS.name(),
+                     insertSentence);
+
             preparedStatement = connection.prepareStatement(insertSentence);
             ResultSet resultSet = preparedStatement.executeQuery();
-            
-            
+
             int newRowId = resultSet.getInt(1);
-            if(newRowId ==0) newRowId = resultSet.getInt(RECORDING_ID_FIELD);
-            
+            if (newRowId == 0) {
+                newRowId = resultSet.getInt(RECORDING_ID_FIELD);
+            }
+            recordingToInsert.setId(newRowId);
+
             /* Need to close pstmt and rst to prevent sqlite Busy exception*/
             preparedStatement.close();
             resultSet.close();
-            
+
             this.updateRecordingTitle(recordingToInsert.getRecordingTitle(), newRowId);
             this.updateRecordingDate(recordingToInsert.getRecordingDate(), newRowId);
             this.updateRecordingDuration(recordingToInsert.getRecordingDuration(), newRowId);
             this.updateRecordingInputEvents(recordingToInsert.getInputEvents(), newRowId);
-            logger.log(Level.ALL, "Succesfully add a new Record with id: {} "
-                    , newRowId);
-        } catch (SQLException  e) {
+            logger.log(Level.ALL, "Succesfully add a new Record with id: {} ",
+                     newRowId);
+        } catch (SQLException e) {
             logger.log(Level.ERROR, "Could not insert the Recording in database");
             logger.log(Level.ERROR, e);
         } finally {
@@ -388,10 +422,55 @@ public class RecordingsRepository {
                 try {
                     preparedStatement.close();
                 } catch (SQLException ex) {
-                    logger.log(Level.ERROR, "Could not close PrepareStament on {} method. Exception msg: {}"
-                            , "RecordingsRepository.insertRecording(Recording)", ex.getMessage());
+                    logger.log(Level.ERROR, "Could not close PrepareStament on {} method. Exception msg: {}",
+                             "RecordingsRepository.insertRecording(Recording)", ex.getMessage());
                 }
             }
         }
+    }
+
+    class RecordingMapper {
+
+        static final public Recording mapRecordingFromResultset(ResultSet resultSet) throws SQLException, IOException, ClassNotFoundException {
+            try {
+                resultSet.next();
+            } catch (SQLException ex) {
+                logger.log(Level.ERROR, "No resultset rows available");
+                throw ex;
+            }
+            int recordingId;
+            LinkedHashMap<Long, NativeInputEvent> recordingInputEvents;
+            String recordingTitle;
+            float recordingDuration;
+            LocalDate recordingDate;
+            DateTimeFormatter dateFormater = Recording.DATE_FORMATER;
+            try {
+                recordingId = resultSet.getInt(RECORDING_ID_FIELD);
+                recordingInputEvents
+                        = ObjectBytesConverter.objectFromBytes(
+                                resultSet.getBytes(RECORDING_INPUT_EVENTS_FIELD), LinkedHashMap.class
+                        );
+
+                recordingTitle = resultSet.getString(RECORDING_TITLE_FIELD);
+
+                recordingDuration = resultSet.getFloat(RECORDING_DURATION_FIELD);
+
+                String retrievedDate = resultSet.getString(RECORDING_DATE_FIELD);
+                recordingDate = LocalDate.parse(retrievedDate, dateFormater);
+
+            } catch (SQLException | IOException | ClassNotFoundException ex) {
+                logger.log(Level.ERROR, "Could not get recording from resultset. Exception: {}", ex.getMessage());
+                throw ex;
+            }
+
+            return new Recording(
+                    recordingId,
+                     recordingInputEvents,
+                     recordingTitle,
+                     recordingDuration,
+                     recordingDate
+            );
+        }
+
     }
 }
