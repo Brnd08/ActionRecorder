@@ -1,5 +1,6 @@
 package com.brnd.action_recorder.record.capturing;
 
+import static com.brnd.action_recorder.data.Database.initializeDatabase;
 import com.github.kwhat.jnativehook.NativeHookException;
 import org.apache.logging.log4j.Level;
 
@@ -7,18 +8,20 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import static com.brnd.action_recorder.record.capturing.InteractionRecorder.logger;
+import java.sql.SQLException;
 
 public class RecorderTest {
 
-    public static void main(String[] args) throws NativeHookException {
+    public static void main(String[] args) throws NativeHookException, SQLException {
+        initializeDatabase(); // Initialize database
 
         InteractionRecorder interactionRecorder = new InteractionRecorder();
 
         RecordConfiguration recordConfiguration = new RecordConfiguration(
-                false
-                , false
+                true
                 , true
-                , false
+                , true
+                , true
         );
 
         interactionRecorder.setRecordConfiguration(recordConfiguration);
@@ -31,7 +34,7 @@ public class RecorderTest {
                 logger.log(Level.TRACE, "Recorded actions: \n{}", interactionRecorder.getlastRecording().interactionsString());
                 System.exit(0);
             }
-        }, (long) 15 * 1000);
+        }, (long) 5 * 1000);
 
     }
 }
