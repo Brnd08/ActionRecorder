@@ -17,7 +17,7 @@ public class Recording implements Serializable {
     private static final long serialVersionUID = 4265898901141738551L;
     private int id;
     private final LinkedHashMap<Long, NativeInputEvent> inputEvents;
-    private final LocalDate recordingDate = LocalDate.now();
+    private final LocalDate recordingDate;
     private String recordingTitle;
     /**
      * Recording Execution start time in nanoseconds.
@@ -59,7 +59,20 @@ public class Recording implements Serializable {
     public Recording() {
         this.recordingStartTime = System.nanoTime();
         this.inputEvents = new LinkedHashMap<>();
+        this.recordingDate = LocalDate.now();
     }
+
+    public Recording(
+            int id, LinkedHashMap<Long, NativeInputEvent> inputEvents, String recordingTitle, float recordingDuration, LocalDate recordingDate
+    ) {
+        this.id = id;
+        this.inputEvents = inputEvents;
+        this.recordingTitle = recordingTitle;
+        this.recordingDuration = recordingDuration;
+        this.recordingDate = recordingDate;
+        recordingStartTime = 0;
+    }
+    
 
     public int getId() {
         return id;
@@ -104,4 +117,20 @@ public class Recording implements Serializable {
     public void setRecordingTitle(String recordingTitle) {
         this.recordingTitle = recordingTitle;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Recording{");
+        sb.append("id=").append(id);
+        sb.append(", inputEvents=").append(interactionsString());
+        sb.append(", recordingDate=").append(recordingDate);
+        sb.append(", recordingTitle=").append(recordingTitle);
+        sb.append(", recordingStartTime=").append(recordingStartTime);
+        sb.append(", recordingStopTime=").append(recordingStopTime);
+        sb.append(", recordingDuration=").append(recordingDuration);
+        sb.append('}');
+        return sb.toString();
+    }
+    
 }
