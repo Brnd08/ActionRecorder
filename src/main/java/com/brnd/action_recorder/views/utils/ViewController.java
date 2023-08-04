@@ -130,7 +130,7 @@ public interface ViewController {
 
     @FXML
     public default void navigateToRecordView(Event event) throws IOException {
-        logger.log(Level.ALL, "Unimplemented functionality" );
+        navigateToView(event, ViewEnum.RECORDING_START);
     }
 
     @FXML

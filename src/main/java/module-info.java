@@ -8,6 +8,7 @@ module com.brnd.action_recorder {
     requires java.sql;
     requires org.xerial.sqlitejdbc;
     requires com.github.kwhat.jnativehook;
+    requires java.base;
 
     opens com.brnd.action_recorder.views.main_view to javafx.fxml;
     opens com.brnd.action_recorder.views.settings_view to javafx.fxml;

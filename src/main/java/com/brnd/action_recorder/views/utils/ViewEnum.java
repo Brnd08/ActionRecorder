@@ -15,10 +15,14 @@ public enum ViewEnum {
     MAIN(
             "Action Recorder || By brdn",
             "/main_view/mainView.fxml"
-    ),
-    SETTINGS(
+    )
+    , SETTINGS(
             "Settings || Action Recorder",
             "/settings_view/settingsView.fxml"
+    )
+    , RECORDING_START(
+                "Start Recording || Action Recorder"
+            , "/recording_start_view/recordingStartView.fxml"
     );
 
     private static final String PATH_TO_VIEWS_PACKAGE_FROM_SOURCE_ROOT
@@ -58,7 +62,6 @@ public enum ViewEnum {
         return Arrays.stream(ViewEnum.values())
                 .filter(viewEnum -> viewEnum.getStageTitle().equals(title))
                 .findFirst().orElseThrow();
-
     }
 
 }
