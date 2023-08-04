@@ -125,7 +125,7 @@
                             <ColumnConstraints hgrow="SOMETIMES" maxWidth="461.0" minWidth="10.0" prefWidth="282.0" />
                           </columnConstraints>
                            <children>
-                              <TextField maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="33.0" prefWidth="237.0" promptText="Nombre de la grabación" styleClass="primaryButton" text="New Recording" GridPane.columnIndex="1">
+                              <TextField fx:id="recordingTitleTexField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="33.0" prefWidth="237.0" promptText="Nombre de la grabación" styleClass="primaryButton" text="New Recording" GridPane.columnIndex="1">
                                  <tooltip>
                                     <Tooltip text="Nombre para guardar la grabación" />
                                  </tooltip>
@@ -139,6 +139,9 @@
                                  </GridPane.margin>
                               </Label>
                            </children>
+                           <rowConstraints>
+                              <RowConstraints />
+                           </rowConstraints>
                         </GridPane>
                         <VBox id="startRecordingCaptureVBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="76.0" prefWidth="477.0" GridPane.halignment="LEFT" GridPane.rowIndex="1">
                            <children>
@@ -152,7 +155,7 @@
                               </Label>
                               <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="39.0" prefWidth="324.0">
                                  <children>
-                                    <CheckBox alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="41.0" prefWidth="86.0" styleClass="primaryButton" text="Teclado" textAlignment="CENTER">
+                                    <CheckBox fx:id="recordKeyboardCheckBox" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="41.0" prefWidth="86.0" styleClass="primaryButton" text="Teclado" textAlignment="CENTER">
                                        <HBox.margin>
                                           <Insets left="3.0" />
                                        </HBox.margin>
@@ -163,7 +166,7 @@
                                           <Tooltip text="Escritura y atajos" />
                                        </tooltip>
                                     </CheckBox>
-                                    <CheckBox alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="41.0" prefWidth="109.0" styleClass="primaryButton" text="Clicks mouse" textAlignment="CENTER">
+                                    <CheckBox fx:id="recordMouseClicksCheckBox" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="41.0" prefWidth="109.0" styleClass="primaryButton" text="Clicks mouse" textAlignment="CENTER">
                                        <padding>
                                           <Insets bottom="10.0" left="5.0" right="5.0" />
                                        </padding>
@@ -174,7 +177,7 @@
                                           <Tooltip text="Clicks del mouse" />
                                        </tooltip>
                                     </CheckBox>
-                                    <CheckBox alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="41.0" prefWidth="142.0" styleClass="primaryButton" text="Movimiento mouse" textAlignment="CENTER">
+                                    <CheckBox fx:id="recordMouseMotionCheckBox" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="41.0" prefWidth="142.0" styleClass="primaryButton" text="Movimiento mouse" textAlignment="CENTER">
                                        <padding>
                                           <Insets bottom="10.0" left="5.0" right="5.0" />
                                        </padding>
@@ -185,7 +188,7 @@
                                           <Tooltip text="Desplazamiento del puntero del mouse" />
                                        </tooltip>
                                     </CheckBox>
-                                    <CheckBox alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="41.0" prefWidth="116.0" styleClass="primaryButton" text="Rueda mouse" textAlignment="CENTER">
+                                    <CheckBox fx:id="recordMouseWheelCheckBox" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="41.0" prefWidth="116.0" styleClass="primaryButton" text="Rueda mouse" textAlignment="CENTER">
                                        <padding>
                                           <Insets bottom="10.0" left="5.0" right="5.0" />
                                        </padding>
@@ -231,7 +234,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </Button>
-                        <Button fx:id="saveConfigsButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="33.0" prefWidth="105.0" styleClass="primaryButton" text="Comenzar" translateX="-5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                        <Button fx:id="startRecordingButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#startRecording" prefHeight="33.0" prefWidth="105.0" styleClass="primaryButton" text="Comenzar" translateX="-5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
