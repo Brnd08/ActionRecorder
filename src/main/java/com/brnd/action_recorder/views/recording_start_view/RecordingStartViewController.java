@@ -4,8 +4,11 @@
  */
 package com.brnd.action_recorder.views.recording_start_view;
 
+import com.brnd.action_recorder.views.utils.ViewController;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.event.Event;
 import javafx.fxml.Initializable;
 
 /**
@@ -13,7 +16,7 @@ import javafx.fxml.Initializable;
  *
  * @author brdn
  */
-public class RecordingStartViewController implements Initializable {
+public class RecordingStartViewController implements Initializable, ViewController{
 
     /**
      * Initializes the controller class.
@@ -21,5 +24,19 @@ public class RecordingStartViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
     }    
+    
+    
+    @Override
+    public void minimizeStage(Event event) {
+        ViewController.super.minimizeStage(event);
+    }
+    @Override
+    public void closeStage(Event event) {
+        ViewController.super.closeStage(event);
+    }
+    @Override
+    public void navigateToMainView(Event event) throws IOException {
+        ViewController.super.navigateToMainView(event);
+    }
     
 }

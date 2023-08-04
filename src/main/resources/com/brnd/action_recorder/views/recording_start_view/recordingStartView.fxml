@@ -1,15 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.effect.Reflection?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.paint.RadialGradient?>
 <?import javafx.scene.paint.Stop?>
-<?import javafx.scene.text.*?>
-<?import java.lang.String?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="165.0" prefWidth="600.0" stylesheets="@../css/common.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.brnd.action_recorder.views.recording_start_view.RecordingStartViewController">
     <children>
@@ -24,14 +31,30 @@
             <children>
                 <GridPane prefHeight="69.0" prefWidth="323.0">
                     <columnConstraints>
-                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="545.0" minWidth="0.0" prefWidth="388.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="454.0" minWidth="0.0" prefWidth="212.0" />
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="545.0" minWidth="0.0" prefWidth="404.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="454.0" minWidth="0.0" prefWidth="196.0" />
                     </columnConstraints>
                     <rowConstraints>
                         <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
                     </rowConstraints>
                     <children>
-                        <GridPane prefHeight="69.0" prefWidth="160.0" GridPane.columnIndex="1">
+                        <Label prefWidth="160.0" text="Start Recording">
+                            <font>
+                                <Font name="Leelawadee UI Bold" size="21.0" />
+                            </font>
+                            <textFill>
+                                <RadialGradient centerX="0.15555555555555556" centerY="0.2571428571428571" cycleMethod="REFLECT" focusAngle="-75.81" focusDistance="0.37209302325581395" radius="0.8604651162790697">
+                                    <stops>
+                                        <Stop color="BLACK" />
+                                        <Stop color="BLACK" offset="1.0" />
+                                    </stops>
+                                </RadialGradient>
+                            </textFill>
+                            <effect>
+                                <Reflection fraction="0.6" topOffset="-2.0" topOpacity="0.73" />
+                            </effect>
+                        </Label>
+                        <GridPane prefHeight="37.0" prefWidth="190.0" GridPane.columnIndex="1">
                             <columnConstraints>
                                 <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                             </columnConstraints>
@@ -71,22 +94,6 @@
                                 </Button>
                             </children>
                         </GridPane>
-                        <Label text="Configuración">
-                            <font>
-                                <Font name="Leelawadee UI Bold" size="21.0" />
-                            </font>
-                            <textFill>
-                                <RadialGradient centerX="0.15555555555555556" centerY="0.2571428571428571" cycleMethod="REFLECT" focusAngle="-75.81" focusDistance="0.37209302325581395" radius="0.8604651162790697">
-                                    <stops>
-                                        <Stop color="BLACK" />
-                                        <Stop color="BLACK" offset="1.0" />
-                                    </stops>
-                                </RadialGradient>
-                            </textFill>
-                            <effect>
-                                <Reflection fraction="0.6" topOffset="-2.0" topOpacity="0.73" />
-                            </effect>
-                        </Label>
                     </children>
                 </GridPane>
             <GridPane GridPane.rowIndex="1">
@@ -98,68 +105,104 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="TOP" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <GridPane>
+                  <GridPane prefHeight="126.0" prefWidth="482.0">
                      <columnConstraints>
                         <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="278.0" minWidth="10.0" prefWidth="237.0" />
-                        <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="234.0" minWidth="10.0" prefWidth="218.0" />
                      </columnConstraints>
                      <rowConstraints>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="70.0" minHeight="2.0" prefHeight="37.0" valignment="CENTER" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="99.0" minHeight="0.0" prefHeight="64.0" valignment="CENTER" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
-                        <Label text="Posición Inicial de la ventana:" translateX="11.0" translateY="5.0">
-                           <font>
-                              <Font name="Georgia Bold Italic" size="15.0" />
-                           </font>
-                        </Label>
-                        <ChoiceBox fx:id="positionChoiceBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="31.0" prefWidth="227.0" translateY="5.0" GridPane.columnIndex="1">
-                           <tooltip>
-                              <Tooltip text="Posicion de la ventana al iniciar el Programa" />
-                           </tooltip>
-                           <styleClass>
-                              <String fx:value="primaryButton" />
-                              <String fx:value="reducedFont" />
-                           </styleClass>
-                           <cursor>
-                              <Cursor fx:constant="OPEN_HAND" />
-                           </cursor>
-                        </ChoiceBox>
-                        <Label text="Mantener siempre al frente:" translateX="11.0" GridPane.rowIndex="1">
-                           <font>
-                              <Font name="Georgia Bold Italic" size="15.0" />
-                           </font>
-                        </Label>
-                        <CheckBox fx:id="alwaysOnTopCheckBox" ellipsisString="" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="17.0" prefWidth="17.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                           <tooltip>
-                              <Tooltip text="Mostrar sobre los demas programas" />
-                           </tooltip>
-                           <cursor>
-                              <Cursor fx:constant="DEFAULT" />
-                           </cursor>
-                        </CheckBox>
-                        <Label text="Ubicacion archivos:" translateX="11.0" GridPane.rowIndex="2">
-                           <font>
-                              <Font name="Georgia Bold Italic" size="15.0" />
-                           </font>
-                        </Label>
-                        <Button fx:id="browseButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#browseDirectories" prefHeight="32.0" prefWidth="72.0" styleClass="primaryButton" text="Examinar" translateX="176.0" GridPane.rowIndex="2">
-                           <tooltip>
-                              <Tooltip text="Seleccionar carpeta" />
-                           </tooltip>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </Button>
-                        <TextField fx:id="directoryTxt" editable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="32.0" prefWidth="228.0" styleClass="primaryButton" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                           <tooltip>
-                              <Tooltip text="Ubicacion de los archivos y configuraciones" />
-                           </tooltip>
-                           <cursor>
-                              <Cursor fx:constant="DEFAULT" />
-                           </cursor>
-                        </TextField>
+                        <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="477.0">
+                          <columnConstraints>
+                            <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="328.0" minWidth="0.0" prefWidth="235.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="461.0" minWidth="10.0" prefWidth="226.0" />
+                          </columnConstraints>
+                           <children>
+                              <TextField maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="33.0" prefWidth="194.0" promptText="Nombre de la grabación" styleClass="primaryButton" text="New Recording" GridPane.columnIndex="1" />
+                              <Label maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="19.0" prefWidth="198.0" text="Nombre de grabación:">
+                                 <font>
+                                    <Font name="Georgia Bold Italic" size="15.0" />
+                                 </font>
+                                 <GridPane.margin>
+                                    <Insets left="10.0" />
+                                 </GridPane.margin>
+                              </Label>
+                           </children>
+                        </GridPane>
+                        <GridPane prefHeight="77.0" prefWidth="317.0" GridPane.rowIndex="1">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <Label maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="19.0" prefWidth="94.0" text="Capturar Teclado">
+                                 <font>
+                                    <Font name="Georgia Bold Italic" size="15.0" />
+                                 </font>
+                                 <GridPane.margin>
+                                    <Insets left="10.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <CheckBox fx:id="alwaysOnTopCheckBox" ellipsisString="" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="17.0" prefWidth="17.0" GridPane.rowIndex="1">
+                                 <tooltip>
+                                    <Tooltip text="Mostrar sobre los demas programas" />
+                                 </tooltip>
+                                 <cursor>
+                                    <Cursor fx:constant="DEFAULT" />
+                                 </cursor>
+                                 <GridPane.margin>
+                                    <Insets left="10.0" />
+                                 </GridPane.margin>
+                              </CheckBox>
+                              <Label maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" text="Capturar Teclado" GridPane.columnIndex="1">
+                                 <font>
+                                    <Font name="Georgia Bold Italic" size="15.0" />
+                                 </font>
+                              </Label>
+                              <Label maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" text="Capturar Teclado" GridPane.columnIndex="2">
+                                 <font>
+                                    <Font name="Georgia Bold Italic" size="15.0" />
+                                 </font>
+                              </Label>
+                              <Label maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" text="Capturar Teclado" GridPane.columnIndex="3">
+                                 <font>
+                                    <Font name="Georgia Bold Italic" size="15.0" />
+                                 </font>
+                              </Label>
+                              <CheckBox fx:id="alwaysOnTopCheckBox1" ellipsisString="" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="17.0" prefWidth="17.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                 <tooltip>
+                                    <Tooltip text="Mostrar sobre los demas programas" />
+                                 </tooltip>
+                                 <cursor>
+                                    <Cursor fx:constant="DEFAULT" />
+                                 </cursor>
+                              </CheckBox>
+                              <CheckBox fx:id="alwaysOnTopCheckBox2" ellipsisString="" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="17.0" prefWidth="17.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                 <tooltip>
+                                    <Tooltip text="Mostrar sobre los demas programas" />
+                                 </tooltip>
+                                 <cursor>
+                                    <Cursor fx:constant="DEFAULT" />
+                                 </cursor>
+                              </CheckBox>
+                              <CheckBox fx:id="alwaysOnTopCheckBox3" ellipsisString="" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="17.0" prefWidth="17.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                                 <tooltip>
+                                    <Tooltip text="Mostrar sobre los demas programas" />
+                                 </tooltip>
+                                 <cursor>
+                                    <Cursor fx:constant="DEFAULT" />
+                                 </cursor>
+                              </CheckBox>
+                           </children>
+                        </GridPane>
                      </children>
                   </GridPane>
                   <GridPane GridPane.columnIndex="1">
@@ -188,7 +231,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </Button>
-                        <Button fx:id="saveConfigsButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#saveConfigurationOnDatabase" prefHeight="33.0" prefWidth="105.0" styleClass="primaryButton" text="Guardar y Salir" translateX="-5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                        <Button fx:id="saveConfigsButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="33.0" prefWidth="105.0" styleClass="primaryButton" text="Guardar y Salir" translateX="-5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
