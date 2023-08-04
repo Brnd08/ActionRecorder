@@ -1,6 +1,6 @@
-package com.brnd.action_recorder.record.capturing;
+package com.brnd.action_recorder.views.recording_start_view;
 
-public class RecordConfiguration {
+public class RecordingConfiguration {
     private boolean recordingKeyboardInteractions;
     private boolean recordingMouseMotionInteractions;
 
@@ -39,13 +39,13 @@ public class RecordConfiguration {
     private boolean recordingMouseClickInteractions;
     private boolean recordingMouseWheelInteractions;
 
-    public RecordConfiguration(boolean recordingKeyboardInteractions, boolean recordingMouseMotionInteractions, boolean recordingMouseClickInteractions, boolean recordingMouseWheelInteractions) {
+    public RecordingConfiguration(boolean recordingKeyboardInteractions, boolean recordingMouseMotionInteractions, boolean recordingMouseClickInteractions, boolean recordingMouseWheelInteractions) {
         this.recordingKeyboardInteractions = recordingKeyboardInteractions;
         this.recordingMouseMotionInteractions = recordingMouseMotionInteractions;
         this.recordingMouseClickInteractions = recordingMouseClickInteractions;
         this.recordingMouseWheelInteractions = recordingMouseWheelInteractions;
     }
-    public RecordConfiguration(){
+    public RecordingConfiguration(){
         this.recordingKeyboardInteractions = true;
         this.recordingMouseMotionInteractions = true;
         this.recordingMouseClickInteractions = true;

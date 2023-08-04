@@ -1,5 +1,6 @@
 package com.brnd.action_recorder.record.capturing;
 
+import com.brnd.action_recorder.views.recording_start_view.RecordingConfiguration;
 import com.brnd.action_recorder.record.Recording;
 import com.brnd.action_recorder.record.RecordingsRepository;
 import com.github.kwhat.jnativehook.GlobalScreen;
@@ -15,7 +16,7 @@ import org.apache.logging.log4j.Logger;
 public class InteractionRecorder {
     public static final Logger logger = LogManager.getLogger(InteractionRecorder.class);
     private Recording recording;
-    private RecordConfiguration recordConfiguration;
+    private RecordingConfiguration recordConfiguration;
     private final KeyBoardListener keyboardListener = new KeyBoardListener();
     private final MouseClicksListener mouseClicksListener = new MouseClicksListener();
     private final MouseMotionListener mouseMotionListener = new MouseMotionListener();
@@ -78,17 +79,17 @@ public class InteractionRecorder {
         /* Do nothing */
     }
 
-    public RecordConfiguration getRecordConfiguration() {
+    public RecordingConfiguration getRecordConfiguration() {
         return recordConfiguration;
     }
 
-    public void setRecordConfiguration(RecordConfiguration recordConfiguration) {
+    public void setRecordConfiguration(RecordingConfiguration recordConfiguration) {
         this.recordConfiguration = recordConfiguration;
     }
 
 
     public void stopRecording() {
-        this.recordConfiguration = new RecordConfiguration(
+        this.recordConfiguration = new RecordingConfiguration(
                 false
                 , false
                 , false

@@ -1,5 +1,6 @@
 package com.brnd.action_recorder.record.capturing;
 
+import com.brnd.action_recorder.views.recording_start_view.RecordingConfiguration;
 import static com.brnd.action_recorder.data.Database.initializeDatabase;
 import com.brnd.action_recorder.record.Recording;
 import com.brnd.action_recorder.record.RecordingsRepository;
@@ -20,9 +21,9 @@ public class RecorderTest {
         InteractionRecorder interactionRecorder = new InteractionRecorder();
         RecordingsRepository recordingsRepository = new RecordingsRepository();
 
-        RecordConfiguration recordConfiguration = new RecordConfiguration(
+        RecordingConfiguration recordConfiguration = new RecordingConfiguration(
                 true
-                , true
+                , false
                 , true
                 , true
         );
