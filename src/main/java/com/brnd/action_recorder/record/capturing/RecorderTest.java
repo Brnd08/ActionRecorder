@@ -26,18 +26,22 @@ public class RecorderTest {
                 , false
                 , true
                 , true
+                , "Recording Test"
         );
 
         interactionRecorder.setRecordConfiguration(recordConfiguration);
-        interactionRecorder.startRecording("Recording Test");
+        interactionRecorder.startRecording();
         
         
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
+            @Override
             public void run() {
                 interactionRecorder.stopRecording();
                 
                 Recording recordedRecording = interactionRecorder.getlastRecording();
+                recordingsRepository.insertRecording(recordedRecording);
+                
                 logger.log(Level.TRACE, "Recorded actions: {}", recordedRecording.interactionsString());
                 
                 Recording retrievedRecording = recordingsRepository.getRecordingById(recordedRecording.getId());

@@ -2,13 +2,19 @@ package com.brnd.action_recorder.record.capturing;
 
 import com.brnd.action_recorder.views.recording_start_view.RecordingConfiguration;
 import com.brnd.action_recorder.record.Recording;
-import com.brnd.action_recorder.record.RecordingsRepository;
+
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
 import com.github.kwhat.jnativehook.NativeInputEvent;
+import com.github.kwhat.jnativehook.dispatcher.SwingDispatchService;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
-import com.github.kwhat.jnativehook.mouse.*;
+import com.github.kwhat.jnativehook.mouse.NativeMouseMotionListener;
+import com.github.kwhat.jnativehook.mouse.NativeMouseWheelEvent;
+import com.github.kwhat.jnativehook.mouse.NativeMouseWheelListener;
+import com.github.kwhat.jnativehook.mouse.NativeMouseListener;
+import com.github.kwhat.jnativehook.mouse.NativeMouseEvent;
+
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,7 +27,6 @@ public class InteractionRecorder {
     private final MouseClicksListener mouseClicksListener = new MouseClicksListener();
     private final MouseMotionListener mouseMotionListener = new MouseMotionListener();
     private final MouseWheelListener mouseWheelListener = new MouseWheelListener();
-    private final RecordingsRepository recordingsRepository = new RecordingsRepository();
 
     private void loadRecordConfiguration(){
 
@@ -29,23 +34,26 @@ public class InteractionRecorder {
             logger.log(Level.FATAL, "No Record configuration has been set");
             throw new NullPointerException();
         }
+        
+        
+        recording.setRecordingTitle(recordConfiguration.recordingTitle());
 
         // Keyboard interactions
-        if (recordConfiguration.isRecordingKeyboardInteractions()) {
+        if (recordConfiguration.recordingKeyboardInteractions()) {
             GlobalScreen.addNativeKeyListener(keyboardListener);
         } else {
             GlobalScreen.removeNativeKeyListener(keyboardListener);
         }
 
         // Mouse click interactions
-        if (recordConfiguration.isRecordingMouseClickInteractions()) {
+        if (recordConfiguration.recordingMouseClickInteractions()) {
             GlobalScreen.addNativeMouseListener(mouseClicksListener);
         } else {
             GlobalScreen.removeNativeMouseListener(mouseClicksListener);
         }
 
         // Mouse motion interactions
-        if (recordConfiguration.isRecordingMouseMotionInteractions()) {
+        if (recordConfiguration.recordingMouseMotionInteractions()) {
             GlobalScreen.addNativeMouseMotionListener(mouseMotionListener);
         } else {
             GlobalScreen.removeNativeMouseMotionListener(mouseMotionListener);
@@ -53,18 +61,18 @@ public class InteractionRecorder {
 
         // Mouse wheel interactions
 
-        if (recordConfiguration.isRecordingMouseWheelInteractions()) {
+        if (recordConfiguration.recordingMouseWheelInteractions()) {
             GlobalScreen.addNativeMouseWheelListener(mouseWheelListener);
         } else {
             GlobalScreen.removeNativeMouseWheelListener(mouseWheelListener);
         }
     }
 
-    public void startRecording(String recordingTitle) throws NativeHookException {
+    public void startRecording() throws NativeHookException {
+        GlobalScreen.setEventDispatcher(new SwingDispatchService());
 
         logger.log(Level.TRACE, "Creating new Recording");
         this.recording = new Recording();
-        recording.setRecordingTitle(recordingTitle);
 
         GlobalScreen.registerNativeHook();
 
@@ -87,19 +95,23 @@ public class InteractionRecorder {
         this.recordConfiguration = recordConfiguration;
     }
 
+    private void removeListenners(){
+        
+            GlobalScreen.removeNativeKeyListener(keyboardListener);
+            GlobalScreen.removeNativeMouseListener(mouseClicksListener);
+            GlobalScreen.removeNativeMouseMotionListener(mouseMotionListener);
+            GlobalScreen.removeNativeMouseWheelListener(mouseWheelListener);
+    }
 
     public void stopRecording() {
-        this.recordConfiguration = new RecordingConfiguration(
-                false
-                , false
-                , false
-                , false
-        );
-        loadRecordConfiguration();
+        removeListenners();
+        try {
+            GlobalScreen.unregisterNativeHook();
+        } catch (NativeHookException ex) {
+            logger.log(Level.ERROR,ex);
+        }
         this.recording.closeRecording();
-        recordingsRepository.insertRecording(recording);
-        logger.log(Level.TRACE, "Recording Stopped and saved in database");
-
+        logger.log(Level.TRACE, "Recording Stopped");
     }
 
     public Recording getlastRecording() {
@@ -126,7 +138,7 @@ public class InteractionRecorder {
          */
         @Override
         public void nativeKeyPressed(NativeKeyEvent nativeEvent) {
-            if (recordConfiguration.isRecordingKeyboardInteractions()) {
+            if (recordConfiguration.recordingKeyboardInteractions()) {
                 addNativeEventToRecording(nativeEvent);
             }
         }
@@ -138,7 +150,7 @@ public class InteractionRecorder {
          */
         @Override
         public void nativeKeyReleased(NativeKeyEvent nativeEvent) {
-            if (recordConfiguration.isRecordingKeyboardInteractions()) {
+            if (recordConfiguration.recordingKeyboardInteractions()) {
                 addNativeEventToRecording(nativeEvent);
             }
         }
@@ -163,7 +175,7 @@ public class InteractionRecorder {
          */
         @Override
         public void nativeMousePressed(NativeMouseEvent nativeEvent) {
-            if (recordConfiguration.isRecordingMouseClickInteractions()) {
+            if (recordConfiguration.recordingMouseClickInteractions()) {
                 addNativeEventToRecording(nativeEvent);
             }
         }
@@ -175,7 +187,7 @@ public class InteractionRecorder {
          */
         @Override
         public void nativeMouseReleased(NativeMouseEvent nativeEvent) {
-            if (recordConfiguration.isRecordingMouseClickInteractions()) {
+            if (recordConfiguration.recordingMouseClickInteractions()) {
                 addNativeEventToRecording(nativeEvent);
             }
         }
@@ -192,7 +204,7 @@ public class InteractionRecorder {
          */
         @Override
         public void nativeMouseMoved(NativeMouseEvent nativeEvent) {
-            if (recordConfiguration.isRecordingMouseMotionInteractions()) {
+            if (recordConfiguration.recordingMouseMotionInteractions()) {
                 addNativeEventToRecording(nativeEvent);
             }
         }
@@ -218,7 +230,7 @@ public class InteractionRecorder {
          */
         @Override
         public void nativeMouseWheelMoved(NativeMouseWheelEvent nativeEvent) {
-            if (recordConfiguration.isRecordingMouseWheelInteractions()) {
+            if (recordConfiguration.recordingMouseWheelInteractions()) {
                 addNativeEventToRecording(nativeEvent);
             }
         }
