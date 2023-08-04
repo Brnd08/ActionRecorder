@@ -13,7 +13,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.RadialGradient?>
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
@@ -53,6 +55,9 @@
                             <effect>
                                 <Reflection fraction="0.6" topOffset="-2.0" topOpacity="0.73" />
                             </effect>
+                     <GridPane.margin>
+                        <Insets top="2.0" />
+                     </GridPane.margin>
                         </Label>
                         <GridPane prefHeight="37.0" prefWidth="190.0" GridPane.columnIndex="1">
                             <columnConstraints>
@@ -105,22 +110,26 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="TOP" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <GridPane prefHeight="126.0" prefWidth="482.0">
+                  <GridPane prefHeight="107.0" prefWidth="465.0" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                      <columnConstraints>
-                        <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="278.0" minWidth="10.0" prefWidth="237.0" />
+                        <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="237.0" />
                      </columnConstraints>
                      <rowConstraints>
-                        <RowConstraints maxHeight="70.0" minHeight="2.0" prefHeight="37.0" valignment="CENTER" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="99.0" minHeight="0.0" prefHeight="64.0" valignment="CENTER" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="55.0" minHeight="-Infinity" prefHeight="31.0" valignment="CENTER" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="93.0" minHeight="-Infinity" prefHeight="83.0" valignment="CENTER" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
-                        <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="477.0">
+                        <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="489.0">
                           <columnConstraints>
-                            <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="328.0" minWidth="0.0" prefWidth="235.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="461.0" minWidth="10.0" prefWidth="226.0" />
+                            <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="328.0" minWidth="0.0" prefWidth="207.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="461.0" minWidth="10.0" prefWidth="282.0" />
                           </columnConstraints>
                            <children>
-                              <TextField maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="33.0" prefWidth="194.0" promptText="Nombre de la grabación" styleClass="primaryButton" text="New Recording" GridPane.columnIndex="1" />
+                              <TextField maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="33.0" prefWidth="237.0" promptText="Nombre de la grabación" styleClass="primaryButton" text="New Recording" GridPane.columnIndex="1">
+                                 <tooltip>
+                                    <Tooltip text="Nombre para guardar la grabación" />
+                                 </tooltip>
+                              </TextField>
                               <Label maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="19.0" prefWidth="198.0" text="Nombre de grabación:">
                                  <font>
                                     <Font name="Georgia Bold Italic" size="15.0" />
@@ -131,78 +140,69 @@
                               </Label>
                            </children>
                         </GridPane>
-                        <GridPane prefHeight="77.0" prefWidth="317.0" GridPane.rowIndex="1">
-                          <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="100.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="100.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="100.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="100.0" />
-                          </columnConstraints>
-                          <rowConstraints>
-                            <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                          </rowConstraints>
+                        <VBox id="startRecordingCaptureVBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="76.0" prefWidth="477.0" GridPane.halignment="LEFT" GridPane.rowIndex="1">
                            <children>
-                              <Label maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="19.0" prefWidth="94.0" text="Capturar Teclado">
+                              <Label alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="19.0" prefWidth="470.0" text="Eventos a grabar:" textAlignment="CENTER">
                                  <font>
                                     <Font name="Georgia Bold Italic" size="15.0" />
                                  </font>
-                                 <GridPane.margin>
-                                    <Insets left="10.0" />
-                                 </GridPane.margin>
+                                 <VBox.margin>
+                                    <Insets bottom="5.0" />
+                                 </VBox.margin>
                               </Label>
-                              <CheckBox fx:id="alwaysOnTopCheckBox" ellipsisString="" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="17.0" prefWidth="17.0" GridPane.rowIndex="1">
-                                 <tooltip>
-                                    <Tooltip text="Mostrar sobre los demas programas" />
-                                 </tooltip>
-                                 <cursor>
-                                    <Cursor fx:constant="DEFAULT" />
-                                 </cursor>
-                                 <GridPane.margin>
-                                    <Insets left="10.0" />
-                                 </GridPane.margin>
-                              </CheckBox>
-                              <Label maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" text="Capturar Teclado" GridPane.columnIndex="1">
-                                 <font>
-                                    <Font name="Georgia Bold Italic" size="15.0" />
-                                 </font>
-                              </Label>
-                              <Label maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" text="Capturar Teclado" GridPane.columnIndex="2">
-                                 <font>
-                                    <Font name="Georgia Bold Italic" size="15.0" />
-                                 </font>
-                              </Label>
-                              <Label maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" text="Capturar Teclado" GridPane.columnIndex="3">
-                                 <font>
-                                    <Font name="Georgia Bold Italic" size="15.0" />
-                                 </font>
-                              </Label>
-                              <CheckBox fx:id="alwaysOnTopCheckBox1" ellipsisString="" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="17.0" prefWidth="17.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                                 <tooltip>
-                                    <Tooltip text="Mostrar sobre los demas programas" />
-                                 </tooltip>
-                                 <cursor>
-                                    <Cursor fx:constant="DEFAULT" />
-                                 </cursor>
-                              </CheckBox>
-                              <CheckBox fx:id="alwaysOnTopCheckBox2" ellipsisString="" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="17.0" prefWidth="17.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
-                                 <tooltip>
-                                    <Tooltip text="Mostrar sobre los demas programas" />
-                                 </tooltip>
-                                 <cursor>
-                                    <Cursor fx:constant="DEFAULT" />
-                                 </cursor>
-                              </CheckBox>
-                              <CheckBox fx:id="alwaysOnTopCheckBox3" ellipsisString="" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="17.0" prefWidth="17.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
-                                 <tooltip>
-                                    <Tooltip text="Mostrar sobre los demas programas" />
-                                 </tooltip>
-                                 <cursor>
-                                    <Cursor fx:constant="DEFAULT" />
-                                 </cursor>
-                              </CheckBox>
+                              <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="39.0" prefWidth="324.0">
+                                 <children>
+                                    <CheckBox alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="41.0" prefWidth="86.0" styleClass="primaryButton" text="Teclado" textAlignment="CENTER">
+                                       <HBox.margin>
+                                          <Insets left="3.0" />
+                                       </HBox.margin>
+                                       <padding>
+                                          <Insets bottom="10.0" left="5.0" right="5.0" />
+                                       </padding>
+                                       <tooltip>
+                                          <Tooltip text="Escritura y atajos" />
+                                       </tooltip>
+                                    </CheckBox>
+                                    <CheckBox alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="41.0" prefWidth="109.0" styleClass="primaryButton" text="Clicks mouse" textAlignment="CENTER">
+                                       <padding>
+                                          <Insets bottom="10.0" left="5.0" right="5.0" />
+                                       </padding>
+                                       <HBox.margin>
+                                          <Insets left="3.0" />
+                                       </HBox.margin>
+                                       <tooltip>
+                                          <Tooltip text="Clicks del mouse" />
+                                       </tooltip>
+                                    </CheckBox>
+                                    <CheckBox alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="41.0" prefWidth="142.0" styleClass="primaryButton" text="Movimiento mouse" textAlignment="CENTER">
+                                       <padding>
+                                          <Insets bottom="10.0" left="5.0" right="5.0" />
+                                       </padding>
+                                       <HBox.margin>
+                                          <Insets left="3.0" />
+                                       </HBox.margin>
+                                       <tooltip>
+                                          <Tooltip text="Desplazamiento del puntero del mouse" />
+                                       </tooltip>
+                                    </CheckBox>
+                                    <CheckBox alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="41.0" prefWidth="116.0" styleClass="primaryButton" text="Rueda mouse" textAlignment="CENTER">
+                                       <padding>
+                                          <Insets bottom="10.0" left="5.0" right="5.0" />
+                                       </padding>
+                                       <HBox.margin>
+                                          <Insets left="3.0" />
+                                       </HBox.margin>
+                                       <tooltip>
+                                          <Tooltip text="Scroll del mouse" />
+                                       </tooltip>
+                                    </CheckBox>
+                                 </children>
+                              </HBox>
                            </children>
-                        </GridPane>
+                           <GridPane.margin>
+                              <Insets left="7.0" />
+                           </GridPane.margin>
+                        </VBox>
                      </children>
                   </GridPane>
                   <GridPane GridPane.columnIndex="1">
@@ -231,10 +231,13 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </Button>
-                        <Button fx:id="saveConfigsButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="33.0" prefWidth="105.0" styleClass="primaryButton" text="Guardar y Salir" translateX="-5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                        <Button fx:id="saveConfigsButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="33.0" prefWidth="105.0" styleClass="primaryButton" text="Comenzar" translateX="-5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
+                           <tooltip>
+                              <Tooltip text="Iniciar grabación" />
+                           </tooltip>
                         </Button>
                      </children>
                   </GridPane>
