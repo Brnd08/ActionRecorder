@@ -1,14 +1,16 @@
 package com.brnd.action_recorder.data;
 
 import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.LinkedHashMap;
 
-import static com.brnd.action_recorder.data.Database.logger;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public enum DatabaseTable {
+	
     SETTINGS(
             new String[]{"settings_id", "INTEGER PRIMARY KEY  UNIQUE"},
             new String[]{"always_on_top", "BOOLEAN NOT NULL DEFAULT FALSE"},
@@ -21,7 +23,7 @@ public enum DatabaseTable {
             new String[]{"recording_duration", "FLOAT"},
             new String[]{"recording_input_events", "BLOB"}
     );
-
+	
     private final LinkedHashMap<String, String> fieldsMap = new LinkedHashMap<>();
     private final String createTableSentence;
     private final String selectByIdSentence;
@@ -77,6 +79,9 @@ public enum DatabaseTable {
 
 
     private DatabaseTable(String[]... columns) {
+
+    	final Logger logger = LogManager.getLogger(DatabaseTable.class);
+    	
         String[] idColumn = columns[0];
         String idColumnTypeAndConstraints = idColumn[1];
         String idColumnName = columns[0][0];
@@ -92,7 +97,7 @@ public enum DatabaseTable {
                 .append(
                         Arrays.stream(columns).map(field -> (field[0] + " " + field[1]))
                                 .collect(Collectors.joining(", ", "(", ")"))
-                ) // appends colum names followed by type and constraints separating them  by commas and enclose them with curly braces
+                ) // appends column names followed by type and constraints separating them  by commas and enclose them with curly braces
                 .append(";");
         createTableSentence =  createSentence.toString();
 
@@ -101,7 +106,7 @@ public enum DatabaseTable {
                 .append(
                         Arrays.stream(columns).map(column -> column[0])
                         .collect(Collectors.joining(", ", "(", ")"))
-                ) // appends comaseparated column names enclosed between curly braces
+                ) // appends comma separated column names enclosed between curly braces
                 .append(" VALUES ")
                 .append(
                         Arrays.stream(columns).map(column -> "?")
@@ -111,7 +116,7 @@ public enum DatabaseTable {
         
         String insertSentenceString = insertSentence.toString();
         
-        // if the primary key is autoincremented removes primary key column and ? sign from the insertSentence
+        // if the primary key is auto-incremented removes primary key column and ? sign from the insertSentence
         if(idColumnTypeAndConstraints.contains("INTEGER PRIMARY KEY AUTOINCREMENT")){ 
             insertNewRowSentence 
                     = insertSentenceString
@@ -124,8 +129,7 @@ public enum DatabaseTable {
         
         insertFirstSentence = insertNewRowSentence.replace("INSERT INTO", "INSERT OR IGNORE INTO");// ignore exceptions if the row already exists
 
-        logger.log(Level.TRACE,
-                "Table constant {} created with following configuration: {}",
+        logger.log(Level.TRACE, "Table constant {} created with following configuration: {}",
                 this.name(), this.toString());
 
     }

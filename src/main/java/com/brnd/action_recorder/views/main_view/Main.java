@@ -30,14 +30,7 @@ public class Main extends Application {
     public void start(Stage stage) throws IOException, SQLException {
         logger.log(Level.TRACE, "App Initialization.");
         
-        try {
-            logger.log(Level.TRACE, "Database Initialization.");
-            initializeDatabase();
-        } catch (SQLException ex) {
-            logger.log(Level.FATAL, "Could not initialize the database", ex);
-            throw ex;
-        }
-
+        
         // shows the main view
         ViewController.openView(stage, ViewEnum.MAIN);
 

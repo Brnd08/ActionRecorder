@@ -14,8 +14,7 @@ import java.sql.SQLException;
 import static com.brnd.action_recorder.data.DatabaseTable.SETTINGS;
 
 public class Database {
-    
-    public static final Logger logger = LogManager.getLogger(Database.class);
+	
     private static final String SQLITE_JDBC_CLASS = "org.sqlite.JDBC";
 
     private static final String APP_FOLDER
@@ -33,6 +32,19 @@ public class Database {
 
     private static final String DB_URL = "jdbc:sqlite:" + File.separator + DB_FILE_PATH;
         
+    
+    public static final Logger logger = LogManager.getLogger(Database.class);
+    
+    static {
+    	try {
+            logger.log(Level.TRACE, "Database Initialization.");
+            Database.initializeDatabase();
+        } catch (Exception ex) {
+            logger.log(Level.FATAL, "Could not initialize the database", ex);
+            System.exit(1);
+        }
+
+    }
     
     private Database() { // To prevent class instantiation in utility classes
         throw new UnsupportedOperationException("Utility class can not be instantiated");
