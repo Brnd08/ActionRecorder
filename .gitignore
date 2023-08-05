@@ -43,7 +43,7 @@ ActionRecorder.eml
 /manifest.mf
 /lib
 /nbproject
-
+nb-configuration.xml
 
 ### Other files ###
 **/*.class

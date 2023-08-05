@@ -5,16 +5,14 @@ import com.brnd.action_recorder.views.utils.StageLocation;
 import com.brnd.action_recorder.views.utils.StagePositioner;
 import com.brnd.action_recorder.views.utils.ViewController;
 import com.brnd.action_recorder.views.utils.ViewEnum;
+import java.io.IOException;
+import java.sql.SQLException;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
-import java.sql.SQLException;
-
-import static com.brnd.action_recorder.data.Database.initializeDatabase;
 
 
 public class Main extends Application {
