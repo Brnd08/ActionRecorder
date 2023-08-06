@@ -19,6 +19,10 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * This class has functionalities to create recordings objects based on
+ * specified configurations
+ */
 public class InteractionRecorder {
     public static final Logger logger = LogManager.getLogger(InteractionRecorder.class);
     private Recording recording;
@@ -28,6 +32,11 @@ public class InteractionRecorder {
     private final MouseMotionListener mouseMotionListener = new MouseMotionListener();
     private final MouseWheelListener mouseWheelListener = new MouseWheelListener();
 
+    /**
+     * Applies the configurations from the recordConfiguration object
+     * This method is meant to be when starting a new recording in the startRecording() method
+     * @throws NullPointerException if the recordConfiguration object has not been created
+     */
     private void loadRecordConfiguration(){
 
         if (recordConfiguration == null){
@@ -35,7 +44,7 @@ public class InteractionRecorder {
             throw new NullPointerException();
         }
         
-        
+        // Sets the specified recording title to the current recording object
         recording.setRecordingTitle(recordConfiguration.recordingTitle());
 
         // Keyboard interactions
@@ -68,17 +77,20 @@ public class InteractionRecorder {
         }
     }
 
-    public void startRecording() throws NativeHookException {
+    public void startRecording(RecordingConfiguration recordConfiguration) throws NativeHookException {
+        // Force JNativeHook to use the Swing thread
         GlobalScreen.setEventDispatcher(new SwingDispatchService());
 
         logger.log(Level.TRACE, "Creating new Recording");
         this.recording = new Recording();
-
+        // Enables native hook
         GlobalScreen.registerNativeHook();
 
         logger.log(Level.TRACE, "Loading configuration: {}", this.recordConfiguration);
 
-            loadRecordConfiguration();
+        // sets and load the recordConfiguration
+        this.recordConfiguration = recordConfiguration;
+        loadRecordConfiguration();
 
         logger.log(Level.TRACE, "Recording Started");
     }
@@ -91,11 +103,11 @@ public class InteractionRecorder {
         return recordConfiguration;
     }
 
-    public void setRecordConfiguration(RecordingConfiguration recordConfiguration) {
-        this.recordConfiguration = recordConfiguration;
-    }
 
-    private void removeListenners(){
+    /**
+     * Removes all listeners from native hook to stop listening to all events
+     */
+    private void removeListeners(){
         
             GlobalScreen.removeNativeKeyListener(keyboardListener);
             GlobalScreen.removeNativeMouseListener(mouseClicksListener);
@@ -103,8 +115,11 @@ public class InteractionRecorder {
             GlobalScreen.removeNativeMouseWheelListener(mouseWheelListener);
     }
 
+    /**
+     * Stops the current recording by removing all listeners and disabling native hook
+     */
     public void stopRecording() {
-        removeListenners();
+        removeListeners();
         try {
             GlobalScreen.unregisterNativeHook();
         } catch (NativeHookException ex) {
@@ -114,11 +129,18 @@ public class InteractionRecorder {
         logger.log(Level.TRACE, "Recording Stopped");
     }
 
+    /**
+     * Returns the previously created recording
+     * @return Recording containing the caught events
+     */
     public Recording getlastRecording() {
         return recording;
     }
 
-
+    /**
+     * This class implements methods to catch Keyboard related events such
+     * as key presses, key releases and typed keys
+     */
     private class KeyBoardListener implements NativeKeyListener{
         /**
          * Invoked when a key has been typed.
@@ -156,6 +178,10 @@ public class InteractionRecorder {
         }
     }
 
+    /**
+     * This class implements methods to catch Mouse click events such
+     * as button mouse presses, releases and clicks
+     */
     public class MouseClicksListener implements NativeMouseListener{
 
         /**
@@ -193,9 +219,10 @@ public class InteractionRecorder {
         }
     }
 
-
-
-    /*      MOUSE-MOTION INTERACTIONS       */
+    /**
+     * This class implements methods to catch Mouse motion event such as mouse movements
+     * and drags
+     */
     private class MouseMotionListener implements NativeMouseMotionListener{
         /**
          * Invoked when the mouse has been moved.
@@ -221,6 +248,9 @@ public class InteractionRecorder {
         }
     }
 
+    /**
+     * This class implements methods to catch Mouse wheel events such as scrolling movements
+     */
     private class MouseWheelListener implements NativeMouseWheelListener{
 
         /**
@@ -236,14 +266,17 @@ public class InteractionRecorder {
         }
     }
 
-
+    /**
+     * Adds the specified NativeInputEvent to the current recording
+     * @param event The caught event
+     */
     private void addNativeEventToRecording(NativeInputEvent event) {
         try {
             if (this.recording == null) {
                 logger.log(Level.ERROR, "No available recording object to store events");
                 throw new NullPointerException();
             } else {
-                this.recording.getInputEvents().put(System.nanoTime(), event);
+                this.recording.getInputEvents().put(System.nanoTime(), event);// adds the event and the current execution time
                 String paramString = event.paramString();
                 logger.log(Level.INFO, "Recorded : {}", paramString);
             }
@@ -252,5 +285,4 @@ public class InteractionRecorder {
             logger.log(Level.FATAL, nullPointerException);
         }
     }
-
 }

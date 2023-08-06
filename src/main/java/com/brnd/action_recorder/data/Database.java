@@ -13,6 +13,10 @@ import java.sql.SQLException;
 
 import static com.brnd.action_recorder.data.DatabaseTable.SETTINGS;
 
+/**
+ * This class has database related functionalities such as database
+ * initialization or to get connection instances
+ */
 public class Database {
 	
     private static final String SQLITE_JDBC_CLASS = "org.sqlite.JDBC";
@@ -86,7 +90,10 @@ public class Database {
         
 
     }
-    
+
+    /**
+     * Insets the default settings method to the database intended to be use when first app execution
+     */
     private static void insertDefaultSettingsValues(){
         PreparedStatement preparedStatement = null;
             String insertScript = SETTINGS.getInsertFirstSentence();
@@ -114,17 +121,16 @@ public class Database {
                 try {
                     preparedStatement.close();
                 } catch (SQLException ex) {
-                    logger.log(Level.ERROR, "Could not close PrepareStament on {} method. Exception msg: {}"
+                    logger.log(Level.ERROR, "Could not close PrepareStatement on {} method. Exception msg: {}"
                             , "SettingsService.SettingsRepository.saveShowOnTopValue()", ex.getMessage());
                 }
             }
         }
     }
-    
-    
+
     /**
      * Method to instantiate the singleton {@link Connection} instance
-     * @throws SQLException 
+     * @throws SQLException Either if an exception occur when loading JDBC class or creating the connection
      */
     private static void initializeConnection() throws SQLException{
         try {
@@ -142,7 +148,10 @@ public class Database {
             throw e;
         }
     }
-    
+
+    /**
+     * Creates the app related directories
+     */
     private static void createAppDirs(){
         
         File programRootDir = new File(APP_FOLDER);
@@ -166,9 +175,8 @@ public class Database {
      * This method creates the specified table in the app database
      *
      * @param table The table to be created
-     * @throws SQLException If could not create table or if could not close the
-     * PreparedStatement used for update execution
-     */
+     * @throws SQLException Either If an exception occurs during table creation
+     * */
     private static void createTable(DatabaseTable table) throws SQLException {
         PreparedStatement pStatement = null;
         try {
@@ -182,7 +190,7 @@ public class Database {
                 try {
                     pStatement.close();
                 } catch (SQLException ex) {
-                    logger.log(Level.ERROR, "Could not close PrepareStament for {} table", table.name());
+                    logger.log(Level.ERROR, "Could not close PrepareStatement for {} table", table.name());
                 }
             }
         }

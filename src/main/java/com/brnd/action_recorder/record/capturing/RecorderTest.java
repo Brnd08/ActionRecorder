@@ -13,6 +13,9 @@ import java.util.TimerTask;
 import static com.brnd.action_recorder.record.capturing.InteractionRecorder.logger;
 import java.sql.SQLException;
 
+/**
+ * This class serves a quick way to check verify recording creation functionality
+ */
 public class RecorderTest {
 
     public static void main(String[] args) throws NativeHookException, SQLException {
@@ -29,8 +32,7 @@ public class RecorderTest {
                 , "Recording Test"
         );
 
-        interactionRecorder.setRecordConfiguration(recordConfiguration);
-        interactionRecorder.startRecording();
+        interactionRecorder.startRecording(recordConfiguration);
         
         
         Timer timer = new Timer();

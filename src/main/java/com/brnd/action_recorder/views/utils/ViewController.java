@@ -23,18 +23,24 @@ import static com.brnd.action_recorder.views.main_view.Main.logger;
  * code, by providing methods for views navigation and related methods.
  */
 public interface ViewController {
+    /**
+     * Configures, loads and show a specific view in to the specified Stage
+     * @param stage the Stage to be used to display the view
+     * @param view the desired view constant to be showed
+     * @throws IOException if and exception occurs when loading the fxml file of the view
+     */
 
-    public static void openView(Stage stage, ViewEnum nextView) throws IOException {
-        logger.log(Level.TRACE, "Opening {} view", nextView.name());
+    public static void openView(Stage stage, ViewEnum view) throws IOException {
+        logger.log(Level.TRACE, "Opening {} view", view.name());
         // Load Fxml view
         FXMLLoader fxmlLoader;
-        logger.log(Level.TRACE, "Creating FXMLLoader for {} view with fxml path {}", nextView.name(), nextView.getFxmlPath());
+        logger.log(Level.TRACE, "Creating FXMLLoader for {} view with fxml path {}", view.name(), view.getFxmlPath());
         try {
             fxmlLoader =
                     new FXMLLoader(
                             Objects.requireNonNull(
                                     ViewEnum.class.getResource(
-                                            nextView.getFxmlPath() // get the fxml file path from View constant
+                                            view.getFxmlPath() // get the fxml file path from View constant
                                     )
                             )
                     );
@@ -44,7 +50,7 @@ public interface ViewController {
         }
 
         Parent root = fxmlLoader.load();
-        logger.log(Level.TRACE, "Configuring {} view", nextView.name());
+        logger.log(Level.TRACE, "Configuring {} view", view.name());
         // Add the fxml view to a new scene with the previous scene width and height
         Scene newScene = new Scene(root);
 
@@ -58,7 +64,7 @@ public interface ViewController {
         // Adds taskbar icon
         stage.getIcons().add(0, ViewEnum.getAppIcon());
         // Modify the stage title
-        stage.setTitle(nextView.getStageTitle());
+        stage.setTitle(view.getStageTitle());
 
 
         // Adds the new scene to the Stage
@@ -75,14 +81,20 @@ public interface ViewController {
         // makes stage draggable by mouse interaction
         StagePositioner.addDragFunctionalityToStage(stage, newScene);
 
-        logger.log(Level.TRACE, "Showing {} view", nextView.name());
+        logger.log(Level.TRACE, "Showing {} view", view.name());
         // display the stage on the screen
         stage.show();
 
 
     }
 
-    private static void navigateToView(Event clickEvent, ViewEnum nextView) throws IOException, NullPointerException {
+    /**
+     * Opens the desired view and closes the view from where this method was called
+     * @param clickEvent the event that triggered this method
+     * @param nextView the view will be showed
+     * @throws IOException if an exception occurs when opening the next view
+     */
+    private static void navigateToView(Event clickEvent, ViewEnum nextView) throws IOException {
         Stage previousStage =
                 (Stage) ((Button) clickEvent.getSource())
                         .getScene()
@@ -101,12 +113,20 @@ public interface ViewController {
         previousStage.close();
     }
 
+    /**
+     * Minimizes the stage from where this method was called
+     * @param event the event that triggered this method call
+     */
     @FXML
     public default void minimizeStage(Event event) {
         ((Stage) (((Button) event.getSource()).getScene().getWindow())).setIconified(true);
         logger.log(Level.TRACE, "Minimizing view" );
     }
 
+    /**
+     * Close the stage from where this method was called and finalizes app execution
+     * @param event the event that triggered this method call
+     */
     @FXML
     public default void closeStage(Event event) {
         ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();

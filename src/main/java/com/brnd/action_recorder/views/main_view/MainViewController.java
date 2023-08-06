@@ -7,6 +7,9 @@ import javafx.scene.control.Button;
 
 import java.io.IOException;
 
+/**
+ * Controller for the Main View
+ */
 public class MainViewController implements ViewController {
     @FXML
     Button playBttn;

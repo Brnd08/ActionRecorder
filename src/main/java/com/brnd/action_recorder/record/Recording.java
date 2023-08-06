@@ -8,7 +8,9 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
 import java.util.stream.Collectors;
-
+/*
+    This class is used to store the Recordings events as well as other useful information
+ */
 public class Recording implements Serializable {
     public static final DateTimeFormatter DATE_FORMATER = DateTimeFormatter.ofPattern("yyyy-MM-DD");
     @Serial
@@ -40,6 +42,10 @@ public class Recording implements Serializable {
         this.recordingDuration = (recordingStopTime - recordingStartTime) / nanoSecondsInOneSecond;
     }
 
+    /**
+     * The string representation of the stored events
+     * @return a String representation of the map containing the events.
+     */
     public String interactionsString() {
 
         return
@@ -53,14 +59,13 @@ public class Recording implements Serializable {
                         .collect(Collectors.joining());
     }
 
-
-    public Recording() {
+    public Recording() { // used to create new Recordings
         this.recordingStartTime = System.nanoTime();
         this.inputEvents = new LinkedHashMap<>();
         this.recordingDate = LocalDate.now();
     }
 
-    public Recording(
+    public Recording(// used to retrieve Recordings from database
             int id, LinkedHashMap<Long, NativeInputEvent> inputEvents, String recordingTitle, float recordingDuration, LocalDate recordingDate
     ) {
         this.id = id;

@@ -20,11 +20,21 @@ public enum StageLocation {
         this.toShowString = toShow;
     }
 
+    /**
+     * Maps a StageLocation enum constant using its toShowString value
+     * @param toShowString the toShowString property of the constant
+     * @return the StageLocation associated to the toShowString
+     */
     public static StageLocation stageLocationFromToShowString(String toShowString) {
         return Arrays.stream(StageLocation.values())
                 .filter(stagePosition -> stagePosition.getToShowString().equals(toShowString))
                 .findFirst().orElseThrow();
     }
+
+    /**
+     * Obtain all the toShowString for all the StageLocation enum constants
+     * @return List<String> containing the toShowStrings
+     */
     public static List<String> getToShowStringsList(){
         return Arrays
                 .stream(StageLocation.values())

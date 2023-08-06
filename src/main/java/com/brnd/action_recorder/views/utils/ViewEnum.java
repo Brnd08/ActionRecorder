@@ -58,6 +58,11 @@ public enum ViewEnum {
         return APP_ICON;
     }
 
+    /**
+     * Maps a ViewEnum constant using the specified title
+     * @param title the title of the view enum
+     * @return the ViewEnum associated to the given title
+     */
     public static ViewEnum fromTitle(String title){
         return Arrays.stream(ViewEnum.values())
                 .filter(viewEnum -> viewEnum.getStageTitle().equals(title))

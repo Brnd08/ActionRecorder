@@ -12,6 +12,10 @@ import java.sql.SQLException;
 
 import static com.brnd.action_recorder.data.Database.logger;
 
+/**
+ * This class has the needed functionalities to insert, select and update Settings from the
+ * database
+ */
 public class SettingsRepository {
 
     private final Connection connection;

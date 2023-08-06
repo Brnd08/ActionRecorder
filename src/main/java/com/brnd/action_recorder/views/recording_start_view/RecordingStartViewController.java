@@ -7,11 +7,13 @@ package com.brnd.action_recorder.views.recording_start_view;
 import com.brnd.action_recorder.record.capturing.InteractionRecorder;
 import com.brnd.action_recorder.views.utils.ViewController;
 import com.github.kwhat.jnativehook.NativeHookException;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
+
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -24,9 +26,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * FXML Controller class
- *
- * @author brdn
+ * FXML Controller class for Recording start view
  */
 public class RecordingStartViewController implements Initializable, ViewController {
 
@@ -52,9 +52,14 @@ public class RecordingStartViewController implements Initializable, ViewControll
 
     }
 
+    /**
+     * Starts a new recording with the current configuration from the GUI
+     *
+     * @param event The event which calls this method
+     */
     @FXML
     public void startRecording(Event event) {
-        
+
         RecordingConfiguration recordingConfiguration = new RecordingConfiguration(
                 recordKeyboardCheckBox.isSelected(),
                 recordMouseMotionCheckBox.isSelected(),
@@ -65,14 +70,13 @@ public class RecordingStartViewController implements Initializable, ViewControll
 
         logger.log(Level.INFO, "Starting Recording with following configuration: {}", recordingConfiguration);
 
-        this.interactionRecorder.setRecordConfiguration(recordingConfiguration);
         boolean recordingStarted = false;
-        
+
         try {
-            this.interactionRecorder.startRecording();
+            this.interactionRecorder.startRecording(recordingConfiguration);
             recordingStarted = true;
         } catch (NativeHookException exception) {
-            logger.log(Level.ERROR, "Could not start Recording. Exception message: {}", exception);
+            logger.log(Level.ERROR, "Could not start Recording. Exception message: {}", exception.getMessage());
         }
 
         if (recordingStarted) {
@@ -82,29 +86,31 @@ public class RecordingStartViewController implements Initializable, ViewControll
                 public void run() {
                     interactionRecorder.stopRecording();
                     logger.log(Level.TRACE, "Resulting Recording: {}", interactionRecorder.getlastRecording());
-                    
+
                 }
             }, (long) 5 * 1000);
-            timer.cancel();
-            timer.purge();
-            
+
         }
 
     }
 
+    /**
+     * Limits the number of characters of the Recording Name input
+     */
     private void limitRecordingTitleLength() {
         this.recordingTitleTexField
                 .setTextFormatter(
                         new TextFormatter<Change>(
                                 (Change change) -> {
 
-                                    String newString = change.getControlNewText();
+                                    String newString = change.getControlNewText(); // incoming string
 
                                     int remainingCharacters = RECORDING_TITLE_LENGTH_LIMIT - newString.length();
 
                                     if (remainingCharacters < 0) {
                                         String incomingChange = change.getText();
-                                        change.setText(incomingChange.substring(0, incomingChange.length()+remainingCharacters));
+                                        // Remove leftover characters to keep the max length
+                                        change.setText(incomingChange.substring(0, incomingChange.length() + remainingCharacters));
                                     }
 
                                     return change;

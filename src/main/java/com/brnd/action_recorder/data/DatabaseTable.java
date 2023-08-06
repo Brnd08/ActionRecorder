@@ -9,14 +9,16 @@ import java.util.LinkedHashMap;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+/**
+ * This enum stores database tables used in the app, and useful sql scripts
+ */
 public enum DatabaseTable {
-	
-    SETTINGS(
+    SETTINGS( //table used to store the app settings
             new String[]{"settings_id", "INTEGER PRIMARY KEY  UNIQUE"},
             new String[]{"always_on_top", "BOOLEAN NOT NULL DEFAULT FALSE"},
             new String[]{"initial_stage_location", "VARCHAR(30) NOT NULL DEFAULT 'CENTER'"}
     ),
-    RECORDINGS(
+    RECORDINGS(//table used to store recordings
             new String[]{"recording_id", "INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE"},
             new String[]{"recording_title", "VARCHAR(30)"},
             new String[]{"recording_date", "VARCHAR(20)"},
@@ -77,7 +79,10 @@ public enum DatabaseTable {
         return sb.toString();
     }
 
-
+    /**
+     * Initializes the constants members base on the given array of string indicating the table columns
+     * @param columns Arrays indicating table columns. First index containing column name, second column type and constraints
+     */
     private DatabaseTable(String[]... columns) {
 
     	final Logger logger = LogManager.getLogger(DatabaseTable.class);
@@ -130,7 +135,7 @@ public enum DatabaseTable {
         insertFirstSentence = insertNewRowSentence.replace("INSERT INTO", "INSERT OR IGNORE INTO");// ignore exceptions if the row already exists
 
         logger.log(Level.TRACE, "Table constant {} created with following configuration: {}",
-                this.name(), this.toString());
+                this.name(), this);
 
     }
 

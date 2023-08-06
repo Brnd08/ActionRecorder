@@ -6,6 +6,9 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 
+/**
+ * Utility class to serialize and deserialize objects
+ */
 public class ObjectBytesConverter {
     private ObjectBytesConverter(){
         logger.log(Level.ERROR, "Utility classes should not be instantiated.");

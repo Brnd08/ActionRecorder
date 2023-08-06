@@ -2,7 +2,7 @@ package com.brnd.action_recorder.record;
 
 import com.brnd.action_recorder.data.Database;
 import com.brnd.action_recorder.data.DatabaseTable;
-import static com.brnd.action_recorder.record.RecordingsRepository.RecordingMapper.mapRecordingFromResultset;
+import static com.brnd.action_recorder.record.RecordingsRepository.RecordingMapper.mapRecordingFromResultSet;
 import org.apache.logging.log4j.Level;
 
 import java.sql.Connection;
@@ -21,6 +21,10 @@ import java.util.stream.Collectors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * This class has the needed functionalities to insert, select and update Recordings from the
+ * database
+ */
 public class RecordingsRepository {
 
     private static Logger logger = LogManager.getLogger(RecordingsRepository.class);
@@ -290,8 +294,8 @@ public class RecordingsRepository {
             preparedStatement = connection.prepareStatement(SELECT_INPUT_EVENTS_BY_ID_SENTENCE);
             preparedStatement.setInt(1, recordingId);
             ResultSet resultSet = preparedStatement.executeQuery();
-            serializedInputEvent = resultSet.getBytes(1);
-            inputEvents = ObjectBytesConverter.objectFromBytes(serializedInputEvent, LinkedHashMap.class);
+            serializedInputEvent = resultSet.getBytes(1); // get the serialized Map in an array of bytes
+            inputEvents = ObjectBytesConverter.objectFromBytes(serializedInputEvent, LinkedHashMap.class); //deserializes the bytes to a LinkedHashMap object
 
         } catch (SQLException | IOException | ClassNotFoundException e) {
             logger.log(Level.ERROR, "Could not retrieve the recording duration with following query {}", SELECT_RECORDING_DURATION_BY_ID_SENTENCE);
@@ -324,7 +328,7 @@ public class RecordingsRepository {
 
             preparedStatement = connection.prepareStatement(UPDATE_INPUT_EVENTS_WHERE_ID_SENTENCE);
 
-            preparedStatement.setBytes(1, ObjectBytesConverter.toBytes(inputEvents));
+            preparedStatement.setBytes(1, ObjectBytesConverter.toBytes(inputEvents)); // inserts the serialized object as a byte array
             preparedStatement.setInt(2, recordingId);
 
             int modifiedRows = preparedStatement.executeUpdate();
@@ -362,9 +366,9 @@ public class RecordingsRepository {
 
             preparedStatement.setInt(1, recordingId);
 
-            ResultSet resultSet = preparedStatement.executeQuery();
+            ResultSet resultSet = preparedStatement.executeQuery(); //obtains the resultset from the query execution
 
-            retrievedRecording = mapRecordingFromResultset(resultSet);
+            retrievedRecording = mapRecordingFromResultSet(resultSet);//asign the retrievedRecording usin the Recording mapper
 
         } catch (SQLException | IOException | ClassNotFoundException e) {
             logger.log(Level.ERROR, "Could not retrieve the recording duration with following query {}", SELECT_RECORDING_DURATION_BY_ID_SENTENCE);
@@ -429,13 +433,28 @@ public class RecordingsRepository {
         }
     }
 
-    class RecordingMapper {
+    /**
+     * This utility class is intended to be use when saving, updating and retrieving recordings from the database
+     */
+    static class RecordingMapper {
 
-        static final public Recording mapRecordingFromResultset(ResultSet resultSet) throws SQLException, IOException, ClassNotFoundException {
+        private RecordingMapper() { // To prevent class instantiation in utility classes
+            throw new UnsupportedOperationException("Utility class should not be instantiated");
+        }
+
+        /**
+         * Maps a Recording using the given Result set
+         * @param resultSet the result set obtained after executing the select recording by id
+         * @return Recording containing the information specified in the result set
+         * @throws SQLException if an exception related to jdbc
+         * @throws IOException if an exception occur while deserializing the recording input events field content
+         * @throws ClassNotFoundException if the class containing the input events field can not be found
+         */
+        public static Recording mapRecordingFromResultSet(ResultSet resultSet) throws SQLException, IOException, ClassNotFoundException {
             try {
                 resultSet.next();
             } catch (SQLException ex) {
-                logger.log(Level.ERROR, "No resultset rows available");
+                logger.log(Level.ERROR, "No result set rows available");
                 throw ex;
             }
             int recordingId;

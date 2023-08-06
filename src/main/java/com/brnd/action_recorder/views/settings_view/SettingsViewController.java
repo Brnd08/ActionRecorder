@@ -18,6 +18,9 @@ import java.util.ResourceBundle;
 
 import static com.brnd.action_recorder.views.main_view.Main.logger;
 
+/**
+ * FXML controller for the settings view controller
+ */
 public class SettingsViewController implements ViewController, Initializable {
 
     private Settings currentSettings;
@@ -80,6 +83,9 @@ public class SettingsViewController implements ViewController, Initializable {
 
     }
 
+    /**
+     * Saves the current settings in the database
+     */
     @FXML
     public void saveConfigurationOnDatabase() {
 
@@ -87,13 +93,19 @@ public class SettingsViewController implements ViewController, Initializable {
 
         logger.log(Level.INFO, "SAVED SETTINGS {}", currentSettings);
     }
-    
-    
+
+    /**
+     * Saves the specified Settings values in the database
+     * @param settings Settings containing the desired values to be saved
+     */
     private void saveSettings(Settings settings){
         Main.settingsRepository.saveInitialStageLocation(settings.getInitialViewLocation());
         Main.settingsRepository.saveShowOnTopValue(settings.isShowAlwaysOnTopEnabled());        
     }
-    
+
+    /**
+     * Loads the settings values stored in the database
+     */
     private void loadSavedSettings(){
         this.currentSettings = new Settings (
                 Main.settingsRepository.obtainInitialStageLocation()

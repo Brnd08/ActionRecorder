@@ -79,6 +79,7 @@ public abstract class StagePositioner {
                 stageXCoordinate = (screenWidth - stageWidth) / 2;
             }
         }
+        // set calculated coordinates to the stage
         stage.setX(stageXCoordinate);
         stage.setY(stageYCoordinate);
     }
