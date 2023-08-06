@@ -68,7 +68,7 @@
             <version>0.22.0</version>
             <optional>true</optional>
         </dependency>
-<!--        Persistence dependency-->
+        <!-- Persistence dependency-->
         <dependency>
             <groupId>org.xerial</groupId>
             <artifactId>sqlite-jdbc</artifactId>
@@ -79,9 +79,13 @@
             <groupId>com.github.kwhat</groupId>
             <artifactId>jnativehook</artifactId>
             <version>2.2.2</version>
-
         </dependency>
-
+        <!-- System tray dependency for javafx -->
+        <dependency>
+            <groupId>com.dustinredmond.fxtrayicon</groupId>
+            <artifactId>FXTrayIcon</artifactId>
+            <version>4.0.1</version>
+        </dependency>
 
     </dependencies>
 
