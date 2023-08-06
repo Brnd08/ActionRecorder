@@ -7,13 +7,6 @@ package com.brnd.action_recorder.views.recording_start_view;
 import com.brnd.action_recorder.record.capturing.InteractionRecorder;
 import com.brnd.action_recorder.views.utils.ViewController;
 import com.github.kwhat.jnativehook.NativeHookException;
-
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -24,6 +17,12 @@ import javafx.scene.control.TextFormatter.Change;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * FXML Controller class for Recording start view

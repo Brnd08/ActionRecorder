@@ -2,24 +2,23 @@ package com.brnd.action_recorder.record;
 
 import com.brnd.action_recorder.data.Database;
 import com.brnd.action_recorder.data.DatabaseTable;
-import static com.brnd.action_recorder.record.RecordingsRepository.RecordingMapper.mapRecordingFromResultSet;
+import com.brnd.action_recorder.record.utils.ObjectBytesConverter;
+import com.github.kwhat.jnativehook.NativeInputEvent;
 import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import com.brnd.action_recorder.record.utils.ObjectBytesConverter;
-import com.github.kwhat.jnativehook.NativeInputEvent;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.stream.Collectors;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
+import static com.brnd.action_recorder.record.RecordingsRepository.RecordingMapper.mapRecordingFromResultSet;
 
 /**
  * This class has the needed functionalities to insert, select and update Recordings from the

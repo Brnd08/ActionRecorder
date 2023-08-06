@@ -4,9 +4,8 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.LinkedHashMap;
-
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.stream.Collectors;
 
 /**
