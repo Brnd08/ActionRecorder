@@ -40,6 +40,8 @@ public class RecordingStartViewController implements Initializable, ViewControll
 
     private final InteractionRecorder interactionRecorder = new InteractionRecorder();
 
+    private FXTrayIcon trayIcon;
+
     private final boolean useSystemTray = Main.settingsRepository.obtainShowOnTopValue();
     @FXML
     public Button returnButton;
@@ -98,9 +100,12 @@ public class RecordingStartViewController implements Initializable, ViewControll
     public void stopRecording() {
         interactionRecorder.stopRecording();
         logger.log(Level.TRACE, "Resulting Recording: {}", interactionRecorder.getlastRecording());
-        this.isRecording=false;
+        this.isRecording = false;
         this.disableAllInputs(false);
         switchStartRecordingButtonFunctionality();
+        if(this.trayIcon != null && this.trayIcon.isShowing()){ // if the tray icon is already defined and showing remove it from the system tray
+            trayIcon.hide();
+        }        
     }
 
     /**
@@ -134,45 +139,43 @@ public class RecordingStartViewController implements Initializable, ViewControll
 
         if (this.useSystemTray) {
             configureSystemTrayIcon(currentStage);
-
         }
     }
-    
-    private void pauseRecording(){
+
+    private void pauseRecording() {
         logger.log(Level.ALL, "Unimplemented pause Recording functionality");
 
     }
 
     private void configureSystemTrayIcon(Stage currentStage) {
         logger.log(Level.INFO, "configuring System Tray Icon");
-        FXTrayIcon trayIcon = new FXTrayIcon(currentStage, ViewEnum.getAppIcon());
+        trayIcon = new FXTrayIcon(currentStage, ViewEnum.getAppIcon());
         trayIcon.setTrayIconTooltip("Recording in progress | Action Recorder");
         trayIcon.show();
-        
+
         MenuItem stopRecording = new MenuItem("Stop Recording");
         MenuItem pauseRecording = new MenuItem("Pause Recording");
         MenuItem resumeRecording = new MenuItem("Resume Recording");
         resumeRecording.setDisable(true);
-        
+
         stopRecording.setOnAction(e -> {
             logger.log(Level.INFO, "Stoping Recording from System Tray icon");
             stopRecording();
         });
-        
+
         pauseRecording.setOnAction(e -> {
             logger.log(Level.INFO, "Pausing recording from System Tray icon");
             pauseRecording();
             resumeRecording.setDisable(false);
             pauseRecording.setDisable(true);
         });
-        
+
         resumeRecording.setOnAction(e -> {
             logger.log(Level.INFO, "Resuming recording from System Tray icon");
             stopRecording();
             pauseRecording.setDisable(false);
         });
-        
-        
+
         MenuItem exitProgram = new MenuItem("Exit");
         exitProgram.setOnAction(e -> {
             logger.log(Level.INFO, "Exit program call from System Tray icon");
@@ -180,8 +183,7 @@ public class RecordingStartViewController implements Initializable, ViewControll
             trayIcon.hide();
             currentStage.close();
         });
-        
-        
+
         trayIcon.addMenuItem(stopRecording);
         trayIcon.addMenuItem(pauseRecording);
         trayIcon.addMenuItem(resumeRecording);
