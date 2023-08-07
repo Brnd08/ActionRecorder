@@ -27,9 +27,10 @@ public class Main extends Application {
     }
 
     /**
-     * The main entry point for all JavaFX applications. The start method is called after the init method has returned, and after the system is ready for the application to begin running.
-     * NOTE: This method is called on the JavaFX Application Thread.
-     * @param stage – the primary stage for this application, onto which the application scene can be set. Applications may create other stages, if needed, but they will not be primary stages.
+     * The main entry point for all JavaFX applications. The start method is called after the init method has returned,
+     * and after the system is ready for the application to begin running. * NOTE: This method is called on the JavaFX Application Thread.
+     * @param stage – the primary stage for this application, onto which the application scene can be set. Applications may create other stages, 
+     * if needed, but they will not be primary stages.
      * @throws IOException if an exception occurs when opening main view
      */
     @Override

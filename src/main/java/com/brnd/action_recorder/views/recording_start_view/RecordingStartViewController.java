@@ -10,6 +10,7 @@ import com.github.kwhat.jnativehook.NativeHookException;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
@@ -34,13 +35,30 @@ public class RecordingStartViewController implements Initializable, ViewControll
     private static final int RECORDING_TITLE_LENGTH_LIMIT = 30;
 
     private final InteractionRecorder interactionRecorder = new InteractionRecorder();
+    @FXML
+    public Button returnButton;
 
     @FXML
     TextField recordingTitleTexField;
+    @FXML
+    Button startRecordingButton;
+
+    boolean isRecording = false;
 
     @FXML
     CheckBox recordKeyboardCheckBox, recordMouseClicksCheckBox, recordMouseMotionCheckBox, recordMouseWheelCheckBox;
 
+    /**
+     * Disables all the inputs from the view, intended to be used when a recording has started
+     */
+    private void disableAllInputs() {
+        recordKeyboardCheckBox.setDisable(true);
+        recordMouseClicksCheckBox.setDisable(true);
+        recordMouseMotionCheckBox.setDisable(true);
+        recordMouseWheelCheckBox.setDisable(true);
+        recordingTitleTexField.setDisable(true);
+        returnButton.setDisable(true);
+    }
 
     /**
      * Initializes the controller class.
@@ -48,50 +66,71 @@ public class RecordingStartViewController implements Initializable, ViewControll
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         limitRecordingTitleLength();
+    }
+
+    /**
+     * Modifies start recording button functionality based on the isRecoding boolean
+     * If its true modify button to stop the recorder, if not modify it to start a recording
+     */
+    private void switchStartRecordingButtonFunctionality() {
+        if (this.isRecording) {
+            startRecordingButton.setText("Detener Grabación");
+            startRecordingButton.setOnAction(event -> stopRecording());
+        } else {
+            startRecordingButton.setText("Iniciar grabación");
+            startRecordingButton.setOnAction(event -> startRecording());
+        }
 
     }
 
     /**
-     * Starts a new recording with the current configuration from the GUI
-     *
-     * @param event The event which calls this method
+     * This method executes needed actions to stop the current recording
      */
     @FXML
-    public void startRecording(Event event) {
+    public void stopRecording() {
+        interactionRecorder.stopRecording();
+        logger.log(Level.TRACE, "Resulting Recording: {}", interactionRecorder.getlastRecording());
+        switchStartRecordingButtonFunctionality();
+    }
 
-        RecordingConfiguration recordingConfiguration = new RecordingConfiguration(
+    /**
+     * Obtains a recording configuration based on the inserted values on the GUI inputs
+     *
+     * @return RecordingConfiguration containing the configurations
+     */
+    private RecordingConfiguration obtainRecordingConfigurationFromGUI() {
+        return new RecordingConfiguration(
                 recordKeyboardCheckBox.isSelected(),
                 recordMouseMotionCheckBox.isSelected(),
                 recordMouseClicksCheckBox.isSelected(),
                 recordMouseWheelCheckBox.isSelected(),
                 recordingTitleTexField.getText()
         );
+    }
+
+    /**
+     * Starts a new recording with the current configuration from the GUI
+     */
+    @FXML
+    public void startRecording() {
+
+        RecordingConfiguration recordingConfiguration = obtainRecordingConfigurationFromGUI();
 
         logger.log(Level.INFO, "Starting Recording with following configuration: {}", recordingConfiguration);
 
-        boolean recordingStarted = false;
-
         try {
             this.interactionRecorder.startRecording(recordingConfiguration);
-            recordingStarted = true;
+            disableAllInputs();
+            this.isRecording = true;
         } catch (NativeHookException exception) {
-            logger.log(Level.ERROR, "Could not start Recording. Exception message: {}", exception.getMessage());
+            logger.log(Level.ERROR, "Fail to create the Recording", exception);
         }
 
-        if (recordingStarted) {
-            Timer timer = new Timer();
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    interactionRecorder.stopRecording();
-                    logger.log(Level.TRACE, "Resulting Recording: {}", interactionRecorder.getlastRecording());
-
-                }
-            }, (long) 5 * 1000);
-
+        if (isRecording) {
+            this.switchStartRecordingButtonFunctionality();
         }
-
     }
+
 
     /**
      * Limits the number of characters of the Recording Name input
@@ -126,6 +165,8 @@ public class RecordingStartViewController implements Initializable, ViewControll
 
     @Override
     public void closeStage(Event event) {
+        if(this.isRecording)
+            stopRecording();
         ViewController.super.closeStage(event);
     }
 
