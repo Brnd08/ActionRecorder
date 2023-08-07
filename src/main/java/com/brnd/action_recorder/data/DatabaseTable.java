@@ -15,7 +15,8 @@ public enum DatabaseTable {
     SETTINGS( //table used to store the app settings
             new String[]{"settings_id", "INTEGER PRIMARY KEY  UNIQUE"},
             new String[]{"always_on_top", "BOOLEAN NOT NULL DEFAULT FALSE"},
-            new String[]{"initial_stage_location", "VARCHAR(30) NOT NULL DEFAULT 'CENTER'"}
+            new String[]{"initial_stage_location", "VARCHAR(30) NOT NULL DEFAULT 'CENTER'"},
+            new String[]{"use_system_tray", "BOOLEAN NOT NULL DEFAULT FALSE"}
     ),
     RECORDINGS(//table used to store recordings
             new String[]{"recording_id", "INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE"},

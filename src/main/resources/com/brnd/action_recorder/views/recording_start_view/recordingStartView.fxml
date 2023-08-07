@@ -209,7 +209,7 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
-                        <Button contentDisplay="CENTER" graphicTextGap="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#navigateToMainView" prefHeight="34.0" prefWidth="61.0" styleClass="primaryButton" translateX="-5.0" GridPane.columnIndex="1">
+                        <Button fx:id="returnButton" contentDisplay="CENTER" graphicTextGap="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#navigateToMainView" prefHeight="34.0" prefWidth="61.0" styleClass="primaryButton" translateX="-5.0" GridPane.columnIndex="1">
                            <tooltip>
                               <Tooltip text="Volver" />
                            </tooltip>

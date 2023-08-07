@@ -6,13 +6,19 @@ import com.brnd.action_recorder.views.utils.StageLocation;
  * This class is used to store Settings properties for the app
  */
 public class Settings {
-    public static final Settings DEFAULT_SETTINGS = new Settings(StageLocation.CENTER, true);
+    public static final Settings DEFAULT_SETTINGS = new Settings(StageLocation.CENTER, true, false);
     private StageLocation initialViewLocation;
     private boolean showAlwaysOnTop;
+    private boolean useSystemTrayOnRecordingEnabled;
 
     public Settings(StageLocation initialViewLocation, boolean showAlwaysOnTop) {
         this.initialViewLocation = initialViewLocation;
         this.showAlwaysOnTop = showAlwaysOnTop;
+    }
+    public Settings(StageLocation initialViewLocation, boolean showAlwaysOnTop, boolean useSystemTray){
+        this.initialViewLocation = initialViewLocation;
+        this.showAlwaysOnTop = showAlwaysOnTop;
+        this.useSystemTrayOnRecordingEnabled = useSystemTray;
     }
 
     @Override
@@ -20,6 +26,7 @@ public class Settings {
         final StringBuilder sb = new StringBuilder("Settings{");
         sb.append("initialViewLocation=").append(initialViewLocation);
         sb.append(", showAlwaysOnTop=").append(showAlwaysOnTop);
+        sb.append(", useSystemTrayOnRecording=").append(useSystemTrayOnRecordingEnabled);
         sb.append('}');
         return sb.toString();
     }
@@ -56,6 +63,14 @@ public class Settings {
 
     public void setShowAlwaysOnTop(boolean showAlwaysOnTop) {
         this.showAlwaysOnTop = showAlwaysOnTop;
+    }
+
+    public boolean isUseSystemTrayOnRecordingEnabled() {
+        return useSystemTrayOnRecordingEnabled;
+    }
+
+    public void setUseSystemTrayOnRecordingEnabled(boolean useSystemTrayOnRecordingEnabled) {
+        this.useSystemTrayOnRecordingEnabled = useSystemTrayOnRecordingEnabled;
     }
 
 }

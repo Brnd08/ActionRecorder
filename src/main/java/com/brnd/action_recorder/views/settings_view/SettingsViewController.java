@@ -33,11 +33,11 @@ public class SettingsViewController implements ViewController, Initializable {
     @FXML
     Button closeButton;
     @FXML
-    TextField directoryTxt;
-    @FXML
     CheckBox alwaysOnTopCheckBox;
     @FXML
     ChoiceBox<String> positionChoiceBox;
+    @FXML
+    CheckBox useSystemTrayCheckBox;
 
     
     @Override
@@ -45,6 +45,7 @@ public class SettingsViewController implements ViewController, Initializable {
         loadSavedSettings();
         configurePositionChoiceFunctionality();
         configureAlwaysOnTopFunctionality();
+        configureUseSystemTray();
     }
 
     /**
@@ -82,6 +83,23 @@ public class SettingsViewController implements ViewController, Initializable {
         });
 
     }
+    
+
+    /**
+     * Sets the needed configuration for system tray icon setting feature
+     */
+    private void configureUseSystemTray() {
+
+        // sets selecting depending on showAlways on top value
+        useSystemTrayCheckBox.setSelected(currentSettings.isUseSystemTrayOnRecordingEnabled());
+
+        // configure listener for the checkbox
+        useSystemTrayCheckBox.setOnAction(actionEvent -> {
+            currentSettings.setUseSystemTrayOnRecordingEnabled(useSystemTrayCheckBox.isSelected());
+            logger.log(Level.INFO, "Use system tray selected value: {}" , currentSettings.isShowAlwaysOnTopEnabled() );
+        });
+
+    }
 
     /**
      * Saves the current settings in the database
@@ -101,6 +119,7 @@ public class SettingsViewController implements ViewController, Initializable {
     private void saveSettings(Settings settings){
         Main.settingsRepository.saveInitialStageLocation(settings.getInitialViewLocation());
         Main.settingsRepository.saveShowOnTopValue(settings.isShowAlwaysOnTopEnabled());        
+        Main.settingsRepository.saveUseSystemTrayValue(settings.isUseSystemTrayOnRecordingEnabled());        
     }
 
     /**
@@ -110,7 +129,10 @@ public class SettingsViewController implements ViewController, Initializable {
         this.currentSettings = new Settings (
                 Main.settingsRepository.obtainInitialStageLocation()
                 ,Main.settingsRepository.obtainShowOnTopValue()
+                , Main.settingsRepository.obtainUseSystemTrayValue()
         );
+        logger.log(Level.INFO, "Successfully load settings ({}) from database", this.currentSettings.toString() );
+
     }
     @FXML
     public void browseDirectories() {
