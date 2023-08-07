@@ -1,7 +1,9 @@
 package com.brnd.action_recorder.views.utils;
 
+import javafx.event.Event;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
@@ -83,5 +85,9 @@ public abstract class StagePositioner {
         stage.setX(stageXCoordinate);
         stage.setY(stageYCoordinate);
     }
-
+    
+    
+    public static Stage getStageFromEvent(Event event){
+        return ((Stage) (((Button) event.getSource()).getScene().getWindow()));
+    }
 }

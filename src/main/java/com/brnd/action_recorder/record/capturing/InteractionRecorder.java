@@ -80,10 +80,10 @@ public class InteractionRecorder {
         // Enables native hook
         GlobalScreen.registerNativeHook();
 
-        logger.log(Level.TRACE, "Loading configuration: {}", this.recordConfiguration);
 
         // sets and load the recordConfiguration
         this.recordConfiguration = recordConfiguration;
+        logger.log(Level.TRACE, "Loading configuration: {}", this.recordConfiguration);
         loadRecordConfiguration();
 
         logger.log(Level.TRACE, "Recording Started");

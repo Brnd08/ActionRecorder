@@ -119,7 +119,7 @@ public interface ViewController {
      */
     @FXML
     public default void minimizeStage(Event event) {
-        ((Stage) (((Button) event.getSource()).getScene().getWindow())).setIconified(true);
+         StagePositioner.getStageFromEvent(event).setIconified(true);
         logger.log(Level.TRACE, "Minimizing view" );
     }
 
@@ -129,7 +129,7 @@ public interface ViewController {
      */
     @FXML
     public default void closeStage(Event event) {
-        ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
+         StagePositioner.getStageFromEvent(event).close();
         logger.log(Level.TRACE, "Closing view and stopping app execution" );
     }
 
