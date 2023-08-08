@@ -14,4 +14,18 @@ public record RecordingConfiguration(
         boolean recordingMouseClickInteractions,
         boolean recordingMouseWheelInteractions,
         String recordingTitle
-        ) {}
+        ) {
+    
+    /**
+     * Verifies if at least one of the available boolean variables corresponding to the native listeners 
+     * has a true value
+     * @return Whether at least one listener is enabled
+     */
+    public boolean isAtLeastOneListenerEnabled(){
+        return
+                recordingKeyboardInteractions || 
+                recordingMouseMotionInteractions || 
+                recordingMouseClickInteractions || 
+                recordingMouseWheelInteractions;
+    }
+}
