@@ -4,13 +4,11 @@
  */
 package com.brnd.action_recorder.views.recording_start_view;
 
-import com.brnd.action_recorder.record.capturing.InteractionRecorder;
 import com.brnd.action_recorder.views.main_view.Main;
 import com.brnd.action_recorder.views.recording_start_view.RecordingConfiguration;
 import com.brnd.action_recorder.views.utils.StagePositioner;
 import com.brnd.action_recorder.views.utils.ViewController;
 import com.brnd.action_recorder.views.utils.ViewEnum;
-import static com.brnd.action_recorder.views.utils.ViewEnum.styleAlert;
 import com.dustinredmond.fxtrayicon.FXTrayIcon;
 import com.github.kwhat.jnativehook.NativeHookException;
 import java.io.IOException;
@@ -19,18 +17,15 @@ import java.util.ResourceBundle;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.DialogPane;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.control.TextFormatter.Change;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -133,6 +128,7 @@ public class RecordingStartViewController implements Initializable, ViewControll
     /**
      * This method changes GUI behavior when creating a Recording based on the
      * useSystemTray boolean
+     * @param currentStage the current stage 
      */
     public void switchToRecordingMode(Stage currentStage) {
         if (!this.isRecording) //if the app is not currently recording do nothing
@@ -209,7 +205,7 @@ public class RecordingStartViewController implements Initializable, ViewControll
 
         if (!recordingConfiguration.isAtLeastOneListenerEnabled()) {
             // verifies if at least one listener is enabled, if not displays an alert and aborts method execution
-            Alert alert = new Alert(Alert.AlertType.NONE, "Selecciona al menos un evento para grabar", ButtonType.OK);
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Selecciona al menos un evento para grabar", ButtonType.OK);
             alert.setHeaderText("Configuración inválida - Action Recorder");
             alert.initOwner(currentStage);
             ViewEnum.styleAlert(alert).show(); // styles and shows the alert

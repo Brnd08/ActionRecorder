@@ -1,6 +1,6 @@
-package com.brnd.action_recorder.record.capturing;
+package com.brnd.action_recorder.views.recording_start_view;
 
-import com.brnd.action_recorder.record.Recording;
+import com.brnd.action_recorder.views.recording_start_view.Recording;
 import com.brnd.action_recorder.views.recording_start_view.RecordingConfiguration;
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;

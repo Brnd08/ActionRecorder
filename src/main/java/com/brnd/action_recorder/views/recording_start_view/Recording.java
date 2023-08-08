@@ -1,4 +1,4 @@
-package com.brnd.action_recorder.record;
+package com.brnd.action_recorder.views.recording_start_view;
 
 import com.github.kwhat.jnativehook.NativeInputEvent;
 

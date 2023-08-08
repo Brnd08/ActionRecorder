@@ -1,7 +1,8 @@
 package com.brnd.action_recorder.record.capturing;
 
-import com.brnd.action_recorder.record.Recording;
-import com.brnd.action_recorder.record.RecordingsRepository;
+import com.brnd.action_recorder.views.recording_start_view.InteractionRecorder;
+import com.brnd.action_recorder.views.recording_start_view.Recording;
+import com.brnd.action_recorder.views.recording_start_view.RecordingsRepository;
 import com.brnd.action_recorder.views.recording_start_view.RecordingConfiguration;
 import com.github.kwhat.jnativehook.NativeHookException;
 import org.apache.logging.log4j.Level;
@@ -11,7 +12,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import static com.brnd.action_recorder.data.Database.initializeDatabase;
-import static com.brnd.action_recorder.record.capturing.InteractionRecorder.logger;
+import static com.brnd.action_recorder.views.recording_start_view.InteractionRecorder.logger;
 
 /**
  * This class serves a quick way to check verify recording creation functionality

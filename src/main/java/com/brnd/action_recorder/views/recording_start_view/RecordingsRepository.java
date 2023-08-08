@@ -1,8 +1,8 @@
-package com.brnd.action_recorder.record;
+package com.brnd.action_recorder.views.recording_start_view;
 
 import com.brnd.action_recorder.data.Database;
 import com.brnd.action_recorder.data.DatabaseTable;
-import com.brnd.action_recorder.record.utils.ObjectBytesConverter;
+import com.brnd.action_recorder.data.ObjectBytesConverter;
 import com.github.kwhat.jnativehook.NativeInputEvent;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -18,7 +18,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
 import java.util.stream.Collectors;
 
-import static com.brnd.action_recorder.record.RecordingsRepository.RecordingMapper.mapRecordingFromResultSet;
+import static com.brnd.action_recorder.views.recording_start_view.RecordingsRepository.RecordingMapper.mapRecordingFromResultSet;
 
 /**
  * This class has the needed functionalities to insert, select and update Recordings from the

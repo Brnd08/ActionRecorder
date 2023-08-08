@@ -1,4 +1,4 @@
-package com.brnd.action_recorder.record.utils;
+package com.brnd.action_recorder.data;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
