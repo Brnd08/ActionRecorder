@@ -10,6 +10,7 @@ import com.brnd.action_recorder.views.recording_start_view.RecordingConfiguratio
 import com.brnd.action_recorder.views.utils.StagePositioner;
 import com.brnd.action_recorder.views.utils.ViewController;
 import com.brnd.action_recorder.views.utils.ViewEnum;
+import static com.brnd.action_recorder.views.utils.ViewEnum.styleAlert;
 import com.dustinredmond.fxtrayicon.FXTrayIcon;
 import com.github.kwhat.jnativehook.NativeHookException;
 import java.io.IOException;
@@ -18,13 +19,18 @@ import java.util.ResourceBundle;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.control.TextFormatter.Change;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -103,9 +109,9 @@ public class RecordingStartViewController implements Initializable, ViewControll
         this.isRecording = false;
         this.disableAllInputs(false);
         switchStartRecordingButtonFunctionality();
-        if(this.trayIcon != null && this.trayIcon.isShowing()){ // if the tray icon is already defined and showing remove it from the system tray
+        if (this.trayIcon != null && this.trayIcon.isShowing()) { // if the tray icon is already defined and showing remove it from the system tray
             trayIcon.hide();
-        }        
+        }
     }
 
     /**
@@ -197,15 +203,25 @@ public class RecordingStartViewController implements Initializable, ViewControll
      */
     @FXML
     public void startRecording(Event event) {
+        Stage currentStage = StagePositioner.getStageFromEvent(event);
 
         RecordingConfiguration recordingConfiguration = obtainRecordingConfigurationFromGUI();
+
+        if (!recordingConfiguration.isAtLeastOneListenerEnabled()) {
+            // verifies if at least one listener is enabled, if not displays an alert and aborts method execution
+            Alert alert = new Alert(Alert.AlertType.NONE, "Selecciona al menos un evento para grabar", ButtonType.OK);
+            alert.setHeaderText("Configuración inválida - Action Recorder");
+            alert.initOwner(currentStage);
+            ViewEnum.styleAlert(alert).show(); // styles and shows the alert
+            return;
+        }
 
         logger.log(Level.INFO, "Starting Recording with following configuration: {}", recordingConfiguration);
 
         try {
             this.interactionRecorder.startRecording(recordingConfiguration);
             this.isRecording = true;
-            switchToRecordingMode(StagePositioner.getStageFromEvent(event));
+            switchToRecordingMode(currentStage);
         } catch (NativeHookException exception) {
             logger.log(Level.ERROR, "Fail to create the Recording", exception);
         }
