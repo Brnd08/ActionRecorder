@@ -1,5 +1,3 @@
-package com.brnd.action_recorder.record.capturing;
-
 /*
  * Copyright (c) 2022 Dustin K. Redmond & contributors
  *
@@ -22,6 +20,7 @@ package com.brnd.action_recorder.record.capturing;
  * SOFTWARE.
  */
 
+package com.brnd.action_recorder.record.capturing;
 import com.brnd.action_recorder.views.utils.ViewEnum;
 import com.dustinredmond.fxtrayicon.FXTrayIcon;
 import javafx.application.Application;
