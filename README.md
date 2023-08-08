@@ -1,5 +1,5 @@
-# ActionRecorder
-ActionRecorder is a JavaFx application to record and replay user-computer interactions with multiple functionalities.
+# ![GPLv3Project](images/gplv3-logo.png) ActionRecorder 
+ActionRecorder is a JavaFx application to record and replay user-computer interactions with multiple functionalities. 
 
 ## Development
 
