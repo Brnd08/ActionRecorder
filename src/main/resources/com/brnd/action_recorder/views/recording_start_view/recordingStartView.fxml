@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <!-- 
 Copyright (C) 2023 Brandon Velazquez & contributors
  
@@ -15,6 +16,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>
 -->
+
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
@@ -81,38 +83,41 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
                             <rowConstraints>
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
                             </rowConstraints>
-                            <children>
-                                <Button id="closeStageButton" fx:id="closeButton" focusTraversable="false" mnemonicParsing="false" onAction="#closeStage" text="x" textAlignment="CENTER" textFill="#000000">
-                                    <font>
-                                        <Font name="Corbel" size="20.0" />
-                                    </font>
-                                    <cursor>
-                                        <Cursor fx:constant="HAND" />
-                                    </cursor>
-                                    <tooltip>
-                                        <Tooltip contentDisplay="TEXT_ONLY" text="Cerrar">
-                                            <font>
-                                                <Font size="9.0" />
-                                            </font>
-                                        </Tooltip>
-                                    </tooltip>
-                                </Button>
-                                <Button id="minimizeStageButton" fx:id="minimizeButton" alignment="TOP_CENTER" contentDisplay="TEXT_ONLY" ellipsisString="" focusTraversable="false" mnemonicParsing="false" onAction="#minimizeStage" prefWidth="50.0" text="_" textAlignment="CENTER" textFill="#000000">
-                                    <font>
-                                        <Font name="Corbel Bold" size="20.0" />
-                                    </font>
-                                    <cursor>
-                                        <Cursor fx:constant="HAND" />
-                                    </cursor>
-                                    <tooltip>
-                                        <Tooltip text="Minimizar">
-                                            <font>
-                                                <Font size="9.0" />
-                                            </font>
-                                        </Tooltip>
-                                    </tooltip>
-                                </Button>
-                            </children>
+                     <children>
+                        <Button id="closeStageButton" fx:id="closeBttn" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#closeStage" prefHeight="37.0" prefWidth="38.0" text="x" textAlignment="CENTER" textFill="#000000">
+                           <font>
+                              <Font name="Corbel" size="20.0" />
+                           </font>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                           <tooltip>
+                              <Tooltip contentDisplay="TEXT_ONLY" text="Cerrar">
+                                 <font>
+                                    <Font size="9.0" />
+                                 </font>
+                              </Tooltip>
+                           </tooltip>
+                        </Button>
+                        <Button id="minimizeStageButton" fx:id="minimizeBttn" alignment="TOP_CENTER" contentDisplay="TEXT_ONLY" ellipsisString="" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#minimizeStage" prefHeight="35.0" prefWidth="38.0" text="_" textAlignment="CENTER" textFill="#000000">
+                           <font>
+                              <Font name="Corbel Bold" size="20.0" />
+                           </font>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                           <tooltip>
+                              <Tooltip text="Minimizar">
+                                 <font>
+                                    <Font size="9.0" />
+                                 </font>
+                              </Tooltip>
+                           </tooltip>
+                           <GridPane.margin>
+                              <Insets right="5.0" />
+                           </GridPane.margin>
+                        </Button>
+                     </children>
                         </GridPane>
                     </children>
                 </GridPane>
