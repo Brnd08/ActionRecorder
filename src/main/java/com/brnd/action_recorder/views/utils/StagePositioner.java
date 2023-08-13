@@ -101,8 +101,12 @@ public abstract class StagePositioner {
         stage.setX(stageXCoordinate);
         stage.setY(stageYCoordinate);
     }
-    
-    
+
+    /**
+     * Gets the specific stage from where this event was trigered
+     * @param event The input event
+     * @return a The corresponding stage to the input event
+     */
     public static Stage getStageFromEvent(Event event){
         return ((Stage) (((Button) event.getSource()).getScene().getWindow()));
     }

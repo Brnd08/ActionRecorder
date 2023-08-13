@@ -51,7 +51,7 @@ public enum ViewEnum {
             = new Image(
                     Objects.requireNonNull(
                             ViewEnum.class.getResourceAsStream(
-                                    PATH_TO_VIEWS_PACKAGE_FROM_SOURCE_ROOT + "/images/appIcon.gif"
+                                    PATH_TO_VIEWS_PACKAGE_FROM_SOURCE_ROOT + "/images/appIcon.png"
                             )
                     )
             );
