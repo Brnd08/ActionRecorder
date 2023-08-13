@@ -50,14 +50,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
             <children>
                 <GridPane prefHeight="69.0" prefWidth="323.0">
                     <columnConstraints>
-                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="545.0" minWidth="0.0" prefWidth="404.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="454.0" minWidth="0.0" prefWidth="196.0" />
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="545.0" minWidth="0.0" prefWidth="417.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="454.0" minWidth="0.0" prefWidth="183.0" />
                     </columnConstraints>
                     <rowConstraints>
                         <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
                     </rowConstraints>
                     <children>
-                        <Label prefWidth="160.0" text="Start Recording">
+                        <Label prefHeight="31.0" prefWidth="207.0" text="Comenzar Grabación">
                             <font>
                                 <Font name="Leelawadee UI Bold" size="21.0" />
                             </font>

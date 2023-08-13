@@ -34,13 +34,13 @@ import javafx.stage.StageStyle;
 public enum ViewEnum {
 
     MAIN(
-            "Action Recorder || By brdn",
+            "Grabadora de Acciones - brdn",
             "/main_view/mainView.fxml"
     ), SETTINGS(
-            "Settings || Action Recorder",
+            "Configuraciones - Grabadora de Acciones",
             "/settings_view/settingsView.fxml"
     ), RECORDING_START(
-            "Start Recording || Action Recorder",
+            "Comenzar Grabación - Grabadora de Acciones",
              "/recording_start_view/recordingStartView.fxml"
     );
 

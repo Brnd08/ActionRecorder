@@ -98,7 +98,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
                               <Cursor fx:constant="HAND" />
                            </cursor>
                                 </Button>
-                        <Button fx:id="settingsBttn1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#navigateToSettingsView" prefHeight="33.0" prefWidth="45.0" styleClass="primaryButton" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                        <Button fx:id="coordinatesBttn" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#enableCoordinatesMode" onMouseClicked="#navigateToSettingsView" prefHeight="33.0" prefWidth="45.0" styleClass="primaryButton" GridPane.columnIndex="2" GridPane.rowIndex="2">
                            <graphic>
                               <ImageView fitHeight="14.0" fitWidth="34.0" opacity="0.74" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -146,8 +146,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
                 </GridPane>
                 <GridPane prefHeight="69.0" prefWidth="323.0">
                     <columnConstraints>
-                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="545.0" minWidth="0.0" prefWidth="389.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="454.0" minWidth="0.0" prefWidth="157.0" />
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="545.0" minWidth="0.0" prefWidth="439.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="454.0" minWidth="0.0" prefWidth="161.0" />
                     </columnConstraints>
                     <rowConstraints>
                         <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />

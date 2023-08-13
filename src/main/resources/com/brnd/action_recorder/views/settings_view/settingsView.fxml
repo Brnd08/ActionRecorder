@@ -49,8 +49,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
             <children>
                 <GridPane prefHeight="69.0" prefWidth="323.0">
                     <columnConstraints>
-                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="545.0" minWidth="0.0" prefWidth="388.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="454.0" minWidth="0.0" prefWidth="212.0" />
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="545.0" minWidth="0.0" prefWidth="407.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="454.0" minWidth="0.0" prefWidth="193.0" />
                     </columnConstraints>
                     <rowConstraints>
                         <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
@@ -99,7 +99,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
                         </Button>
                      </children>
                         </GridPane>
-                        <Label text="Configuración">
+                        <Label text="Configuraciones">
                             <font>
                                 <Font name="Leelawadee UI Bold" size="21.0" />
                             </font>

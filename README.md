@@ -23,11 +23,14 @@ This app has:
 ### Main View
 ![Main view](images/main_view.png)
 
-### Main View from the taskbar
-![Main view from taskbar](images/at_taskbar_pov.png)
+### Main View from the taskbar and tasks view
+![Main view from taskbar](images/at_taskbar-taskview_pov.png)
 
 ### Settings view
 ![Settings view](images/settings_view.png)
+
+### Start recording  view
+![Start recording view](images/start_recording_view.png)
 
 ## Runing from source
 To locally frun this project:
@@ -36,7 +39,7 @@ To locally frun this project:
   git clone https://github.com/Brnd08/ActionRecorder
   cd ./ActionRecorder
   ```
-- If you have local maven instalation simply execute
+- If you have a local maven instalation simply execute
   ```
   mvn javafx:run 
   ```
