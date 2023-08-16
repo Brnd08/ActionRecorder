@@ -16,7 +16,6 @@
  */
 package com.brnd.action_recorder.views.recording_start_view;
 
-import com.brnd.action_recorder.views.recording_start_view.Recording;
 import com.brnd.action_recorder.views.recording_start_view.RecordingConfiguration;
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
@@ -54,9 +53,6 @@ public class InteractionRecorder {
             throw new NullPointerException();
         }
         
-        // Sets the specified recording title to the current recording object
-        recording.setRecordingTitle(recordConfiguration.recordingTitle());
-
         // Keyboard interactions
         if (recordConfiguration.recordingKeyboardInteractions()) {
             GlobalScreen.addNativeKeyListener(keyboardListener);

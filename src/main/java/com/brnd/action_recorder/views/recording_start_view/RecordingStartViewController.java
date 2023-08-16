@@ -14,13 +14,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
- */
 package com.brnd.action_recorder.views.recording_start_view;
 
-import com.brnd.action_recorder.views.main_view.Main;
 import com.brnd.action_recorder.views.recording_start_view.RecordingConfiguration;
 import com.brnd.action_recorder.views.utils.StagePositioner;
 import com.brnd.action_recorder.views.utils.ViewController;
@@ -38,9 +33,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
-import javafx.scene.control.TextFormatter.Change;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -52,26 +46,43 @@ import org.apache.logging.log4j.Logger;
 public class RecordingStartViewController implements Initializable, ViewController {
 
     private static final Logger logger = LogManager.getLogger(RecordingStartViewController.class);
-
-    private static final int RECORDING_TITLE_LENGTH_LIMIT = 30;
-
     private final InteractionRecorder interactionRecorder = new InteractionRecorder();
-
     private FXTrayIcon trayIcon;
-
-    private final boolean useSystemTray = Main.settingsRepository.obtainShowOnTopValue();
-    @FXML
-    public Button returnButton;
-
-    @FXML
-    TextField recordingTitleTexField;
-    @FXML
-    Button startRecordingButton;
-
     boolean isRecording = false;
 
     @FXML
+    Button returnButton;
+
+    @FXML
+    private ToggleButton windowToggleButton;
+    @FXML
+    private final ToggleGroup recordModeToggleGroup = new ToggleGroup();
+    @FXML
+    private ToggleButton systemTrayToggleButton;
+
+    @FXML
     CheckBox recordKeyboardCheckBox, recordMouseClicksCheckBox, recordMouseMotionCheckBox, recordMouseWheelCheckBox;
+    @FXML
+
+    Button startRecordingButton;
+
+    /**
+     * This method configures the Record mode toggle group by adding to it the
+     * systemTray and window toggle buttons and configuring them to force to
+     * have at least one toggle button selected
+     */
+    private void configureRecordModeToogleGroup() {
+        this.recordModeToggleGroup.selectedToggleProperty()
+                .addListener((selectedToggleProperty, oldSelectedToggleButton, newSelectedToggleButton) -> {
+                    // no selected ToggleButtons  and previously selected toggleButton
+                    if (newSelectedToggleButton == null && oldSelectedToggleButton != null){
+                            oldSelectedToggleButton.setSelected(true);
+                    }
+                });
+
+        this.windowToggleButton.setToggleGroup(this.recordModeToggleGroup);
+        this.systemTrayToggleButton.setToggleGroup(this.recordModeToggleGroup);
+    }
 
     /**
      * Disables all the inputs from the view, intended to be used when a
@@ -82,7 +93,8 @@ public class RecordingStartViewController implements Initializable, ViewControll
         recordMouseClicksCheckBox.setDisable(disable);
         recordMouseMotionCheckBox.setDisable(disable);
         recordMouseWheelCheckBox.setDisable(disable);
-        recordingTitleTexField.setDisable(disable);
+        windowToggleButton.setDisable(disable);
+        systemTrayToggleButton.setDisable(disable);
         returnButton.setDisable(disable);
     }
 
@@ -91,7 +103,7 @@ public class RecordingStartViewController implements Initializable, ViewControll
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        limitRecordingTitleLength();
+        configureRecordModeToogleGroup();
     }
 
     /**
@@ -136,15 +148,15 @@ public class RecordingStartViewController implements Initializable, ViewControll
                 recordKeyboardCheckBox.isSelected(),
                 recordMouseMotionCheckBox.isSelected(),
                 recordMouseClicksCheckBox.isSelected(),
-                recordMouseWheelCheckBox.isSelected(),
-                recordingTitleTexField.getText()
+                recordMouseWheelCheckBox.isSelected()
         );
     }
 
     /**
      * This method changes GUI behavior when creating a Recording based on the
      * useSystemTray boolean
-     * @param currentStage the current stage 
+     *
+     * @param currentStage the current stage
      */
     public void switchToRecordingMode(Stage currentStage) {
         if (!this.isRecording) //if the app is not currently recording do nothing
@@ -155,16 +167,20 @@ public class RecordingStartViewController implements Initializable, ViewControll
         this.disableAllInputs(true);
         this.switchStartRecordingButtonFunctionality();
 
-        if (this.useSystemTray) {
+        if (this.systemTrayToggleButton.isSelected()) {
             configureSystemTrayIcon(currentStage);
         }
     }
 
     private void pauseRecording() {
         logger.log(Level.ALL, "Unimplemented pause Recording functionality");
-
     }
 
+    /**
+     * Creates and configure the app system tray icon during the recording time
+     *
+     * @param currentStage The stage that will be related with the tray icon
+     */
     private void configureSystemTrayIcon(Stage currentStage) {
         logger.log(Level.INFO, "configuring System Tray Icon");
         trayIcon = new FXTrayIcon(currentStage, ViewEnum.getAppIcon());
@@ -238,32 +254,6 @@ public class RecordingStartViewController implements Initializable, ViewControll
             logger.log(Level.ERROR, "Fail to create the Recording", exception);
         }
 
-    }
-
-    /**
-     * Limits the number of characters of the Recording Name input
-     */
-    private void limitRecordingTitleLength() {
-        this.recordingTitleTexField
-                .setTextFormatter(
-                        new TextFormatter<Change>(
-                                (Change change) -> {
-
-                                    String newString = change.getControlNewText(); // incoming string
-
-                                    int remainingCharacters = RECORDING_TITLE_LENGTH_LIMIT - newString.length();
-
-                                    if (remainingCharacters < 0) {
-                                        String incomingChange = change.getText();
-                                        // Remove leftover characters to keep the max length
-                                        change.setText(incomingChange.substring(0, incomingChange.length() + remainingCharacters));
-                                    }
-
-                                    return change;
-
-                                }
-                        )
-                );
     }
 
     @Override

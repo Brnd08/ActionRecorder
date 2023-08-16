@@ -28,8 +28,7 @@ public record RecordingConfiguration(
         boolean recordingKeyboardInteractions,
         boolean recordingMouseMotionInteractions,
         boolean recordingMouseClickInteractions,
-        boolean recordingMouseWheelInteractions,
-        String recordingTitle
+        boolean recordingMouseWheelInteractions
         ) {
     
     /**

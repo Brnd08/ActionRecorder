@@ -22,7 +22,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.effect.Reflection?>
 <?import javafx.scene.image.Image?>
@@ -135,32 +136,34 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
                         <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="237.0" />
                      </columnConstraints>
                      <rowConstraints>
-                        <RowConstraints maxHeight="55.0" minHeight="-Infinity" prefHeight="31.0" valignment="CENTER" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="93.0" minHeight="-Infinity" prefHeight="83.0" valignment="CENTER" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="55.0" minHeight="-Infinity" prefHeight="41.0" valignment="CENTER" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="93.0" minHeight="-Infinity" prefHeight="73.0" valignment="BASELINE" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
-                        <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="489.0">
+                        <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="42.0" prefWidth="489.0">
                           <columnConstraints>
-                            <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="328.0" minWidth="0.0" prefWidth="207.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="461.0" minWidth="10.0" prefWidth="282.0" />
+                            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="328.0" minWidth="0.0" prefWidth="170.0" />
+                            <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="461.0" minWidth="10.0" prefWidth="319.0" />
                           </columnConstraints>
                            <children>
-                              <TextField fx:id="recordingTitleTexField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="33.0" prefWidth="237.0" promptText="Nombre de la grabación" styleClass="primaryButton" text="New Recording" GridPane.columnIndex="1">
-                                 <tooltip>
-                                    <Tooltip text="Nombre para guardar la grabación" />
-                                 </tooltip>
-                              </TextField>
-                              <Label maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="19.0" prefWidth="198.0" text="Nombre de grabación:">
+                              <Label alignment="CENTER_RIGHT" prefHeight="19.0" prefWidth="168.0" text="Modo grabación: " textAlignment="RIGHT">
                                  <font>
                                     <Font name="Georgia Bold Italic" size="15.0" />
                                  </font>
-                                 <GridPane.margin>
-                                    <Insets left="10.0" />
-                                 </GridPane.margin>
                               </Label>
+                              <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="34.0" prefWidth="172.0" styleClass="primaryButton" GridPane.columnIndex="1">
+                                 <children>
+                                    <ToggleButton fx:id="windowToggleButton" prefHeight="25.0" prefWidth="76.0" selected="true" text="Ventana">
+                                       <toggleGroup>
+                                          <ToggleGroup fx:id="recordModeToggleGroup" />
+                                       </toggleGroup>
+                                    </ToggleButton>
+                                    <ToggleButton fx:id="systemTrayToggleButton" prefHeight="25.0" prefWidth="92.0" text="System Tray" toggleGroup="$recordModeToggleGroup" />
+                                 </children>
+                              </HBox>
                            </children>
                            <rowConstraints>
-                              <RowConstraints />
+                              <RowConstraints valignment="CENTER" />
                            </rowConstraints>
                         </GridPane>
                         <VBox id="startRecordingCaptureVBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="76.0" prefWidth="477.0" GridPane.halignment="LEFT" GridPane.rowIndex="1">
