@@ -16,7 +16,7 @@
  */
 package com.brnd.action_recorder.views.recording_start_view;
 
-import com.brnd.action_recorder.views.recording_start_view.RecordingConfiguration;
+import com.brnd.action_recorder.views.recording_start_view.RecorderConfiguration;
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
 import com.github.kwhat.jnativehook.NativeInputEvent;
@@ -35,7 +35,7 @@ import org.apache.logging.log4j.Logger;
 public class InteractionRecorder {
     public static final Logger logger = LogManager.getLogger(InteractionRecorder.class);
     private Recording recording;
-    private RecordingConfiguration recordConfiguration;
+    private RecorderConfiguration recordConfiguration;
     private final KeyBoardListener keyboardListener = new KeyBoardListener();
     private final MouseClicksListener mouseClicksListener = new MouseClicksListener();
     private final MouseMotionListener mouseMotionListener = new MouseMotionListener();
@@ -83,7 +83,7 @@ public class InteractionRecorder {
         }
     }
 
-    public void startRecording(RecordingConfiguration recordConfiguration) throws NativeHookException {
+    public void startRecording(RecorderConfiguration recordConfiguration) throws NativeHookException {
         // Force JNativeHook to use the Swing thread
         GlobalScreen.setEventDispatcher(new SwingDispatchService());
 
@@ -105,7 +105,7 @@ public class InteractionRecorder {
         /* Do nothing */
     }
 
-    public RecordingConfiguration getRecordConfiguration() {
+    public RecorderConfiguration getRecordConfiguration() {
         return recordConfiguration;
     }
 

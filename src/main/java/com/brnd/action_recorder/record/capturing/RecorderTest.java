@@ -19,7 +19,7 @@ package com.brnd.action_recorder.record.capturing;
 import com.brnd.action_recorder.views.recording_start_view.InteractionRecorder;
 import com.brnd.action_recorder.views.recording_start_view.Recording;
 import com.brnd.action_recorder.views.recording_start_view.RecordingsRepository;
-import com.brnd.action_recorder.views.recording_start_view.RecordingConfiguration;
+import com.brnd.action_recorder.views.recording_start_view.RecorderConfiguration;
 import com.github.kwhat.jnativehook.NativeHookException;
 import org.apache.logging.log4j.Level;
 
@@ -41,15 +41,14 @@ public class RecorderTest {
         InteractionRecorder interactionRecorder = new InteractionRecorder();
         RecordingsRepository recordingsRepository = new RecordingsRepository();
 
-        RecordingConfiguration recordConfiguration = new RecordingConfiguration(
+        RecorderConfiguration recorderConfiguration = new RecorderConfiguration(
                 true
                 , false
                 , true
                 , true
-                , "Recording Test"
         );
 
-        interactionRecorder.startRecording(recordConfiguration);
+        interactionRecorder.startRecording(recorderConfiguration);
         
         
         Timer timer = new Timer();

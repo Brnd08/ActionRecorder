@@ -16,7 +16,7 @@
  */
 package com.brnd.action_recorder.views.recording_start_view;
 
-import com.brnd.action_recorder.views.recording_start_view.RecordingConfiguration;
+import com.brnd.action_recorder.views.recording_start_view.RecorderConfiguration;
 import com.brnd.action_recorder.views.utils.StagePositioner;
 import com.brnd.action_recorder.views.utils.ViewController;
 import com.brnd.action_recorder.views.utils.ViewEnum;
@@ -141,10 +141,10 @@ public class RecordingStartViewController implements Initializable, ViewControll
      * Obtains a recording configuration based on the inserted values on the GUI
      * inputs
      *
-     * @return RecordingConfiguration containing the configurations
+     * @return RecorderConfiguration containing the configurations
      */
-    private RecordingConfiguration obtainRecordingConfigurationFromGUI() {
-        return new RecordingConfiguration(
+    private RecorderConfiguration obtainRecordingConfigurationFromGUI() {
+        return new RecorderConfiguration(
                 recordKeyboardCheckBox.isSelected(),
                 recordMouseMotionCheckBox.isSelected(),
                 recordMouseClicksCheckBox.isSelected(),
@@ -233,7 +233,7 @@ public class RecordingStartViewController implements Initializable, ViewControll
     public void startRecording(Event event) {
         Stage currentStage = StagePositioner.getStageFromEvent(event);
 
-        RecordingConfiguration recordingConfiguration = obtainRecordingConfigurationFromGUI();
+        RecorderConfiguration recordingConfiguration = obtainRecordingConfigurationFromGUI();
 
         if (!recordingConfiguration.isAtLeastOneListenerEnabled()) {
             // verifies if at least one listener is enabled, if not displays an alert and aborts method execution
