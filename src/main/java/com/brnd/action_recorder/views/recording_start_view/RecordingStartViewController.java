@@ -24,8 +24,11 @@ import com.dustinredmond.fxtrayicon.FXTrayIcon;
 import com.github.kwhat.jnativehook.NativeHookException;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -35,6 +38,8 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -52,41 +57,49 @@ public class RecordingStartViewController implements Initializable, ViewControll
 
     @FXML
     Button returnButton;
-
     @FXML
-    private ToggleButton windowToggleButton;
+    public AnchorPane mainPane;
+    @FXML
+    public Button minimizeBttn;
     @FXML
     private final ToggleGroup recordModeToggleGroup = new ToggleGroup();
     @FXML
     private ToggleButton systemTrayToggleButton;
+    @FXML
+    private ToggleButton windowToggleButton;
+    @FXML
+    private CheckBox minimizeAtRecordingCheckBox;
 
     @FXML
     CheckBox recordKeyboardCheckBox, recordMouseClicksCheckBox, recordMouseMotionCheckBox, recordMouseWheelCheckBox;
     @FXML
-
     Button startRecordingButton;
 
     /**
      * This method configures the Record mode toggle group by adding to it the
      * systemTray and window toggle buttons and configuring them to force to
-     * have at least one toggle button selected
+     * have at least one toggle button selected and to switch the minimize when recording button
      */
     private void configureRecordModeToogleGroup() {
         this.recordModeToggleGroup.selectedToggleProperty()
                 .addListener((selectedToggleProperty, oldSelectedToggleButton, newSelectedToggleButton) -> {
                     // no selected ToggleButtons  and previously selected toggleButton
-                    if (newSelectedToggleButton == null && oldSelectedToggleButton != null){
-                            oldSelectedToggleButton.setSelected(true);
+                    if (newSelectedToggleButton == null && oldSelectedToggleButton != null) {
+                        oldSelectedToggleButton.setSelected(true);
                     }
                 });
 
+        this.systemTrayToggleButton.selectedProperty().addListener((observable, oldValue, newValue) ->
+            // set minimizeRecording checkbox enabled if system tray toggle button is deselected, otherwise disables it
+            minimizeAtRecordingCheckBox.setDisable(newValue)
+        );
         this.windowToggleButton.setToggleGroup(this.recordModeToggleGroup);
         this.systemTrayToggleButton.setToggleGroup(this.recordModeToggleGroup);
     }
 
     /**
      * Disables all the inputs from the view, intended to be used when a
-     * recording has started
+     * recording has started or stopped
      */
     private void disableAllInputs(boolean disable) {
         recordKeyboardCheckBox.setDisable(disable);
@@ -96,6 +109,7 @@ public class RecordingStartViewController implements Initializable, ViewControll
         windowToggleButton.setDisable(disable);
         systemTrayToggleButton.setDisable(disable);
         returnButton.setDisable(disable);
+        minimizeAtRecordingCheckBox.setDisable(disable);
     }
 
     /**
@@ -113,11 +127,12 @@ public class RecordingStartViewController implements Initializable, ViewControll
      */
     private void switchStartRecordingButtonFunctionality() {
         if (this.isRecording) {
-            startRecordingButton.setText("Detener Grabación");
-            startRecordingButton.setOnAction(event -> stopRecording());
+            startRecordingButton.setText("Finalizar");
+            startRecordingButton.setOnMouseClicked(event -> stopRecording());
+            mainPane.requestFocus();// removes focus from start button to prevent firing it while typing with the keyboard during recordings
         } else {
-            startRecordingButton.setText("Iniciar grabación");
-            startRecordingButton.setOnAction(event -> startRecording(event));
+            startRecordingButton.setText("Comenzar");
+            startRecordingButton.setOnMouseClicked(this::startRecording);
         }
 
     }
@@ -163,12 +178,15 @@ public class RecordingStartViewController implements Initializable, ViewControll
         {
             return;
         }
+        currentStage.setTitle("Grabando... - Grabadora de Acciones");
 
         this.disableAllInputs(true);
         this.switchStartRecordingButtonFunctionality();
 
         if (this.systemTrayToggleButton.isSelected()) {
             configureSystemTrayIcon(currentStage);
+        }else if(minimizeAtRecordingCheckBox.isSelected()){
+            this.minimizeBttn.fire();
         }
     }
 
@@ -231,6 +249,8 @@ public class RecordingStartViewController implements Initializable, ViewControll
      */
     @FXML
     public void startRecording(Event event) {
+        
+        
         Stage currentStage = StagePositioner.getStageFromEvent(event);
 
         RecorderConfiguration recordingConfiguration = obtainRecordingConfigurationFromGUI();
