@@ -39,7 +39,6 @@ public class SettingsRepository {
     private static final String SETTINGS_ID_FIELD = "settings_id";
     private static final String INITIAL_STAGE_LOCATION_FIELD = "initial_stage_location";
     private static final String SHOW_ON_TOP_FIELD = "always_on_top";
-    private static final String USE_SYSTEM_TRAY_FIELD = "use_system_tray";
 
     private static final String SELECT_INITIAL_STAGE_LOCATION_SENTENCE
             = String.format("SELECT %s FROM %s WHERE %s = %d;",
@@ -55,13 +54,6 @@ public class SettingsRepository {
                     SETTINGS_ID_FIELD,
                     1
             );
-    private static final String SELECT_USE_SYSTEM_TRAY_FIELD_SENTENCE
-            = String.format("SELECT %s FROM %s WHERE %s = %d;",
-                    SHOW_ON_TOP_FIELD,
-                    DatabaseTable.SETTINGS.name(),
-                    USE_SYSTEM_TRAY_FIELD,
-                    1
-            );
     private static final String UPDATE_INITIAL_STAGE_LOCATION_SENTENCE
             = String.format("UPDATE %s SET %s = (?) WHERE %s = %d;",
                     DatabaseTable.SETTINGS.name(),
@@ -74,13 +66,6 @@ public class SettingsRepository {
             = String.format("UPDATE %s SET %s = (?) WHERE %s = %d;",
                     DatabaseTable.SETTINGS.name(),
                     SHOW_ON_TOP_FIELD,
-                    SETTINGS_ID_FIELD,
-                    1
-            );
-    private static final String UPDATE_USE_SYSTEM_TRAY_SENTENCE
-            = String.format("UPDATE %s SET %s = (?) WHERE %s = %d;",
-                    DatabaseTable.SETTINGS.name(),
-                    USE_SYSTEM_TRAY_FIELD,
                     SETTINGS_ID_FIELD,
                     1
             );
@@ -156,35 +141,7 @@ public class SettingsRepository {
 
         return showOnTop;
     }
-    
-    public boolean obtainUseSystemTrayValue() {
-        PreparedStatement preparedStatement = null;
-        boolean useSystemTray;
 
-        try {
-            preparedStatement = connection.prepareStatement(SELECT_USE_SYSTEM_TRAY_FIELD_SENTENCE);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            useSystemTray = resultSet.getBoolean(1);
-
-        } catch (SQLException e) {
-            logger.log(Level.ERROR, "Could not retrieve use system tray value from database with following query {}"
-                    , SELECT_USE_SYSTEM_TRAY_FIELD_SENTENCE);
-            logger.log(Level.ERROR, e);
-            logger.log(Level.ALL, "No saved obtain use system tray value found in database, using default value {}", false);
-            useSystemTray = false;
-        } finally {
-            if (preparedStatement != null) {
-                try {
-                    preparedStatement.close();
-                } catch (SQLException ex) {
-                    logger.log(Level.ERROR, "Could not close PrepareStament on {} method. Error msg: {}"
-                            , "SettingsService.SettingsRepository.obtainUseSystemTrayValue()", ex.getMessage());
-                }
-            }
-        }
-
-        return useSystemTray;
-    }
 
     public String obtainExportDirectoryPath() {
         logger.log(Level.ALL, "Unimplemented SettingsRepository.obtainExportDirectoryPath() method functionality");
@@ -245,33 +202,7 @@ public class SettingsRepository {
             }
         }
     }
-    
-    public void saveUseSystemTrayValue(boolean newUseSystemTrayValue) {
-        PreparedStatement preparedStatement = null;
-        try {
-            logger.log(Level.ALL, "Saving use system tray when recording ({}) in database with script {}"
-                    , newUseSystemTrayValue, UPDATE_USE_SYSTEM_TRAY_SENTENCE);
-            preparedStatement = connection.prepareStatement(UPDATE_USE_SYSTEM_TRAY_SENTENCE);
-            preparedStatement.setBoolean(1, newUseSystemTrayValue);
-            int modifiedRows = preparedStatement.executeUpdate();
-            logger.log(Level.ALL, "Succesfully execute script with a {} modified rows count"
-                    , modifiedRows);
-        } catch (SQLException e) {
-            logger.log(Level.ERROR, "Could not save Use System Tray value ({}) in database following query {}"
-                    , UPDATE_INITIAL_STAGE_LOCATION_SENTENCE);
-            logger.log(Level.ERROR, e);
-        } finally {
-            if (preparedStatement != null) {
-                try {
-                    preparedStatement.close();
-                } catch (SQLException ex) {
-                    logger.log(Level.ERROR, "Could not close PrepareStament on {} method"
-                            , "SettingsService.SettingsRepository.saveUseSystemTrayValue()");
-                    logger.log(Level.ERROR, ex);
-                }
-            }
-        }
-    }
+
 
     public void saveExportDirectoryPath(String newPath) {
         logger.log(Level.ALL, "Unimplemented SettingsRepository.saveExportDirectoryPath(String) method functionality");

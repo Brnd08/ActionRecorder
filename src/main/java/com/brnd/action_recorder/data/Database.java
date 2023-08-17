@@ -121,7 +121,6 @@ public class Database {
             preparedStatement.setInt(1, 1);
             preparedStatement.setBoolean(2, defaultSettings.isShowAlwaysOnTopEnabled());
             preparedStatement.setString(3, defaultSettings.getInitialViewLocation().name());
-            preparedStatement.setBoolean(4, defaultSettings.isUseSystemTrayOnRecordingEnabled());
             int modifiedRows = preparedStatement.executeUpdate();
             if (modifiedRows ==0){
                 logger.log(Level.ALL, "Already configured settings were found. No need to add default values.");
