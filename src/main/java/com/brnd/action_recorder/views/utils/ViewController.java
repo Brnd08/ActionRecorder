@@ -146,7 +146,7 @@ public interface ViewController {
     @FXML
     public default void closeStage(Event event) {
          StagePositioner.getStageFromEvent(event).close();
-        logger.log(Level.TRACE, "Closing view and stopping app execution" );
+        logger.log(Level.TRACE, "Closing view" );
     }
 
     @FXML
