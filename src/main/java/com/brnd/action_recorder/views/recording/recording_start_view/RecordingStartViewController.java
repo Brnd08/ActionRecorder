@@ -22,6 +22,7 @@ import com.brnd.action_recorder.views.utils.ViewController;
 import com.brnd.action_recorder.views.utils.ViewEnum;
 import com.dustinredmond.fxtrayicon.FXTrayIcon;
 import com.github.kwhat.jnativehook.NativeHookException;
+import java.awt.EventQueue;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -232,8 +233,22 @@ public class RecordingStartViewController implements Initializable, ViewControll
         );
     }
 
+    /**
+     * Pauses the current recording
+     */
+    @FXML
     private void pauseRecording() {
-        logger.log(Level.ALL, "Unimplemented pause Recording functionality");
+        logger.log(Level.ALL, "Pausing recording");
+        this.interactionRecorder.pauseRecording(System.nanoTime());
+    }
+
+    /**
+     * Resume the current recording intended to be use after pausing a recording
+     */
+    @FXML
+    private void resumeRecording() {
+        logger.log(Level.ALL, "Resuming recording");
+        this.interactionRecorder.resumeRecording(System.nanoTime());
     }
 
     /**
@@ -253,18 +268,25 @@ public class RecordingStartViewController implements Initializable, ViewControll
         var exitProgram = new MenuItem("Salir del Programa");
         resumeRecording.setDisable(true);
 
-        stopRecording.setOnAction(e -> 
-            this.closeBttn.fire()
+        stopRecording.setOnAction(e
+                -> this.closeBttn.fire()
         );
-        pauseRecording.setOnAction(e -> {
+        pauseRecording.setOnAction(e -> {            
+            EventQueue.invokeLater(() -> { // disables swing pause MenuItem and enables resume one
+                trayIcon.getMenuItem(2).setEnabled(true);
+                trayIcon.getMenuItem(1).setEnabled(false);
+            });
             this.pauseRecording();
-            resumeRecording.setDisable(false);
-            pauseRecording.setDisable(true);
         });
+        
         resumeRecording.setOnAction(e -> {
-            this.stopRecording(e);
-            pauseRecording.setDisable(false);
+            this.resumeRecording();
+            EventQueue.invokeLater(() -> { // disables swing resume MenuItem and enables pause one
+                trayIcon.getMenuItem(2).setEnabled(false);
+                trayIcon.getMenuItem(1).setEnabled(true);
+            });
         });
+        
         exitProgram.setOnAction(event -> {
             this.stopRecording(event);
             this.trayIcon.hide();
