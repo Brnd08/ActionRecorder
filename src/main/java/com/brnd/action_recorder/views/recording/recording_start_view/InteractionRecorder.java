@@ -14,9 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.brnd.action_recorder.views.recording_start_view;
+package com.brnd.action_recorder.views.recording.recording_start_view;
 
-import com.brnd.action_recorder.views.recording_start_view.RecorderConfiguration;
+import com.brnd.action_recorder.views.recording.Recording;
+import com.brnd.action_recorder.views.recording.recording_start_view.RecorderConfiguration;
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
 import com.github.kwhat.jnativehook.NativeInputEvent;

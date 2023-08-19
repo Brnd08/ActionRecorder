@@ -32,18 +32,22 @@ import java.io.IOException;
 import java.util.Objects;
 
 import static com.brnd.action_recorder.views.main_view.Main.logger;
-
+import javafx.scene.input.InputEvent;
 
 /**
- * This interface is intended to be implemented by Scene controllers in order to reduce repetitive
- * code, by providing methods for views navigation and related methods.
+ * This interface is intended to be implemented by Scene controllers in order to
+ * reduce repetitive code, by providing methods for views navigation and related
+ * methods.
  */
 public interface ViewController {
+
     /**
      * Configures, loads and show a specific view in to the specified Stage
+     *
      * @param stage the Stage to be used to display the view
      * @param view the desired view constant to be showed
-     * @throws IOException if and exception occurs when loading the fxml file of the view
+     * @throws IOException if and exception occurs when loading the fxml file of
+     * the view
      */
 
     public static void openView(Stage stage, ViewEnum view) throws IOException {
@@ -52,8 +56,8 @@ public interface ViewController {
         FXMLLoader fxmlLoader;
         logger.log(Level.TRACE, "Creating FXMLLoader for {} view with fxml path {}", view.name(), view.getFxmlPath());
         try {
-            fxmlLoader =
-                    new FXMLLoader(
+            fxmlLoader
+                    = new FXMLLoader(
                             Objects.requireNonNull(
                                     ViewEnum.class.getResource(
                                             view.getFxmlPath() // get the fxml file path from View constant
@@ -61,15 +65,21 @@ public interface ViewController {
                             )
                     );
         } catch (NullPointerException e) {
-            logger.log(Level.FATAL, "Could not find settingsView.fxml file", e);
+            logger.log(Level.FATAL, "Could not find fxml file. fxml specified path: {}", view.getFxmlPath(), e);
             throw e;
         }
 
-        Parent root = fxmlLoader.load();
+        Parent root;
+        try {
+            root = fxmlLoader.load();
+        } catch (RuntimeException e) {
+            logger.log(Level.FATAL, "Something went wrong while loading FXML file, verify its declared controller class or sintax:", e);
+            throw e;
+        }
+        
         logger.log(Level.TRACE, "Configuring {} view", view.name());
         // Add the fxml view to a new scene with the previous scene width and height
         Scene newScene = new Scene(root);
-
 
         // Needed configuration to make the application background transparent
         newScene.setFill(Color.TRANSPARENT);
@@ -82,17 +92,14 @@ public interface ViewController {
         // Modify the stage title
         stage.setTitle(view.getStageTitle());
 
-
         // Adds the new scene to the Stage
         stage.setScene(newScene);
 
         // Sets show on view enabled or disabled depending on specific value
+        boolean alwaysOnTop = Main.settingsRepository.obtainShowOnTopValue();
 
-        boolean alwaysOnTop  = Main.settingsRepository.obtainShowOnTopValue();
-        
         logger.log(Level.TRACE, "Using alwaysOnTop value {} for the view.", alwaysOnTop);
         stage.setAlwaysOnTop(alwaysOnTop);
-
 
         // makes stage draggable by mouse interaction
         StagePositioner.addDragFunctionalityToStage(stage, newScene);
@@ -101,23 +108,23 @@ public interface ViewController {
         // display the stage on the screen
         stage.show();
 
-
     }
 
     /**
-     * Opens the desired view and closes the view from where this method was called
+     * Opens the desired view and closes the view from where this method was
+     * called
+     *
      * @param clickEvent the event that triggered this method
      * @param nextView the view will be showed
      * @throws IOException if an exception occurs when opening the next view
      */
     private static void navigateToView(Event clickEvent, ViewEnum nextView) throws IOException {
-        Stage previousStage =
-                (Stage) ((Button) clickEvent.getSource())
+        Stage previousStage
+                = (Stage) ((Button) clickEvent.getSource())
                         .getScene()
                         .getWindow();
 
         logger.log(Level.TRACE, "Navigating to {} view from {} view", nextView.name(), ViewEnum.fromTitle(previousStage.getTitle()));
-
 
         Stage nextStage = new Stage(); // instantiates the new stage
 
@@ -131,22 +138,25 @@ public interface ViewController {
 
     /**
      * Minimizes the stage from where this method was called
+     *
      * @param event the event that triggered this method call
      */
     @FXML
     public default void minimizeStage(Event event) {
-         StagePositioner.getStageFromEvent(event).setIconified(true);
-        logger.log(Level.TRACE, "Minimizing view" );
+        StagePositioner.getStageFromEvent(event).setIconified(true);
+        logger.log(Level.TRACE, "Minimizing view");
     }
 
     /**
-     * Close the stage from where this method was called and finalizes app execution
+     * Close the stage from where this method was called and finalizes app
+     * execution
+     *
      * @param event the event that triggered this method call
      */
     @FXML
     public default void closeStage(Event event) {
-         StagePositioner.getStageFromEvent(event).close();
-        logger.log(Level.TRACE, "Closing view" );
+        StagePositioner.getStageFromEvent(event).close();
+        logger.log(Level.TRACE, "Closing view");
     }
 
     @FXML
@@ -161,7 +171,7 @@ public interface ViewController {
 
     @FXML
     public default void navigateToReplayView(Event event) throws IOException {
-        logger.log(Level.ALL, "Unimplemented functionality" );
+        logger.log(Level.ALL, "Unimplemented functionality");
     }
 
     @FXML
@@ -171,7 +181,7 @@ public interface ViewController {
 
     @FXML
     public default void enableCoordinatesMode(Event event) {
-        logger.log(Level.ALL, "Unimplemented functionality" );
+        logger.log(Level.ALL, "Unimplemented functionality");
     }
 
 }

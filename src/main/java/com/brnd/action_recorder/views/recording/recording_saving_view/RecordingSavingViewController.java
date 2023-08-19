@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.brnd.action_recorder.views.recording_saving_view;
+package com.brnd.action_recorder.views.recording.recording_saving_view;
 
 import com.brnd.action_recorder.views.utils.ViewController;
 import java.net.URL;

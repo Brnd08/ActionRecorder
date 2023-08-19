@@ -29,7 +29,8 @@ module com.brnd.action_recorder {
 
     opens com.brnd.action_recorder.views.main_view to javafx.fxml;
     opens com.brnd.action_recorder.views.settings_view to javafx.fxml;
-    opens com.brnd.action_recorder.views.recording_start_view to javafx.fxml;
+    opens com.brnd.action_recorder.views.recording.recording_start_view to javafx.fxml;
+    opens com.brnd.action_recorder.views.recording.recording_saving_view to javafx.fxml;
     opens com.brnd.action_recorder.views.utils to javafx.fxml;
     opens com.brnd.action_recorder.record.capturing to javafx.fxml;
 

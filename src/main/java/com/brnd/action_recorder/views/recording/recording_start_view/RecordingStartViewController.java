@@ -14,9 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.brnd.action_recorder.views.recording_start_view;
+package com.brnd.action_recorder.views.recording.recording_start_view;
 
-import com.brnd.action_recorder.views.recording_start_view.RecorderConfiguration;
+import com.brnd.action_recorder.views.recording.recording_start_view.RecorderConfiguration;
 import com.brnd.action_recorder.views.utils.StagePositioner;
 import com.brnd.action_recorder.views.utils.ViewController;
 import com.brnd.action_recorder.views.utils.ViewEnum;
@@ -35,6 +35,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.InputEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.Level;
@@ -68,6 +69,8 @@ public class RecordingStartViewController implements Initializable, ViewControll
     private Button returnButton;
     @FXML
     private Button minimizeBttn;
+    @FXML
+    private Button closeBttn;
 
     private static final Logger logger = LogManager.getLogger(RecordingStartViewController.class);
     private final InteractionRecorder interactionRecorder = new InteractionRecorder();
@@ -86,7 +89,7 @@ public class RecordingStartViewController implements Initializable, ViewControll
      * @param event the event that triggered this method call
      */
     @FXML
-    public void startRecording(Event event) {
+    public void startRecording(InputEvent event) {
         var currentStage = StagePositioner.getStageFromEvent(event);
         RecorderConfiguration recorderConfiguration = this.obtainRecordingConfigurationFromGUI();
 
@@ -111,6 +114,7 @@ public class RecordingStartViewController implements Initializable, ViewControll
 
     /**
      * This method executes needed actions to stop the current recording
+     *
      * @param event the InputEvent that triggered this method call
      */
     @FXML
@@ -174,27 +178,27 @@ public class RecordingStartViewController implements Initializable, ViewControll
      */
     public void switchToRecordingMode(Stage currentStage) {
         //if the app is not recording at the moment do nothing
-            currentStage.setTitle("Grabando... - Grabadora de Acciones");
-            this.disableAllInputs(true);
-            this.switchStartRecordingButtonFunctionality();
+        currentStage.setTitle("Grabando... - Grabadora de Acciones");
+        this.disableAllInputs(true);
+        this.switchStartRecordingButtonFunctionality();
 
-            if (this.systemTrayToggleButton.isSelected()) {
-                this.configureSystemTrayIcon(currentStage);
-                currentStage.close();
-            } else if (this.minimizeAtRecordingCheckBox.isSelected()) {
-                this.minimizeBttn.fire();
-            }
+        if (this.systemTrayToggleButton.isSelected()) {
+            this.configureSystemTrayIcon(currentStage);
+            currentStage.close();
+        } else if (this.minimizeAtRecordingCheckBox.isSelected()) {
+            this.minimizeBttn.fire();
+        }
     }
-    
-     /**
+
+    /**
      * This method changes GUI behavior when stopping a recording
      *
      * @param currentStage the current stage
      */
     public void switchToRecordingStartMode(Stage currentStage) {
-            currentStage.setTitle(ViewEnum.RECORDING_START.getStageTitle());
-            this.disableAllInputs(false);
-            this.switchStartRecordingButtonFunctionality();
+        currentStage.setTitle(ViewEnum.RECORDING_START.getStageTitle());
+        this.disableAllInputs(false);
+        this.switchStartRecordingButtonFunctionality();
     }
 
     /**
@@ -240,8 +244,8 @@ public class RecordingStartViewController implements Initializable, ViewControll
     private void configureSystemTrayIcon(Stage currentStage) {
         logger.log(Level.INFO, "configuring System Tray Icon");
 
-        trayIcon = new FXTrayIcon(currentStage, ViewEnum.getAppIcon());
-        trayIcon.setTrayIconTooltip("Recording in progress - Action Recorder");
+        this.trayIcon = new FXTrayIcon(currentStage, ViewEnum.getAppIcon());
+        this.trayIcon.setTrayIconTooltip("Recording in progress - Action Recorder");
 
         var stopRecording = new MenuItem("Detener Grabación");
         var pauseRecording = new MenuItem("Pausar Grabación");
@@ -249,28 +253,29 @@ public class RecordingStartViewController implements Initializable, ViewControll
         var exitProgram = new MenuItem("Salir del Programa");
         resumeRecording.setDisable(true);
 
-        stopRecording.setOnAction(this::stopRecording);
+        stopRecording.setOnAction(e -> 
+            this.closeBttn.fire()
+        );
         pauseRecording.setOnAction(e -> {
-            pauseRecording();
+            this.pauseRecording();
             resumeRecording.setDisable(false);
             pauseRecording.setDisable(true);
         });
         resumeRecording.setOnAction(e -> {
-            stopRecording(e);
+            this.stopRecording(e);
             pauseRecording.setDisable(false);
         });
         exitProgram.setOnAction(event -> {
-            stopRecording(event);
-            trayIcon.hide();
+            this.stopRecording(event);
+            this.trayIcon.hide();
             currentStage.close();
         });
 
-        trayIcon.addMenuItem(stopRecording);
-        trayIcon.addMenuItem(pauseRecording);
-        trayIcon.addMenuItem(resumeRecording);
-        trayIcon.addMenuItem(exitProgram);
-
-        trayIcon.show();
+        this.trayIcon.addMenuItem(stopRecording);
+        this.trayIcon.addMenuItem(pauseRecording);
+        this.trayIcon.addMenuItem(resumeRecording);
+        this.trayIcon.addMenuItem(exitProgram);
+        this.trayIcon.show();
     }
 
     @Override

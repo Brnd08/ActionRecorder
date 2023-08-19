@@ -22,8 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ToggleButton?>
-<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.effect.Reflection?>
 <?import javafx.scene.image.Image?>
@@ -38,7 +37,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="mainPane" fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="165.0" prefWidth="600.0" stylesheets="@../css/common.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.brnd.action_recorder.views.recording_start_view.RecordingStartViewController">
+<AnchorPane id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="165.0" prefWidth="600.0" stylesheets="@../../css/common.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.brnd.action_recorder.views.recording.recording_start_view.RecordingStartViewController">
     <children>
         <GridPane layoutX="-2.0" layoutY="-5.0" prefHeight="165.0" prefWidth="600.0">
             <columnConstraints>
@@ -51,14 +50,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
             <children>
                 <GridPane prefHeight="69.0" prefWidth="323.0">
                     <columnConstraints>
-                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="545.0" minWidth="0.0" prefWidth="417.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="454.0" minWidth="0.0" prefWidth="183.0" />
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="545.0" minWidth="0.0" prefWidth="404.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="454.0" minWidth="0.0" prefWidth="196.0" />
                     </columnConstraints>
                     <rowConstraints>
                         <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
                     </rowConstraints>
                     <children>
-                        <Label prefHeight="31.0" prefWidth="207.0" text="Comenzar Grabación">
+                        <Label prefWidth="160.0" text="Save Recording">
                             <font>
                                 <Font name="Leelawadee UI Bold" size="21.0" />
                             </font>
@@ -70,12 +69,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
                                     </stops>
                                 </RadialGradient>
                             </textFill>
+                            <effect>
+                                <Reflection fraction="0.6" topOffset="-2.0" topOpacity="0.73" />
+                            </effect>
                      <GridPane.margin>
                         <Insets top="2.0" />
                      </GridPane.margin>
-                     <effect>
-                        <Reflection fraction="0.6" topOffset="-2.0" topOpacity="0.73" />
-                     </effect>
                         </Label>
                         <GridPane prefHeight="37.0" prefWidth="190.0" GridPane.columnIndex="1">
                             <columnConstraints>
@@ -136,54 +135,32 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
                         <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="237.0" />
                      </columnConstraints>
                      <rowConstraints>
-                        <RowConstraints maxHeight="55.0" minHeight="-Infinity" prefHeight="41.0" valignment="CENTER" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="93.0" minHeight="-Infinity" prefHeight="73.0" valignment="BASELINE" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="55.0" minHeight="-Infinity" prefHeight="31.0" valignment="CENTER" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="93.0" minHeight="-Infinity" prefHeight="83.0" valignment="CENTER" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
-                        <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="42.0" prefWidth="523.0">
+                        <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="489.0">
                           <columnConstraints>
-                            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="328.0" minWidth="0.0" prefWidth="168.0" />
-                            <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="461.0" minWidth="10.0" prefWidth="355.0" />
+                            <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="328.0" minWidth="0.0" prefWidth="207.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="461.0" minWidth="10.0" prefWidth="282.0" />
                           </columnConstraints>
                            <children>
-                              <Label alignment="CENTER_RIGHT" prefHeight="19.0" prefWidth="168.0" text="Modo grabación: " textAlignment="RIGHT">
+                              <TextField fx:id="recordingTitleTexField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="33.0" prefWidth="237.0" promptText="Nombre de la grabación" styleClass="primaryButton" text="New Recording" GridPane.columnIndex="1">
+                                 <tooltip>
+                                    <Tooltip text="Nombre para guardar la grabación" />
+                                 </tooltip>
+                              </TextField>
+                              <Label maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="19.0" prefWidth="198.0" text="Nombre de grabación:">
                                  <font>
                                     <Font name="Georgia Bold Italic" size="15.0" />
                                  </font>
-                              </Label>
-                              <CheckBox fx:id="minimizeAtRecordingCheckBox" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="26.0" prefWidth="95.0" styleClass="primaryButton" text="Minimizar" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="RIGHT">
-                                 <padding>
-                                    <Insets left="5.0" right="5.0" />
-                                 </padding>
-                                 <tooltip>
-                                    <Tooltip text="Minimizar ventana al comenzar" />
-                                 </tooltip>
                                  <GridPane.margin>
-                                    <Insets right="50.0" />
+                                    <Insets left="10.0" />
                                  </GridPane.margin>
-                                 <font>
-                                    <Font name="System Italic" size="12.0" />
-                                 </font>
-                              </CheckBox>
-                              <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="33.0" prefWidth="172.0" styleClass="primaryButton" GridPane.columnIndex="1">
-                                 <children>
-                                    <ToggleButton fx:id="windowToggleButton" prefHeight="25.0" prefWidth="76.0" selected="true" text="Ventana">
-                                       <toggleGroup>
-                                          <ToggleGroup fx:id="recordModeToggleGroup" />
-                                       </toggleGroup>
-                                       <tooltip>
-                                          <Tooltip text="Mantener la ventana al grabar" />
-                                       </tooltip>
-                                    </ToggleButton>
-                                    <ToggleButton fx:id="systemTrayToggleButton" prefHeight="25.0" prefWidth="92.0" text="System Tray" toggleGroup="$recordModeToggleGroup">
-                                       <tooltip>
-                                          <Tooltip text="Usar Tray Icon al grabar" />
-                                       </tooltip></ToggleButton>
-                                 </children>
-                              </HBox>
+                              </Label>
                            </children>
                            <rowConstraints>
-                              <RowConstraints valignment="CENTER" />
+                              <RowConstraints />
                            </rowConstraints>
                         </GridPane>
                         <VBox id="startRecordingCaptureVBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="76.0" prefWidth="477.0" GridPane.halignment="LEFT" GridPane.rowIndex="1">
@@ -198,7 +175,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
                               </Label>
                               <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="39.0" prefWidth="324.0">
                                  <children>
-                                    <CheckBox fx:id="recordKeyboardCheckBox" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="41.0" prefWidth="86.0" selected="true" styleClass="primaryButton" text="Teclado" textAlignment="CENTER">
+                                    <CheckBox fx:id="recordKeyboardCheckBox" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="41.0" prefWidth="86.0" styleClass="primaryButton" text="Teclado" textAlignment="CENTER">
                                        <HBox.margin>
                                           <Insets left="3.0" />
                                        </HBox.margin>
@@ -269,7 +246,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
                            <graphic>
                               <ImageView fitHeight="25.0" fitWidth="21.0" pickOnBounds="true">
                                  <image>
-                                    <Image url="@../images/return.png" />
+                                    <Image url="@../../images/return.png" />
                                  </image>
                               </ImageView>
                            </graphic>
@@ -277,7 +254,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </Button>
-                        <Button fx:id="startRecordingButton" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#startRecording" prefHeight="33.0" prefWidth="105.0" styleClass="primaryButton" text="Comenzar" translateX="-5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                        <Button fx:id="startRecordingButton" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#startRecording" prefHeight="33.0" prefWidth="105.0" styleClass="primaryButton" text="Comenzar" translateX="-5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>

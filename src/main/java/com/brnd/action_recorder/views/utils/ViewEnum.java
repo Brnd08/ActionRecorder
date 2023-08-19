@@ -41,10 +41,10 @@ public enum ViewEnum {
             "/settings_view/settingsView.fxml"
     ), RECORDING_START(
             "Comenzar Grabación - Grabadora de Acciones",
-             "/recording_start_view/recordingStartView.fxml"
+             "/recording/recording_start_view/recordingStartView.fxml"
     ), RECORDING_SAVING(
             "Guardar Grabación - Grabadora de Acciones",
-             "/recording_start_view/recordingSavingView.fxml"
+             "/recording/recording_saving_view/recordingSavingView.fxml"
     );
 
     private static final String PATH_TO_VIEWS_PACKAGE_FROM_SOURCE_ROOT

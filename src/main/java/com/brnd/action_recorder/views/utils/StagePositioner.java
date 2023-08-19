@@ -18,8 +18,10 @@ package com.brnd.action_recorder.views.utils;
 
 import javafx.event.Event;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.input.InputEvent;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
@@ -103,11 +105,11 @@ public abstract class StagePositioner {
     }
 
     /**
-     * Gets the specific stage from where this event was trigered
+     * Gets the specific stage from where this event was triggered
      * @param event The input event
      * @return a The corresponding stage to the input event
      */
     public static Stage getStageFromEvent(Event event){
-        return ((Stage) (((Button) event.getSource()).getScene().getWindow()));
+        return ((Stage) (((Node) event.getSource()).getScene().getWindow()));
     }
 }
