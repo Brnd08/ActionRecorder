@@ -25,7 +25,6 @@ import com.github.kwhat.jnativehook.dispatcher.SwingDispatchService;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 import com.github.kwhat.jnativehook.mouse.*;
-import java.util.ArrayList;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -41,10 +40,10 @@ public class InteractionRecorder {
     private final MouseWheelListener mouseWheelListener = new MouseWheelListener();
     private final MouseClicksListener mouseClicksListener = new MouseClicksListener();
     private final KeyBoardListener keyboardListener = new KeyBoardListener();
-    private final ArrayList<Long> pauseStartTimes = new ArrayList<>();
-    private final ArrayList<Long> pauseStopTimes = new ArrayList<>();
+    private long pauseStartTime = 0l;
     private RecorderConfiguration recordConfiguration;
     private Recording recording;
+    private Long eventsTimeStampOffset = 0l;
 
     /**
      * Instantiates a InteractionRecorder object
@@ -95,8 +94,9 @@ public class InteractionRecorder {
      * @param pauseTime Timestamp of pause call in nanoseconds
      */
     public void pauseRecording(long pauseTime) {
-        removeListeners();
-        pauseStartTimes.add(pauseTime);
+        this.removeListeners();
+        this.pauseStartTime = pauseTime;
+        logger.log(Level.INFO, "Pause recording at {}", pauseTime);
     }
 
     /**
@@ -105,8 +105,10 @@ public class InteractionRecorder {
      * @param resumeTime Timestamp of resume call in nanoseconds
      */
     public void resumeRecording(long resumeTime) {
-        loadRecordConfiguration();
-        pauseStopTimes.add(resumeTime);
+        this.loadRecordConfiguration();
+        this.eventsTimeStampOffset = resumeTime - this.pauseStartTime;
+        logger.log(Level.INFO, "Resume recording at {}, the recording remained paused for {} seconds"
+                , resumeTime, this.eventsTimeStampOffset/1_000_000_000l);
     }
 
     /**
@@ -295,7 +297,8 @@ public class InteractionRecorder {
      */
     private void addNativeEventToRecording(NativeInputEvent event) {
         try {
-                this.recording.getInputEvents().put(System.nanoTime(), event);// adds the event and the current execution time
+                long eventTimeStamp = System.nanoTime() - this.eventsTimeStampOffset;                
+                this.recording.getInputEvents().put(eventTimeStamp, event);// adds the event and the current execution time
                 String paramString = event.paramString();
                 logger.log(Level.INFO, "Recorded : {}", paramString);
         } catch (NullPointerException nullPointerException) {
