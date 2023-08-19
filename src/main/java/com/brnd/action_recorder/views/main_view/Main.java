@@ -19,6 +19,7 @@ package com.brnd.action_recorder.views.main_view;
 import com.brnd.action_recorder.views.settings_view.SettingsRepository;
 import com.brnd.action_recorder.views.utils.StageLocation;
 import com.brnd.action_recorder.views.utils.StagePositioner;
+import static com.brnd.action_recorder.views.utils.TaskbarButtonsUtils.addThumbnailButtons;
 import com.brnd.action_recorder.views.utils.ViewController;
 import com.brnd.action_recorder.views.utils.ViewEnum;
 import javafx.application.Application;
@@ -62,5 +63,6 @@ public class Main extends Application {
         StageLocation initialStageLocation = settingsRepository.obtainInitialStageLocation();
         logger.log(Level.TRACE, "Setting view location to {}.", initialStageLocation);
         StagePositioner.setStageLocation( stage , initialStageLocation);
+        addThumbnailButtons();
     }
 }
