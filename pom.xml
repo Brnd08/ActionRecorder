@@ -24,13 +24,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
     <artifactId>ActionRecorder</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>ActionRecorder</name>
+    
+    <repositories>        
+        <!-- Repository for the Taskbar Thumbnail buttons dependency -->
+        <repository>
+            <id>teragam-repo</id>
+            <name>IcarusCoding Repository</name>
+            <url>https://archiva.teragam.de/repository/IcarusCoding/</url>
+        </repository>
+    </repositories>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.9.1</junit.version>
-		<maven.compiler.source>19.0.2</maven.compiler.source>
-		<maven.compiler.target>19.0.2</maven.compiler.target>
-		<exec.mainClass>com.brnd.action_recorder.views.main_view.Main</exec.mainClass>
+        <maven.compiler.source>19.0.2</maven.compiler.source>
+        <maven.compiler.target>19.0.2</maven.compiler.target>
+        <exec.mainClass>com.brnd.action_recorder.views.main_view.Main</exec.mainClass>
     </properties>
 
     <dependencies>
@@ -62,17 +71,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
-			<!-- Needed version for log4j-core 3.0.0-alpha1 -->
+            <!-- Needed version for log4j-core 3.0.0-alpha1 -->
             <version>3.0.0-alpha1</version>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
-			<!-- This version has module descriptor included needed for jlink images creation -->
+            <!-- This version has module descriptor included needed for jlink images creation -->
             <version>3.0.0-alpha1</version> 
         </dependency>
-		<!--	Colorized outputs dependencies -->
-		<dependency>
+        <!--	Colorized outputs dependencies -->
+        <dependency>
             <groupId>org.fusesource.jansi</groupId>
             <artifactId>jansi</artifactId>
             <version>2.4.0</version>
@@ -102,7 +111,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
             <artifactId>FXTrayIcon</artifactId>
             <version>4.0.1</version>
         </dependency>
-
+        <!-- Taskbar Thumbnail buttons dependency -->
+        <dependency>
+            <groupId>de.intelligence</groupId>
+            <artifactId>win-taskbar</artifactId>
+            <version>1.1</version>
+        </dependency>
     </dependencies>
 
     <build>
