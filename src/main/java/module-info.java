@@ -26,6 +26,8 @@ module com.brnd.action_recorder {
     requires com.github.kwhat.jnativehook;
     requires java.base;
     requires com.dustinredmond.fxtrayicon;
+    requires win.taskbar;
+    requires javafx.swing;
 
     opens com.brnd.action_recorder.views.main_view to javafx.fxml;
     opens com.brnd.action_recorder.views.settings_view to javafx.fxml;
