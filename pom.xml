@@ -125,8 +125,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>com.brnd.action_recorder.views.main_view.Main
-                            </mainClass>
+                            <mainClass>com.brnd.action_recorder/com.brnd.action_recorder.views.main_view.Main</mainClass>
                             <launcher>ActionRecorder</launcher>
                             <jlinkImageName>ActionRecorder</jlinkImageName>
                             <noManPages>true</noManPages>
