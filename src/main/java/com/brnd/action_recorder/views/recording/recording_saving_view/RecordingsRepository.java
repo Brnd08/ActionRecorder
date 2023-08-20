@@ -293,7 +293,7 @@ public class RecordingsRepository {
         return retrievedRecording;
     }
 
-    public void insertRecording(Recording recordingToInsert) {
+    public int insertRecording(Recording recordingToInsert) {
         String insertSentence = DatabaseTable.RECORDINGS.getInsertDefaultSentence();
         logger.log(Level.ALL, "Inserting new Recording row in {} database table", DatabaseTable.RECORDINGS.name());
         int newRowId = 0;
@@ -312,8 +312,8 @@ public class RecordingsRepository {
         } catch (SQLException e) {
             logger.log(
                     Level.ERROR,
-                    "Could not insert the Recording. Excecuted query {}. Exception message: {}",
-                    insertSentence, e.getMessage()
+                    "Could not insert the Recording. Returning default value for insertedId {}. Excecuted query {}. Exception message: {}",
+                    newRowId, insertSentence, e.getMessage()
             );
             DataUtils.logSuppressedExceptions(logger, e.getSuppressed());
         }
@@ -325,6 +325,7 @@ public class RecordingsRepository {
             this.updateRecordingDuration(recordingToInsert.getRecordingDuration(), newRowId);
             this.updateRecordingInputEvents(recordingToInsert.getInputEvents(), newRowId);
         }
+        return newRowId;
     }
 
     /**
