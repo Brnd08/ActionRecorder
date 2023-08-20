@@ -17,17 +17,20 @@
 package com.brnd.action_recorder.views.recording;
 
 import com.github.kwhat.jnativehook.NativeInputEvent;
-
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
 import java.util.stream.Collectors;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 /*
     This class is used to store the Recordings events as well as other useful information
  */
 public class Recording implements Serializable {
+    private static final Logger logger = LogManager.getLogger(Recording.class);
     public static final DateTimeFormatter DATE_FORMATER = DateTimeFormatter.ofPattern("yyyy-MM-DD");
     @Serial
     private static final long serialVersionUID = 4265898901141738551L;
@@ -51,11 +54,14 @@ public class Recording implements Serializable {
     /**
      * This method is intended to be called in Recording finalization
      * Sets the stopTime and calculates Recording duration.
+     * @param pausedTime The time that the recording remained paused
      */
-    public void closeRecording() {
+    public void closeRecording(float pausedTime) {
         this.recordingStopTime = System.nanoTime();
         float nanoSecondsInOneSecond = 1_000_000_000.0f;// 1 second = 1x10^9 nanoseconds.
-        this.recordingDuration = (recordingStopTime - recordingStartTime) / nanoSecondsInOneSecond;
+        this.recordingDuration = ((recordingStopTime - recordingStartTime) - pausedTime) / nanoSecondsInOneSecond;
+        
+        logger.log(Level.INFO, "Recording stoped at {} s", this.recordingStopTime/1_000_000_000.0f);
     }
 
     /**
@@ -79,6 +85,7 @@ public class Recording implements Serializable {
         this.recordingStartTime = System.nanoTime();
         this.inputEvents = new LinkedHashMap<>();
         this.recordingDate = LocalDate.now();
+        logger.log(Level.INFO, "Recording started at {} s", this.recordingStartTime/1_000_000_000.0f);
     }
 
     public Recording(// used to retrieve Recordings from database
@@ -89,7 +96,7 @@ public class Recording implements Serializable {
         this.recordingTitle = recordingTitle;
         this.recordingDuration = recordingDuration;
         this.recordingDate = recordingDate;
-        recordingStartTime = 0;
+        this.recordingStartTime = 0;
     }
     
 

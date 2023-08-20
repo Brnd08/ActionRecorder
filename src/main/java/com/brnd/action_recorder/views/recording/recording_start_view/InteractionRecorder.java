@@ -67,8 +67,8 @@ public class InteractionRecorder {
         logger.log(Level.TRACE, "Creating new Recording");
         this.recording = new Recording();
 
-        logger.log(Level.TRACE, "Loading configuration: {}", this.recordConfiguration);
         this.recordConfiguration = recordConfiguration;
+        logger.log(Level.TRACE, "Loading configuration: {}", this.recordConfiguration);
         loadRecordConfiguration(); // loads the specified configuration
 
         logger.log(Level.TRACE, "Recording Started");
@@ -84,7 +84,7 @@ public class InteractionRecorder {
         } catch (NativeHookException ex) {
             logger.log(Level.ERROR, ex);
         }
-        this.recording.closeRecording();
+        this.recording.closeRecording(this.eventsTimeStampOffset);
         logger.log(Level.TRACE, "Recording Stopped");
     }
 
@@ -96,7 +96,7 @@ public class InteractionRecorder {
     public void pauseRecording(long pauseTime) {
         this.removeListeners();
         this.pauseStartTime = pauseTime;
-        logger.log(Level.INFO, "Pause recording at {}", pauseTime);
+        logger.log(Level.INFO, "Pause recording at {}", pauseTime/1_000_000_000.0f);
     }
 
     /**
@@ -108,7 +108,7 @@ public class InteractionRecorder {
         this.loadRecordConfiguration();
         this.eventsTimeStampOffset = resumeTime - this.pauseStartTime;
         logger.log(Level.INFO, "Resume recording at {}, the recording remained paused for {} seconds"
-                , resumeTime, this.eventsTimeStampOffset/1_000_000_000l);
+                , resumeTime/1_000_000_000.0f, this.eventsTimeStampOffset/1_000_000_000.0f);
     }
 
     /**
