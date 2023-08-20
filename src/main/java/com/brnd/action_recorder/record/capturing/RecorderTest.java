@@ -58,11 +58,12 @@ public class RecorderTest {
                 interactionRecorder.stopRecording();
                 
                 Recording recordedRecording = interactionRecorder.getlastRecording();
-                recordingsRepository.insertRecording(recordedRecording);
+                recordedRecording.setRecordingTitle("Recording test");
+                int recordingId = recordingsRepository.insertRecording(recordedRecording);
                 
                 logger.log(Level.TRACE, "Recorded actions: {}", recordedRecording.interactionsString());
                 
-                Recording retrievedRecording = recordingsRepository.getRecordingById(recordedRecording.getId());
+                Recording retrievedRecording = recordingsRepository.getRecordingById(recordingId);
                 logger.log(Level.TRACE, "Retrieved Recording from database: {}"
                         , retrievedRecording
                 );
