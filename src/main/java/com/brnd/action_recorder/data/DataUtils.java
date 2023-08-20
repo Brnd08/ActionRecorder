@@ -16,21 +16,32 @@
  */
 package com.brnd.action_recorder.data;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.*;
-
 /**
- * Utility class to serialize and deserialize objects
+ * This class hold utilities related to data saving, retrieving and management
  */
-public class ObjectBytesConverter {
-    private ObjectBytesConverter(){
+public class DataUtils {
+    
+    private DataUtils(){
         logger.log(Level.ERROR, "Utility classes should not be instantiated.");
     }
-    private static final Logger logger = LogManager.getLogger(ObjectBytesConverter.class);
-
+    private static final Logger logger = LogManager.getLogger(DataUtils.class);
+    
+    public static void logSuppressedExceptions(Logger logger, Throwable[] suppressedExceptions){
+         for(var suppressedException : suppressedExceptions)
+                logger.log(Level.FATAL, "An error occurred while closing resources. Exception message: {}", suppressedException.getMessage());
+    }
+    
+    
     /**
      * Deserialize a byte array into an object of the specified class type.
      *
@@ -89,4 +100,6 @@ public class ObjectBytesConverter {
         }
         return bytes;
     }
+    
+    
 }
