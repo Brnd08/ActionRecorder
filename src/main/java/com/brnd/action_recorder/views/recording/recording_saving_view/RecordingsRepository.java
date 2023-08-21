@@ -28,8 +28,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -146,16 +148,14 @@ public class RecordingsRepository {
     }
 
     public LocalDate obtainRecordingDate(int recordingId) {
-        DateTimeFormatter dateFormater = Recording.DATE_FORMATER;
-        logger.log(Level.ALL, "Retrieving Recording date from database. Date format: {}. Recording id: {}", dateFormater.toFormat(), recordingId);
-
+        logger.log(Level.ALL, "Retrieving Recording date from database. Date format: {}. Recording id: {}", Recording.DATE_TIME_FORMAT, recordingId);
         LocalDate recordingDate = null;
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_RECORDING_DATE_BY_ID_SENTENCE)) {
             preparedStatement.setInt(1, recordingId);
             ResultSet resultSet = preparedStatement.executeQuery();
             String retrievedDate = resultSet.getString(1);
-            recordingDate = LocalDate.parse(retrievedDate, dateFormater);
+            recordingDate = LocalDate.parse(retrievedDate, DateTimeFormatter.ofPattern(Recording.DATE_TIME_FORMAT));
         } catch (SQLException e) {
             logger.log(
                     Level.ERROR,
@@ -167,15 +167,15 @@ public class RecordingsRepository {
         return recordingDate;
     }
 
-    public void updateRecordingDate(LocalDate newDate, int recordingId) {
-        DateTimeFormatter dateFormatter = Recording.DATE_FORMATER;
+    public void updateRecordingDate(LocalDateTime newDateTime, int recordingId) {
+        var dateTimeFormatter = DateTimeFormatter.ofPattern(Recording.DATE_TIME_FORMAT);
         logger.log(
                 Level.ALL, "Updating database Recording date ({}). Date format: {}. Recording id: {}",
-                newDate, dateFormatter.toFormat(), recordingId
+                newDateTime, Recording.DATE_TIME_FORMAT, recordingId
         );
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_RECORDING_DATE_WHERE_ID_SENTENCE)) {
-            String dateString = newDate.format(dateFormatter);
+            String dateString = newDateTime.format(dateTimeFormatter);
             preparedStatement.setString(1, dateString);
             preparedStatement.setInt(2, recordingId);
             int modifiedRows = preparedStatement.executeUpdate();
@@ -301,7 +301,7 @@ public class RecordingsRepository {
         /* Adds a new row on the recordings table with default values*/
         try (
                 /* prepared statement and resultset should be closed before updating recording row values to prevent sqlite Busy exception*/
-                PreparedStatement preparedStatement = connection.prepareStatement(insertSentence);
+                PreparedStatement preparedStatement = connection.prepareStatement(insertSentence); 
                 ResultSet resultSet = preparedStatement.executeQuery();
         ) {
             newRowId = resultSet.getInt(1);
@@ -321,7 +321,7 @@ public class RecordingsRepository {
         if (newRowId != 0) {
             logger.log(Level.ALL, "Updating recording database recording properties.");
             this.updateRecordingTitle(recordingToInsert.getRecordingTitle(), newRowId);
-            this.updateRecordingDate(recordingToInsert.getRecordingDate(), newRowId);
+            this.updateRecordingDate(recordingToInsert.getRecordingDateTime(), newRowId);
             this.updateRecordingDuration(recordingToInsert.getRecordingDuration(), newRowId);
             this.updateRecordingInputEvents(recordingToInsert.getInputEvents(), newRowId);
         }
@@ -355,30 +355,28 @@ public class RecordingsRepository {
             try {
                 resultSet.next();
             } catch (SQLException ex) {
-                logger.log(Level.ERROR, "No result set rows available");
+                logger.log(Level.ERROR, "No rows available in given resulset");
                 throw ex;
             }
-            int recordingId;
-            LinkedHashMap<Long, NativeInputEvent> recordingInputEvents;
-            String recordingTitle;
-            float recordingDuration;
-            LocalDate recordingDate;
-            DateTimeFormatter dateFormater = Recording.DATE_FORMATER;
-            try {
-                recordingId = resultSet.getInt(RECORDING_ID_FIELD);
-                recordingInputEvents
-                        = DataUtils.objectFromBytes(
-                                resultSet.getBytes(RECORDING_INPUT_EVENTS_FIELD), LinkedHashMap.class
-                        );
-                recordingTitle = resultSet.getString(RECORDING_TITLE_FIELD);
-                recordingDuration = resultSet.getFloat(RECORDING_DURATION_FIELD);
-                String retrievedDate = resultSet.getString(RECORDING_DATE_FIELD);
-                recordingDate = LocalDate.parse(retrievedDate, dateFormater);
-            } catch (SQLException | IOException | ClassNotFoundException ex) {
-                logger.log(Level.ERROR, "Could not get recording from resultset. Exception: {}", ex.getMessage());
-                throw ex;
-            }
-            return new Recording(recordingId, recordingInputEvents, recordingTitle, recordingDuration, recordingDate);
+
+            Recording mappedRecording;
+            var recordingInputEvents = DataUtils.objectFromBytes(
+                    resultSet.getBytes(RECORDING_INPUT_EVENTS_FIELD), LinkedHashMap.class
+            );
+            var recordingDuration = resultSet.getFloat(RECORDING_DURATION_FIELD);
+            var retrievedDateTime = resultSet.getString(RECORDING_DATE_FIELD);
+            var recordingTitle = resultSet.getString(RECORDING_TITLE_FIELD);
+            var recordingId = resultSet.getInt(RECORDING_ID_FIELD);
+            mappedRecording = new Recording(
+                    recordingId,
+                    recordingInputEvents,
+                    recordingTitle,
+                    recordingDuration,
+                    LocalDateTime.parse(
+                            retrievedDateTime, DateTimeFormatter.ofPattern(Recording.DATE_TIME_FORMAT)
+                    )
+            );
+            return mappedRecording;
         }
     }
 }
