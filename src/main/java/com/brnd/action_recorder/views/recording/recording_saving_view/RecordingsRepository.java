@@ -31,7 +31,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.stream.Collectors;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -48,13 +47,20 @@ public class RecordingsRepository {
 
     private static final String RECORDING_ID_FIELD = "recording_id";
     private static final String RECORDING_TITLE_FIELD = "recording_title";
-    private static final String RECORDING_DATE_FIELD = "recording_date";
+    private static final String RECORDING_DESCRIPTION_FIELD = "recording_description";
+    private static final String RECORDING_DATE_FIELD = "recording_timestamp";
     private static final String RECORDING_DURATION_FIELD = "recording_duration";
     private static final String RECORDING_INPUT_EVENTS_FIELD = "recording_input_events";
 
     private static final String SELECT_RECORDING_TITLE_BY_ID_SENTENCE
             = String.format("SELECT %s FROM %s WHERE %s = (?);",
                     RECORDING_TITLE_FIELD,
+                    DatabaseTable.RECORDINGS.name(),
+                    RECORDING_ID_FIELD
+            );
+    private static final String SELECT_RECORDING_DESCRIPTION_BY_ID_SENTENCE
+            = String.format("SELECT %s FROM %s WHERE %s = (?);",
+                    RECORDING_DESCRIPTION_FIELD,
                     DatabaseTable.RECORDINGS.name(),
                     RECORDING_ID_FIELD
             );
@@ -81,6 +87,12 @@ public class RecordingsRepository {
             = String.format("UPDATE %s SET %s = (?) WHERE %s = (?);",
                     DatabaseTable.RECORDINGS.name(),
                     RECORDING_TITLE_FIELD,
+                    RECORDING_ID_FIELD
+            );
+    private static final String UPDATE_RECORDING_DESCRIPTION_WHERE_ID_SENTENCE
+            = String.format("UPDATE %s SET %s = (?) WHERE %s = (?);",
+                    DatabaseTable.RECORDINGS.name(),
+                    RECORDING_DESCRIPTION_FIELD,
                     RECORDING_ID_FIELD
             );
     private static final String UPDATE_RECORDING_DATE_WHERE_ID_SENTENCE
@@ -147,6 +159,43 @@ public class RecordingsRepository {
         }
     }
 
+    public String obtainRecordingDescription(int recordingId) {
+        logger.log(Level.ALL, "Retrieving recording description from database. Recording id: {}", recordingId);
+        String recordingDescription = null;
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_RECORDING_DESCRIPTION_BY_ID_SENTENCE)) {
+            preparedStatement.setInt(1, recordingId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            recordingDescription = resultSet.getString(1);
+        } catch (SQLException e) {
+            logger.log(
+                    Level.ERROR,
+                    "Could not retrieve Recording description, using default value: {}. Exception message: {}. Excecuted query {}",
+                    recordingDescription, e.getMessage(), SELECT_RECORDING_DESCRIPTION_BY_ID_SENTENCE
+            );
+            DataUtils.logSuppressedExceptions(logger, e.getSuppressed());
+        }
+        return recordingDescription;
+    }
+
+    public void updateRecordingDescription(String newDescription, int recordingId) {
+        logger.log(Level.ALL, "Updating database Recording description ({}). Recording id: {}", newDescription, recordingId);
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_RECORDING_DESCRIPTION_WHERE_ID_SENTENCE)) {
+            preparedStatement.setString(1, newDescription);
+            preparedStatement.setInt(2, recordingId);
+            int modifiedRows = preparedStatement.executeUpdate();
+            logger.log(Level.ALL, "Succesfully execute script with a {} modified rows count", modifiedRows);
+        } catch (SQLException e) {
+            logger.log(
+                    Level.ERROR,
+                    "Could not update Recording description. Excecuted query {}. Exception message: {}",
+                    UPDATE_RECORDING_DESCRIPTION_WHERE_ID_SENTENCE, e.getMessage()
+            );
+            DataUtils.logSuppressedExceptions(logger, e.getSuppressed());
+        }
+    }
+
     public LocalDate obtainRecordingDate(int recordingId) {
         logger.log(Level.ALL, "Retrieving Recording date from database. Date format: {}. Recording id: {}", Recording.DATE_TIME_FORMAT, recordingId);
         LocalDate recordingDate = null;
@@ -160,7 +209,7 @@ public class RecordingsRepository {
             logger.log(
                     Level.ERROR,
                     "Could not retrieve Recording  date, using default value: {}. Exception message: {}. Excecuted query {}",
-                    recordingDate, e.getMessage(), SELECT_RECORDING_DURATION_BY_ID_SENTENCE
+                    recordingDate, e.getMessage(), SELECT_RECORDING_DATE_BY_ID_SENTENCE
             );
             DataUtils.logSuppressedExceptions(logger, e.getSuppressed());
         }
@@ -185,7 +234,7 @@ public class RecordingsRepository {
             logger.log(
                     Level.ERROR,
                     "Could not update Recording date value. Excecuted query {}. Exception message: {}",
-                    UPDATE_RECORDING_DURATION_WHERE_ID_SENTENCE, e.getMessage()
+                    UPDATE_RECORDING_DATE_WHERE_ID_SENTENCE, e.getMessage()
             );
             DataUtils.logSuppressedExceptions(logger, e.getSuppressed());
         }
@@ -243,7 +292,7 @@ public class RecordingsRepository {
             logger.log(
                     Level.ERROR,
                     "Could not retrieve Recording input events, using default value: {}. Exception message: {}. Excecuted query {}",
-                    inputEvents, e.getMessage(), SELECT_RECORDING_DURATION_BY_ID_SENTENCE
+                    inputEvents, e.getMessage(), SELECT_INPUT_EVENTS_BY_ID_SENTENCE
             );
             DataUtils.logSuppressedExceptions(logger, e.getSuppressed());
         }
@@ -265,7 +314,7 @@ public class RecordingsRepository {
             logger.log(
                     Level.ERROR,
                     "Could not update Recording input events value. Excecuted query {}. Exception message: {}",
-                    UPDATE_RECORDING_DURATION_WHERE_ID_SENTENCE, e.getMessage()
+                    UPDATE_INPUT_EVENTS_WHERE_ID_SENTENCE, e.getMessage()
             );
             DataUtils.logSuppressedExceptions(logger, e.getSuppressed());
         }
@@ -285,8 +334,8 @@ public class RecordingsRepository {
         } catch (SQLException | IOException | ClassNotFoundException e) {
             logger.log(
                     Level.ERROR,
-                    "Could not retrieve the Recording object, using default value: {}. Exception message: {}. Excecuted query {}",
-                    retrievedRecording, e.getMessage(), SELECT_RECORDING_DURATION_BY_ID_SENTENCE
+                    "Could not retrieve the Recording object, using default value: {}. Exception message: {}. Executed query {}",
+                    retrievedRecording, e.getMessage(), selectSentence
             );
             DataUtils.logSuppressedExceptions(logger, e.getSuppressed());
         }
@@ -321,6 +370,7 @@ public class RecordingsRepository {
         if (newRowId != 0) {
             logger.log(Level.ALL, "Updating recording database recording properties.");
             this.updateRecordingTitle(recordingToInsert.getRecordingTitle(), newRowId);
+            this.updateRecordingDescription(recordingToInsert.getRecordingDescription(), newRowId);
             this.updateRecordingDate(recordingToInsert.getRecordingDateTime(), newRowId);
             this.updateRecordingDuration(recordingToInsert.getRecordingDuration(), newRowId);
             this.updateRecordingInputEvents(recordingToInsert.getInputEvents(), newRowId);
@@ -366,15 +416,15 @@ public class RecordingsRepository {
             var recordingDuration = resultSet.getFloat(RECORDING_DURATION_FIELD);
             var retrievedDateTime = resultSet.getString(RECORDING_DATE_FIELD);
             var recordingTitle = resultSet.getString(RECORDING_TITLE_FIELD);
+            var recordingDescription = resultSet.getString(RECORDING_DESCRIPTION_FIELD);
             var recordingId = resultSet.getInt(RECORDING_ID_FIELD);
             mappedRecording = new Recording(
                     recordingId,
                     recordingInputEvents,
                     recordingTitle,
+                    recordingDescription,
                     recordingDuration,
-                    LocalDateTime.parse(
-                            retrievedDateTime, DateTimeFormatter.ofPattern(Recording.DATE_TIME_FORMAT)
-                    )
+                    LocalDateTime.parse(retrievedDateTime, DateTimeFormatter.ofPattern(Recording.DATE_TIME_FORMAT))
             );
             return mappedRecording;
         }

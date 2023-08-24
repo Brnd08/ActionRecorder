@@ -16,13 +16,12 @@
  */
 package com.brnd.action_recorder.data;
 
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.stream.Collectors;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * This enum stores database tables used in the app, and useful sql scripts
@@ -36,7 +35,8 @@ public enum DatabaseTable {
     RECORDINGS(//table used to store recordings
             new String[]{"recording_id", "INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE"},
             new String[]{"recording_title", "VARCHAR(30)"},
-            new String[]{"recording_date", "VARCHAR(20)"},
+            new String[]{"recording_description", "VARCHAR(30)"},
+            new String[]{"recording_timestamp", "VARCHAR(20)"},
             new String[]{"recording_duration", "FLOAT"},
             new String[]{"recording_input_events", "BLOB"}
     );

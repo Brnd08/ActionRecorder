@@ -37,6 +37,7 @@ public class Recording implements Serializable {
     private final LinkedHashMap<Long, NativeInputEvent> inputEvents;
     private final LocalDateTime recordingDateTime;
     private String recordingTitle;
+    private String recordingDescription; 
     /**
      * Recording Execution start time in nanoseconds.
      */
@@ -88,11 +89,13 @@ public class Recording implements Serializable {
     }
 
     public Recording(// used to retrieve Recordings from database
-            int id, LinkedHashMap<Long, NativeInputEvent> inputEvents, String recordingTitle, float recordingDuration, LocalDateTime recordingDateTime
+            int id, LinkedHashMap<Long, NativeInputEvent> inputEvents, String recordingTitle, String recordingDescription, 
+            float recordingDuration, LocalDateTime recordingDateTime
     ) {
         this.id = id;
         this.inputEvents = inputEvents;
         this.recordingTitle = recordingTitle;
+        this.recordingDescription = recordingDescription;
         this.recordingDuration = recordingDuration;
         this.recordingDateTime = recordingDateTime;
         this.recordingStartTime = 0;
@@ -147,18 +150,27 @@ public class Recording implements Serializable {
     public void setRecordingTitle(String recordingTitle) {
         this.recordingTitle = recordingTitle;
     }
+    
+    public String getRecordingDescription() {
+        return recordingDescription;
+    }
+
+    public void setRecordingDescription(String recordingDescription) {
+        this.recordingDescription = recordingDescription;
+    }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Recording{");
         sb.append("id=").append(id);
-        sb.append(", inputEvents=").append(interactionsString());
-        sb.append(", recordingDate=").append(recordingDateTime);
         sb.append(", recordingTitle=").append(recordingTitle);
+        sb.append(", recordingDescription=").append(recordingDescription);
+        sb.append(", recordingDate=").append(recordingDateTime);
         sb.append(", recordingStartTime=").append(recordingStartTime);
         sb.append(", recordingStopTime=").append(recordingStopTime);
         sb.append(", recordingDuration=").append(recordingDuration);
+        sb.append(", inputEvents=").append(interactionsString());
         sb.append('}');
         return sb.toString();
     }
