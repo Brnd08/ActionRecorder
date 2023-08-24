@@ -18,6 +18,7 @@
 package com.brnd.action_recorder.views.recording.recording_saving_view;
 
 import com.brnd.action_recorder.views.utils.ViewController;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.Event;
@@ -84,5 +85,10 @@ public class RecordingSavingViewController implements Initializable, ViewControl
     public void closeStage(Event event) {
         ViewController.super.closeStage(event);
     }
-    
+
+    @Override
+    public void navigateToRecordView(Event event) throws IOException {
+        ViewController.super.navigateToRecordView(event); 
+    }
+
 }
