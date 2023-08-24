@@ -32,6 +32,9 @@ This app has:
 ### Start recording  view
 ![Start recording view](images/start_recording_view.png)
 
+### Recording with system tray icon
+![Start recording view](images/recording_with_tray_icon_pov.png)
+
 ## Runing from source
 To locally frun this project:
 - Clone this repo and go to proyect root:
