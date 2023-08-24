@@ -16,19 +16,17 @@
  */
 package com.brnd.action_recorder.record.capturing;
 
-import com.brnd.action_recorder.views.recording.recording_start_view.InteractionRecorder;
+import static com.brnd.action_recorder.data.Database.initializeDatabase;
 import com.brnd.action_recorder.views.recording.Recording;
 import com.brnd.action_recorder.views.recording.recording_saving_view.RecordingsRepository;
+import com.brnd.action_recorder.views.recording.recording_start_view.InteractionRecorder;
+import static com.brnd.action_recorder.views.recording.recording_start_view.InteractionRecorder.logger;
 import com.brnd.action_recorder.views.recording.recording_start_view.RecorderConfiguration;
 import com.github.kwhat.jnativehook.NativeHookException;
-import org.apache.logging.log4j.Level;
-
 import java.sql.SQLException;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import static com.brnd.action_recorder.data.Database.initializeDatabase;
-import static com.brnd.action_recorder.views.recording.recording_start_view.InteractionRecorder.logger;
+import org.apache.logging.log4j.Level;
 
 /**
  * This class serves a quick way to check verify recording creation functionality

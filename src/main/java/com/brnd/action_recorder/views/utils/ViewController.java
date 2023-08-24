@@ -72,7 +72,7 @@ public interface ViewController {
         Parent root;
         try {
             root = fxmlLoader.load();
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             logger.log(Level.FATAL, "Something went wrong while loading FXML file, verify its declared controller class or sintax:", e);
             throw e;
         }
