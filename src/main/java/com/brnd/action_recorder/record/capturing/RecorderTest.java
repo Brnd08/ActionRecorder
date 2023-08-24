@@ -16,7 +16,7 @@
  */
 package com.brnd.action_recorder.record.capturing;
 
-import static com.brnd.action_recorder.data.Database.initializeDatabase;
+import com.brnd.action_recorder.data.Database;
 import com.brnd.action_recorder.views.recording.Recording;
 import com.brnd.action_recorder.views.recording.recording_saving_view.RecordingsRepository;
 import com.brnd.action_recorder.views.recording.recording_start_view.InteractionRecorder;
@@ -34,7 +34,8 @@ import org.apache.logging.log4j.Level;
 public class RecorderTest {
 
     public static void main(String[] args) throws NativeHookException, SQLException {
-        initializeDatabase(); // Initialize database
+//        Database.deleteDatabase();// deletes previous databases
+        Database.initializeDatabase(); // Initialize database
 
         InteractionRecorder interactionRecorder = new InteractionRecorder();
         RecordingsRepository recordingsRepository = new RecordingsRepository();
@@ -57,6 +58,7 @@ public class RecorderTest {
                 
                 Recording recordedRecording = interactionRecorder.getlastRecording();
                 recordedRecording.setRecordingTitle("Recording test");
+                recordedRecording.setRecordingDescription("A recording to test correct recording functionality behavior");
                 int recordingId = recordingsRepository.insertRecording(recordedRecording);
                 
                 logger.log(Level.TRACE, "Recorded actions: {}", recordedRecording.interactionsString());
