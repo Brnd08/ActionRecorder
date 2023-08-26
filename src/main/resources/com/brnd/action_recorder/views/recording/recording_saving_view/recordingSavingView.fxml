@@ -160,7 +160,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </Button>
-                        <Button fx:id="startRecordingButton" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="33.0" prefWidth="71.0" styleClass="primaryButton" text="Guardar" translateX="-5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                        <Button fx:id="saveRecordingButton" onAction="#saveRecording" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="33.0" prefWidth="71.0" styleClass="primaryButton" text="Guardar" translateX="-5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
@@ -201,7 +201,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
                                           <Insets left="10.0" />
                                        </GridPane.margin>
                                     </Label>
-                                    <TextArea maxWidth="-Infinity" minHeight="-Infinity" prefHeight="75.0" prefWidth="235.0" promptText="Descripción corta de la grabación" styleClass="primaryButton" text="Descripción corta de la grabación" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                    <TextArea fx:id="recordingDescriptionTextArea" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="75.0" prefWidth="235.0" promptText="Descripción corta de la grabación" styleClass="primaryButton" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                        <tooltip>
                                           <Tooltip text="Descripción corta de referencia sobre la grabación" />
                                        </tooltip></TextArea>
@@ -223,7 +223,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
                            <content>
                               <VBox prefHeight="200.0" prefWidth="100.0">
                                  <children>
-                                    <TableView editable="true" prefHeight="200.0" prefWidth="200.0">
+                                    <TableView fx:id="eventsTableView" editable="true" prefHeight="200.0" prefWidth="200.0">
                                       <columns>
                                         <TableColumn editable="false" minWidth="0.0" prefWidth="50.74999237060547" text="ID" />
                                         <TableColumn editable="false" minWidth="0.0" prefWidth="51.25" text="Tiempo" />
