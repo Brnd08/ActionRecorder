@@ -32,6 +32,9 @@ import java.io.IOException;
 import java.util.Objects;
 
 import static com.brnd.action_recorder.views.main_view.Main.logger;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.DialogPane;
 import javafx.scene.input.InputEvent;
 
 /**
@@ -182,6 +185,34 @@ public interface ViewController {
     @FXML
     public default void enableCoordinatesMode(Event event) {
         logger.log(Level.ALL, "Unimplemented functionality");
+    }
+    
+    public static Alert createCustomAlert(
+            Alert.AlertType alertType, String alertMessage, String alertHeader, Stage ownerStage, ButtonType buttonType
+    ) {
+                var alert = new Alert(alertType, alertMessage, buttonType);
+                alert.setHeaderText(alertHeader);
+                alert.initOwner(ownerStage);
+                ViewController.styleAlert(alert);
+                return alert;
+    }
+    
+    /**
+     * Applies app styles to given alert and then return it
+     * @param alert the alert to be styled 
+     * @return the styled alert
+     */
+    private static Alert  styleAlert(Alert alert) {
+        DialogPane alertPane = alert.getDialogPane();
+        alertPane.setStyle(
+                "-fx-background-color: #e0e0e0;" + "-fx-border-color: #03a9f4;"
+                + "-fx-border-width: 4px;" + "-border-radius: 8px;" + "-fx-background-radius: 12px;"
+        );
+        Scene alertScene = alertPane.getScene();
+        Stage alertStage = (Stage) alertScene.getWindow();
+        alertStage.initStyle(StageStyle.TRANSPARENT);
+        StagePositioner.addDragFunctionalityToStage(alertStage, alertScene);
+        return alert;
     }
 
 }

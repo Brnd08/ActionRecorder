@@ -91,22 +91,4 @@ public enum ViewEnum {
                 .filter(viewEnum -> viewEnum.getStageTitle().equals(title))
                 .findFirst().orElseThrow();
     }
-    /**
-     * Applies app styles to given alert and then return it
-     * @param alert the alert to be styled 
-     * @return the styled alert
-     */
-    public static Alert  styleAlert(Alert alert) {
-        DialogPane alertPane = alert.getDialogPane();
-        alertPane.setStyle(
-                "-fx-background-color: #e0e0e0;" + "-fx-border-color: #03a9f4;"
-                + "-fx-border-width: 4px;" + "-border-radius: 8px;" + "-fx-background-radius: 12px;"
-        );
-        Scene alertScene = alertPane.getScene();
-        Stage alertStage = (Stage) alertScene.getWindow();
-        alertStage.initStyle(StageStyle.TRANSPARENT);
-        StagePositioner.addDragFunctionalityToStage(alertStage, alertScene);
-        return alert;
-    }
-
 }
