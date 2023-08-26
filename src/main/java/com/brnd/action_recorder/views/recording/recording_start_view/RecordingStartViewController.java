@@ -16,6 +16,7 @@
  */
 package com.brnd.action_recorder.views.recording.recording_start_view;
 
+import com.brnd.action_recorder.views.recording.Recording;
 import com.brnd.action_recorder.views.recording.recording_start_view.RecorderConfiguration;
 import com.brnd.action_recorder.views.utils.StagePositioner;
 import com.brnd.action_recorder.views.utils.ViewController;
@@ -122,14 +123,41 @@ public class RecordingStartViewController implements Initializable, ViewControll
     public void stopRecording(Event event) {
         logger.log(Level.INFO, "Stoping current recording");
 
-        if (this.trayIcon != null) { // removes the tray icon if its being show
-            this.trayIcon.hide();
-            this.trayIcon = null;
-        }
+        this.removeTrayIconIfExits();
+
         this.interactionRecorder.stopRecording();
         this.isRecording = false;
-        this.switchToRecordingStartMode(StagePositioner.getStageFromEvent(event));
-        logger.log(Level.TRACE, "Resulting Recording: {}", interactionRecorder.getlastRecording());
+
+        var recordedRecording = this.interactionRecorder.getlastRecording();        
+        this.navigateToSavingView(recordedRecording, StagePositioner.getStageFromEvent(event));
+        StagePositioner.getStageFromEvent(event).close(); // closes the current stage after opening saving view
+    }
+    
+    /**
+     * Navigates to the saving view, position in the same coordinates and passes to it the specified recording to it.
+     * @param recordedRecording the recorded recording which is intended to be saved.
+     * @param currentStage the current stage to get the app position.
+     */
+    private void navigateToSavingView(Recording recordedRecording, Stage currentStage){
+        try {
+            var nextStage = new Stage();
+            nextStage.setX(currentStage.getX());
+            nextStage.setY(currentStage.getY());
+            nextStage.setUserData(recordedRecording);
+            ViewController.openView(nextStage, ViewEnum.RECORDING_SAVING);
+        } catch (IOException ex) {
+            logger.log(Level.ERROR, "Could not navigate to {} view. Exception message: {}", ViewEnum.RECORDING_SAVING, ex.getMessage());
+        }
+    }
+
+    /**
+     * Removes app tray icon created at recording start
+     */
+    private void removeTrayIconIfExits() {
+        if (this.trayIcon != null) {
+            this.trayIcon.hide(); // removes the tray icon if its being show
+            this.trayIcon = null;
+        }
     }
 
     /**
@@ -271,14 +299,14 @@ public class RecordingStartViewController implements Initializable, ViewControll
         stopRecording.setOnAction(e
                 -> this.closeBttn.fire()
         );
-        pauseRecording.setOnAction(e -> {            
+        pauseRecording.setOnAction(e -> {
             EventQueue.invokeLater(() -> { // disables swing pause MenuItem and enables resume one
                 trayIcon.getMenuItem(2).setEnabled(true);
                 trayIcon.getMenuItem(1).setEnabled(false);
             });
             this.pauseRecording();
         });
-        
+
         resumeRecording.setOnAction(e -> {
             this.resumeRecording();
             EventQueue.invokeLater(() -> { // disables swing resume MenuItem and enables pause one
@@ -286,7 +314,7 @@ public class RecordingStartViewController implements Initializable, ViewControll
                 trayIcon.getMenuItem(1).setEnabled(true);
             });
         });
-        
+
         exitProgram.setOnAction(event -> {
             this.stopRecording(event);
             this.trayIcon.hide();
