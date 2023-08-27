@@ -107,10 +107,9 @@ public class RecordingStartViewController implements Initializable, ViewControll
             }
         } else {
             /* if no listeners were selected shows an alert requesting to select at leat one*/
-            var alert = new Alert(Alert.AlertType.WARNING, "Selecciona al menos un evento para grabar", ButtonType.OK);
-            alert.setHeaderText("Configuración inválida - Action Recorder");
-            alert.initOwner(currentStage);
-            ViewEnum.styleAlert(alert).show(); // styles and shows the alert
+            ViewController.createCustomAlert(
+                    Alert.AlertType.WARNING, "Selecciona al menos un evento para grabar", "Configuración inválida - Action Recorder", currentStage, ButtonType.OK
+            ).show();
         }
     }
 
@@ -128,17 +127,20 @@ public class RecordingStartViewController implements Initializable, ViewControll
         this.interactionRecorder.stopRecording();
         this.isRecording = false;
 
-        var recordedRecording = this.interactionRecorder.getlastRecording();        
+        var recordedRecording = this.interactionRecorder.getlastRecording();
         this.navigateToSavingView(recordedRecording, StagePositioner.getStageFromEvent(event));
         StagePositioner.getStageFromEvent(event).close(); // closes the current stage after opening saving view
     }
-    
+
     /**
-     * Navigates to the saving view, position in the same coordinates and passes to it the specified recording to it.
-     * @param recordedRecording the recorded recording which is intended to be saved.
+     * Navigates to the saving view, position in the same coordinates and passes
+     * to it the specified recording to it.
+     *
+     * @param recordedRecording the recorded recording which is intended to be
+     * saved.
      * @param currentStage the current stage to get the app position.
      */
-    private void navigateToSavingView(Recording recordedRecording, Stage currentStage){
+    private void navigateToSavingView(Recording recordedRecording, Stage currentStage) {
         try {
             var nextStage = new Stage();
             nextStage.setX(currentStage.getX());
