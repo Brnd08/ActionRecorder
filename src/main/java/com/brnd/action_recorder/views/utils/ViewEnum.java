@@ -16,15 +16,9 @@
  */
 package com.brnd.action_recorder.views.utils;
 
-import javafx.scene.image.Image;
-
 import java.util.Arrays;
 import java.util.Objects;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.DialogPane;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
+import javafx.scene.image.Image;
 
 /**
  * This enum contains constants for the views in the project, each constant has
@@ -45,6 +39,9 @@ public enum ViewEnum {
     ), RECORDING_SAVING(
             "Guardar Grabación - Grabadora de Acciones",
              "/recording/recording_saving_view/recordingSavingView.fxml"
+    ), REPLAY(
+            "Reproducir Grabación- Grabadora de Acciones",
+             "/replay_view/replayView.fxml"
     );
 
     private static final String PATH_TO_VIEWS_PACKAGE_FROM_SOURCE_ROOT

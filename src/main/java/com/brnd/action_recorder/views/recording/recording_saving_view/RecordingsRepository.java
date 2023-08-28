@@ -30,7 +30,9 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.stream.Collectors;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -327,9 +329,12 @@ public class RecordingsRepository {
         Recording retrievedRecording = null;
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(selectSentence)) {
+
             preparedStatement.setInt(1, recordingId);
-            ResultSet resultSet = preparedStatement.executeQuery(); //obtains the resultset from the query execution
-            retrievedRecording = RecordingMapper.mapRecordingFromResultSet(resultSet);//asign the retrievedRecording usin the Recording mapper
+            try (ResultSet resultSet = preparedStatement.executeQuery()) { //obtains the resultset from the query execution
+                resultSet.next(); // moves iterator to first result
+                retrievedRecording = RecordingMapper.mapRecordingFromResultSet(resultSet);//asign the retrievedRecording usin the Recording mapper
+            }
             logger.log(Level.ALL, "Return retrieved Recording {}", retrievedRecording);
         } catch (SQLException | IOException | ClassNotFoundException e) {
             logger.log(
@@ -349,13 +354,12 @@ public class RecordingsRepository {
 
         /* Adds a new row on the recordings table with default values*/
         try (
-                /* prepared statement and resultset should be closed before updating recording row values to prevent sqlite Busy exception*/
-                PreparedStatement preparedStatement = connection.prepareStatement(insertSentence); 
-                ResultSet resultSet = preparedStatement.executeQuery();
+            PreparedStatement preparedStatement = connection.prepareStatement(insertSentence);
+            ResultSet resultSet = preparedStatement.executeQuery();
         ) {
-            newRowId = resultSet.getInt(1);
-            if (newRowId == 0) {
-                newRowId = resultSet.getInt(RECORDING_ID_FIELD);
+             newRowId = resultSet.getInt(1);
+             if (newRowId == 0) {
+                 newRowId = resultSet.getInt(RECORDING_ID_FIELD);
             }
             logger.log(Level.ALL, "A new empty Recording was inserted on database with id: {}", newRowId);
         } catch (SQLException e) {
@@ -376,6 +380,31 @@ public class RecordingsRepository {
             this.updateRecordingInputEvents(recordingToInsert.getInputEvents(), newRowId);
         }
         return newRowId;
+    }
+
+    public List<Recording> getAllRecordings() {
+        logger.log(Level.ALL, "Obtaining all Recordings from database. Recording id");
+
+        var recordingsList = new ArrayList<Recording>();
+        String selectAllScript = DatabaseTable.RECORDINGS.getSelectAllSentence();
+
+        try (
+                PreparedStatement preparedStatement = connection.prepareStatement(selectAllScript);
+                ResultSet resultSet = preparedStatement.executeQuery();
+        ) {
+            while (resultSet.next()) {
+                recordingsList.add(RecordingMapper.mapRecordingFromResultSet(resultSet));
+            }
+            logger.log(Level.ALL, "Return retrieved Recordings {}", recordingsList);
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            logger.log(
+                    Level.ERROR,
+                    "Could not retrieve the Recording List, using default value: {}. Exception message: {}. Executed query {}",
+                    recordingsList, e.getMessage(), selectAllScript
+            );
+            DataUtils.logSuppressedExceptions(logger, e.getSuppressed());
+        }
+        return recordingsList;
     }
 
     /**
@@ -402,12 +431,6 @@ public class RecordingsRepository {
          * events field can not be found
          */
         public static Recording mapRecordingFromResultSet(ResultSet resultSet) throws SQLException, IOException, ClassNotFoundException {
-            try {
-                resultSet.next();
-            } catch (SQLException ex) {
-                logger.log(Level.ERROR, "No rows available in given resulset");
-                throw ex;
-            }
 
             Recording mappedRecording;
             var recordingInputEvents = DataUtils.objectFromBytes(

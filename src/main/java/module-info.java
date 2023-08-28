@@ -28,7 +28,8 @@ module com.brnd.action_recorder {
     requires com.dustinredmond.fxtrayicon;
     requires java.desktop;
 
-    opens com.brnd.action_recorder.views.main_view to javafx.fxml;
+    opens com.brnd.action_recorder.views.main_view to javafx.fxml, javafx.graphics;
+    opens com.brnd.action_recorder.views.replay_view to javafx.fxml;
     opens com.brnd.action_recorder.views.settings_view to javafx.fxml;
     opens com.brnd.action_recorder.views.recording.recording_start_view to javafx.fxml;
     opens com.brnd.action_recorder.views.recording.recording_saving_view to javafx.fxml;
@@ -36,8 +37,8 @@ module com.brnd.action_recorder {
     opens com.brnd.action_recorder.record.capturing to javafx.fxml;
 
 
-    exports com.brnd.action_recorder.views.main_view;
-    exports com.brnd.action_recorder.views.settings_view;
-    exports com.brnd.action_recorder.views.utils;
-    exports com.brnd.action_recorder.record.capturing;
+//    exports com.brnd.action_recorder.views.main_view;
+//    exports com.brnd.action_recorder.views.settings_view;
+//    exports com.brnd.action_recorder.views.utils;
+//    exports com.brnd.action_recorder.record.capturing;
 }

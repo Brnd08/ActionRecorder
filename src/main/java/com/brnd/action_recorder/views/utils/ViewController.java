@@ -174,7 +174,7 @@ public interface ViewController {
 
     @FXML
     public default void navigateToReplayView(Event event) throws IOException {
-        logger.log(Level.ALL, "Unimplemented functionality");
+        navigateToView(event, ViewEnum.REPLAY);
     }
 
     @FXML
