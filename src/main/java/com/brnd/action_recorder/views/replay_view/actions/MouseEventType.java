@@ -14,12 +14,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.brnd.action_recorder.record.utils;
+package com.brnd.action_recorder.views.replay_view.actions;
 
-enum KeyType{
-    ALPHANUMERICAL
-    ,CONTROL
-    ,FUNCTIONAL
-    ,NAVIGATIONAL
-    ,ESPECIAL
+enum MouseEventType {
+    BUTTON_PRESS, BUTTON_RELEASE, SCROLL, MOTION
 }
