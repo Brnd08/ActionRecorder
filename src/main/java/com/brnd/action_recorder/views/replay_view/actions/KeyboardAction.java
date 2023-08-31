@@ -16,11 +16,22 @@
  */
 package com.brnd.action_recorder.views.replay_view.actions;
 
-enum KeyType{
-    ALPHANUMERICAL
-    ,CONTROL
-    ,FUNCTIONAL
-    ,NAVIGATIONAL
-    ,ESPECIAL
-    ,OTHER
+public abstract class KeyboardAction extends Action{
+    public KeyboardAction(){
+        super.actionType = ActionType.KEYBOARD_INPUT;
+    }
+    protected KeyEventType eventType;
+    protected KeyType keyType;
+    enum KeyEventType{
+        PRESS
+        , RELEASE
+    }
+    enum KeyType{
+        ALPHANUMERICAL
+        ,CONTROL
+        ,FUNCTIONAL
+        ,NAVIGATIONAL
+        ,ESPECIAL
+        ,OTHER
+    }
 }

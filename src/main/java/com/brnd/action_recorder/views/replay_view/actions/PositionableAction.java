@@ -16,7 +16,8 @@
  */
 package com.brnd.action_recorder.views.replay_view.actions;
 
-enum KeyEventType{
-    PRESS
-    , RELEASE
+import java.awt.Robot;
+
+public interface PositionableAction {
+    public void prepareMousePosition(Robot robot, int x, int y);
 }

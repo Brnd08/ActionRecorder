@@ -16,8 +16,16 @@
  */
 package com.brnd.action_recorder.views.replay_view.actions;
 
-enum ActionType {
-    MOUSE_INPUT
-    , KEYBOARD_INPUT
-    , MOUSE_MOVEMENT
+import java.awt.*;
+
+public abstract class Action{
+    protected ActionType actionType;
+    protected abstract void executeAction(Robot robot);
+    protected abstract void replayAction(Robot robot);
+
+    enum ActionType {
+        MOUSE_INPUT
+        , KEYBOARD_INPUT
+        , MOUSE_MOVEMENT
+    }
 }

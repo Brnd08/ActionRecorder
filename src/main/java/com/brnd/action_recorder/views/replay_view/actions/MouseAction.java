@@ -16,6 +16,9 @@
  */
 package com.brnd.action_recorder.views.replay_view.actions;
 
-enum MouseEventType {
-    BUTTON_PRESS, BUTTON_RELEASE, SCROLL, MOTION
+public abstract class MouseAction extends Action implements PositionableAction{
+    protected MouseEventType mouseEventType;
+    enum MouseEventType {
+        BUTTON_PRESS, BUTTON_RELEASE, SCROLL, MOTION
+    }
 }
