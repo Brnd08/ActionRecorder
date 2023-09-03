@@ -14,17 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.brnd.action_recorder.views.replay_view.actions;
+import com.github.kwhat.jnativehook.mouse.*;
 
-public abstract class MouseAction extends ReplayableAction{
-  public MouseAction(){
-    super.actionType = ActionType.MOUSE_INPUT;
+public class ScrollAction extends MouseAction {
+  public ScrollAction (NativeMouseEvent NativeMouseEvent){
+    super.mouseEventType = MouseEventType.SCROLL;
+        var nativeEventType = NativeMouseEvent.getID();
+        };
   }
-    protected int mouseX;
-    protected int mouseY;
-    protected MouseEventType mouseEventType;
-    protected abstract void setActionCoordinates(int x, int y);
-    protected enum MouseEventType {
-        BUTTON_PRESS, BUTTON_RELEASE, SCROLL, MOTION
-    }
 }

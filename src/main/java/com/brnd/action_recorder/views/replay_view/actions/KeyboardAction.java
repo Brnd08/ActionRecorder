@@ -48,7 +48,7 @@ public class KeyboardAction extends ReplayableAction {
 
     @Override
     protected void replayAction(Robot robot) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        throw new UnsupportedOperationException("Not supported yet."); 
     }
 
     protected enum KeyActionType {
