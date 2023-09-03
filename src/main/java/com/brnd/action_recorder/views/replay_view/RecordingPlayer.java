@@ -16,7 +16,7 @@
  */
 package com.brnd.action_recorder.views.replay_view;
 
-import com.brnd.action_recorder.views.replay_view.actions.Action;
+import com.brnd.action_recorder.views.replay_view.actions.ReplayableAction;
 
 import java.awt.*;
 
@@ -25,9 +25,6 @@ import java.awt.*;
  * @author brdn
  */
 public class RecordingPlayer {
-    public RecordingPlayer() throws AWTException {
-        this.robot = new Robot();
-    }
-    private final Robot robot;
-    private Action[] actions;
+    
+    
 }

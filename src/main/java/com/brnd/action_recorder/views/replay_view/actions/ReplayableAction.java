@@ -16,8 +16,15 @@
  */
 package com.brnd.action_recorder.views.replay_view.actions;
 
-import java.awt.Robot;
+import java.awt.*;
 
-public interface PositionableAction {
-    public void prepareMousePosition(Robot robot, int x, int y);
+public abstract class ReplayableAction{
+    protected ActionType actionType;
+    protected abstract void replayAction(Robot robot);
+
+    enum ActionType {
+        MOUSE_INPUT
+        , KEYBOARD_INPUT
+        , MOUSE_MOVEMENT
+    }
 }

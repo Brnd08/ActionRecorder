@@ -16,22 +16,46 @@
  */
 package com.brnd.action_recorder.views.replay_view.actions;
 
-public abstract class KeyboardAction extends Action{
-    public KeyboardAction(){
-        super.actionType = ActionType.KEYBOARD_INPUT;
-    }
-    protected KeyEventType eventType;
+import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
+import java.awt.Robot;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+public class KeyboardAction extends ReplayableAction {
+
+    private static final Logger logger = LogManager.getLogger(KeyboardAction.class);
+    protected KeyActionType keyActionType;
     protected KeyType keyType;
-    enum KeyEventType{
-        PRESS
-        , RELEASE
+
+    public KeyboardAction(NativeKeyEvent nativeKeyEvent) {
+        super.actionType = ActionType.KEYBOARD_INPUT;
+        
+        
+        var nativeEventType = nativeKeyEvent.getID();
+        this.keyActionType = switch (nativeEventType) {
+            case NativeKeyEvent.NATIVE_KEY_PRESSED -> KeyActionType.PRESS;
+            case NativeKeyEvent.NATIVE_KEY_RELEASED -> KeyActionType.RELEASE;
+            default -> {
+                logger.log(
+                        Level.FATAL
+                        , "Invalid NativeKeyEvent id value: {}({}). Expecting NATIVE_KEY_PRESSED({}) or NATIVE_KEY_RELEASED({})"
+                );
+            }
+        };
+
     }
-    enum KeyType{
-        ALPHANUMERICAL
-        ,CONTROL
-        ,FUNCTIONAL
-        ,NAVIGATIONAL
-        ,ESPECIAL
-        ,OTHER
+
+    @Override
+    protected void replayAction(Robot robot) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    protected enum KeyActionType {
+        PRESS, RELEASE
+    }
+
+    protected enum KeyType {
+        ALPHANUMERICAL, CONTROL, FUNCTIONAL, NAVIGATIONAL, ESPECIAL, OTHER
     }
 }
