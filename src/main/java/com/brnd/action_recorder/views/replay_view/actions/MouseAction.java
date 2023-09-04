@@ -17,13 +17,12 @@
 package com.brnd.action_recorder.views.replay_view.actions;
 
 public abstract class MouseAction extends ReplayableAction{
-  public MouseAction(){
+  protected MouseAction(){
     super.actionType = ActionType.MOUSE_INPUT;
   }
     protected int mouseX;
     protected int mouseY;
     protected MouseEventType mouseEventType;
-    protected abstract void setActionCoordinates(int x, int y);
     protected enum MouseEventType {
         BUTTON_PRESS, BUTTON_RELEASE, SCROLL, MOTION
     }

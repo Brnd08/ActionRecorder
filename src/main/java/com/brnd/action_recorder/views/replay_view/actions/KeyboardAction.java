@@ -17,7 +17,9 @@
 package com.brnd.action_recorder.views.replay_view.actions;
 
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
-import java.awt.Robot;
+
+import java.awt.*;
+
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -31,7 +33,6 @@ public class KeyboardAction extends ReplayableAction {
     public KeyboardAction(NativeKeyEvent nativeKeyEvent) {
         super.actionType = ActionType.KEYBOARD_INPUT;
         
-        
         var nativeEventType = nativeKeyEvent.getID();
         this.keyActionType = switch (nativeEventType) {
             case NativeKeyEvent.NATIVE_KEY_PRESSED -> KeyActionType.PRESS;
@@ -39,16 +40,18 @@ public class KeyboardAction extends ReplayableAction {
             default -> {
                 logger.log(
                         Level.FATAL
-                        , "Invalid NativeKeyEvent id value: {}({}). Expecting NATIVE_KEY_PRESSED({}) or NATIVE_KEY_RELEASED({})"
+                        , "Invalid NativeKeyEvent id value: ({}). Expecting NATIVE_KEY_PRESSED({}) or NATIVE_KEY_RELEASED({})"
+                        , nativeEventType, NativeKeyEvent.NATIVE_KEY_PRESSED, NativeKeyEvent.NATIVE_KEY_RELEASED
                 );
-            };
+                throw new IllegalStateException("Unexpected value: " + nativeEventType);
+            }
         };
 
     }
 
     @Override
     protected void replayAction(Robot robot) {
-        throw new UnsupportedOperationException("Not supported yet."); 
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     protected enum KeyActionType {
