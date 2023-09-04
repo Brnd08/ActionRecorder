@@ -14,12 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package com.brnd.action_recorder.views.replay_view.actions;
+
 import com.github.kwhat.jnativehook.mouse.*;
 
 public class ScrollAction extends MouseAction {
-  public ScrollAction (NativeMouseEvent NativeMouseEvent){
-    super.mouseEventType = MouseEventType.SCROLL;
+
+    public ScrollAction(NativeMouseEvent NativeMouseEvent) {
+        super.mouseEventType = MouseEventType.SCROLL;
         var nativeEventType = NativeMouseEvent.getID();
-        };
-  }
+    }
 }
+

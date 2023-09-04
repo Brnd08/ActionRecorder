@@ -41,7 +41,7 @@ public class KeyboardAction extends ReplayableAction {
                         Level.FATAL
                         , "Invalid NativeKeyEvent id value: {}({}). Expecting NATIVE_KEY_PRESSED({}) or NATIVE_KEY_RELEASED({})"
                 );
-            }
+            };
         };
 
     }
