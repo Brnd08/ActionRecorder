@@ -24,6 +24,6 @@ public abstract class MouseAction extends ReplayableAction{
     protected int mouseY;
     protected MouseEventType mouseEventType;
     protected enum MouseEventType {
-        BUTTON_PRESS, BUTTON_RELEASE, SCROLL, MOTION
+        BUTTON_CLICK, SCROLL, MOTION
     }
 }
