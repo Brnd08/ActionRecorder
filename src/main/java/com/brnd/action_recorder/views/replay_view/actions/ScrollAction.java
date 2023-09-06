@@ -16,7 +16,6 @@
  */
 package com.brnd.action_recorder.views.replay_view.actions;
 
-import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.github.kwhat.jnativehook.mouse.*;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
@@ -26,6 +25,20 @@ import java.awt.*;
 
 public class ScrollAction extends MouseAction {
     private static final Logger logger = LogManager.getLogger(ScrollAction.class);
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("ScrollAction{");
+        sb.append("scrollDirection=").append(scrollDirection);
+        sb.append(", whellScroll=").append(whellScroll);
+        sb.append(", mouseX=").append(mouseX);
+        sb.append(", mouseY=").append(mouseY);
+        sb.append(", mouseEventType=").append(mouseEventType);
+        sb.append(", actionType=").append(actionType);
+        sb.append('}');
+        return sb.toString();
+    }
+
     private final ScrollDirection scrollDirection;
     private final int whellScroll;
 
@@ -52,11 +65,11 @@ public class ScrollAction extends MouseAction {
     }
 
     @Override
-    protected void replayAction(Robot robot) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void replayAction(Robot robot) {
+        logger.log(Level.ALL, "Unimplemented functionality replayAction.");
     }
     
-    private enum ScrollDirection{
+    public enum ScrollDirection{
         VERTICAL_POSITIVE, VERTICAL_NEGATIVE, HORIZONTAL_POSITIVE, HORIZONTAL_NEGATIVE
     }
 }

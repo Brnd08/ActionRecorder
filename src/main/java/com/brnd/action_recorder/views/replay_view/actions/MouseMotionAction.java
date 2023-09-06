@@ -25,6 +25,18 @@ import java.awt.*;
 
 public class MouseMotionAction extends MouseAction {
     private static final Logger logger = LogManager.getLogger(MouseMotionAction.class);
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("MouseMotionAction{");
+        sb.append("mouseX=").append(mouseX);
+        sb.append(", mouseY=").append(mouseY);
+        sb.append(", mouseEventType=").append(mouseEventType);
+        sb.append(", actionType=").append(actionType);
+        sb.append('}');
+        return sb.toString();
+    }
+
     public MouseMotionAction(NativeMouseEvent nativeMouseEvent) {
         var nativeMouseEventId = nativeMouseEvent.getID();
         if(nativeMouseEventId== NativeMouseEvent.NATIVE_MOUSE_MOVED){
@@ -42,7 +54,7 @@ public class MouseMotionAction extends MouseAction {
     }
 
     @Override
-    protected void replayAction(Robot robot) {
+    public void replayAction(Robot robot) {
         logger.log(Level.ALL, "Unimplemented functionality replayAction.");
     }
 }

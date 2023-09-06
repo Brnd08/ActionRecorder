@@ -27,6 +27,17 @@ import org.apache.logging.log4j.Logger;
 public class KeyboardAction extends ReplayableAction {
 
     private static final Logger logger = LogManager.getLogger(KeyboardAction.class);
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("KeyboardAction{");
+        sb.append("keyActionType=").append(keyActionType);
+        sb.append(", keyType=").append(keyType);
+        sb.append(", actionType=").append(actionType);
+        sb.append('}');
+        return sb.toString();
+    }
+
     protected KeyActionType keyActionType;
     protected KeyType keyType;
 
@@ -50,8 +61,8 @@ public class KeyboardAction extends ReplayableAction {
     }
 
     @Override
-    protected void replayAction(Robot robot) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void replayAction(Robot robot) {
+        logger.log(Level.ALL, "Unimplemented functionality replayAction.");
     }
 
     protected enum KeyActionType {

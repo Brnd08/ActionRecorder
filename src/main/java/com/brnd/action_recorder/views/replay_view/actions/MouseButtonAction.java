@@ -28,6 +28,19 @@ public class MouseButtonAction extends MouseAction {
     private final ButtonActionType buttonActionType;
     private final int buttonId;
 
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("MouseButtonAction{");
+        sb.append("buttonActionType=").append(buttonActionType);
+        sb.append(", buttonId=").append(buttonId);
+        sb.append(", mouseX=").append(mouseX);
+        sb.append(", mouseY=").append(mouseY);
+        sb.append(", mouseEventType=").append(mouseEventType);
+        sb.append(", actionType=").append(actionType);
+        sb.append('}');
+        return sb.toString();
+    }
+
     public MouseButtonAction(NativeMouseEvent nativeMouseEvent) {
         var nativeMouseEventId = nativeMouseEvent.getID();
         switch (nativeMouseEventId) {
@@ -35,7 +48,8 @@ public class MouseButtonAction extends MouseAction {
             case NativeMouseEvent.NATIVE_MOUSE_RELEASED -> this.buttonActionType = ButtonActionType.BUTTON_RELEASE;
             default -> {
                 logger.log(Level.ERROR
-                        , "Unexpected NativeMouseEvent, expecting NativeMouseEvent.NATIVE_MOUSE_PRESSED:({}) or NativeMouseEvent.NATIVE_MOUSE_RELEASED:({}) and got: ({}) instead "
+                        , "Unexpected NativeMouseEvent, expecting NativeMouseEvent.NATIVE_MOUSE_PRESSED:({}) or" +
+                            " NativeMouseEvent.NATIVE_MOUSE_RELEASED:({}) and got: ({}) instead "
                         , NativeMouseEvent.NATIVE_MOUSE_PRESSED, NativeMouseEvent.NATIVE_MOUSE_RELEASED, nativeMouseEventId
                 );
                 throw new UnsupportedOperationException("Only mouse presses and releases are admitted.");
@@ -48,12 +62,12 @@ public class MouseButtonAction extends MouseAction {
     }
 
     private int parseButtonId(int nativeMouseButtonId) {
-        logger.log(Level.ALL, "Unimplemented method functionality parseButtonId, returning given buttonId: {}", nativeMouseButtonId);
+        logger.log(Level.ALL, "Unimplemented method functionality parseButtonId, using given buttonId: {}", nativeMouseButtonId);
         return nativeMouseButtonId;
     }
 
     @Override
-    protected void replayAction(Robot robot) {
+    public void replayAction(Robot robot) {
         logger.log(Level.ALL, "Unimplemented functionality replayAction.");
     }
 

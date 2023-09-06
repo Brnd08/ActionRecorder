@@ -20,7 +20,7 @@ import java.awt.*;
 
 public abstract class ReplayableAction{
     protected ActionType actionType;
-    protected abstract void replayAction(Robot robot);
+    public abstract void replayAction(Robot robot);
 
     enum ActionType {
         MOUSE_INPUT
