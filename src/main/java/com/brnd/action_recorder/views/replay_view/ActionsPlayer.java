@@ -23,13 +23,14 @@ import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 
 import com.github.kwhat.jnativehook.mouse.NativeMouseEvent;
 import com.github.kwhat.jnativehook.mouse.NativeMouseWheelEvent;
-import javafx.concurrent.Task;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.awt.*;
-import java.util.List;
+import java.awt.event.InputEvent;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -37,21 +38,40 @@ import java.util.concurrent.TimeUnit;
 /**
  * Contains methods and functionalities to reproduce a list of InputEvents
  */
-public class RecordingPlayer {
-    private static final Logger logger = LogManager.getLogger(RecordingPlayer.class);
+public class ActionsPlayer {
+    private static final Logger logger = LogManager.getLogger(ActionsPlayer.class);
     private final ScheduledExecutorService actionsScheduler = Executors.newScheduledThreadPool(1);
     private final Robot robot;
+    private final Map<Long, ReplayableAction> replayableActions = new HashMap<>();
 
-    public RecordingPlayer(Recording recordingToPlay) throws AWTException {
+    public ActionsPlayer(Map<Long, NativeInputEvent> inputEventMap) throws AWTException {
         this.robot = new Robot();
-        recordingToPlay.getInputEvents().forEach(
+        inputEventMap.forEach(
                 (executionTime, recordedAction) -> {
-                    actionsScheduler.schedule(() -> {
-                        var replayableAction = this.parseReplayableAction(recordedAction);
-                        replayableAction.replayAction(robot);
-                    }, executionTime, TimeUnit.NANOSECONDS);
+                    var replayableAction = this.parseReplayableAction(recordedAction);
+                    this.replayableActions.put(executionTime, replayableAction);
+                    logger.log(Level.INFO, "New ReplayableAction processed. Execution Time: {}. Action: {}"
+                            , executionTime, replayableAction
+                    );
                 }
         );
+    }
+
+    public void startReplay(){
+        logger.log(Level.INFO, "Starting Actions Replay");
+        this.replayableActions.forEach(this::scheduleActionExecution);
+    }
+
+    public void stopReplay(){
+        logger.log(Level.INFO, "Unsupported functionality stopReplay");
+    }
+
+    private void scheduleActionExecution(long executionTime, ReplayableAction action) {
+        this.actionsScheduler.schedule(
+                () -> {
+                    action.replayAction(robot);
+                    logger.log(Level.TRACE, "Execute Action: {}. System time: {}", action, System.nanoTime());
+                }, executionTime, TimeUnit.NANOSECONDS);
     }
 
     private ReplayableAction parseReplayableAction(NativeInputEvent nativeEvent) {
@@ -60,11 +80,9 @@ public class RecordingPlayer {
             parsedAction = new ScrollAction(mouseWheelEvent);
         } else if (nativeEvent instanceof NativeKeyEvent keyEvent) { // keyboard events
             parsedAction = new KeyboardAction(keyEvent);
-        } else { // mouse clicks and movements
-            var mouseEvent = (NativeMouseEvent) nativeEvent;
-            parsedAction =
-                    (mouseEvent.getID() == NativeMouseEvent.NATIVE_MOUSE_MOVED) ?
-                            new MouseMotionAction(mouseEvent) : new MouseButtonAction(mouseEvent);
+        } else if (nativeEvent instanceof NativeMouseEvent mouseEvent) { // mouse clicks and movements
+            parsedAction = (mouseEvent.getID() == NativeMouseEvent.NATIVE_MOUSE_MOVED) ?
+                    new MouseMotionAction(mouseEvent) : new MouseButtonAction(mouseEvent);
         }
         return parsedAction;
     }
