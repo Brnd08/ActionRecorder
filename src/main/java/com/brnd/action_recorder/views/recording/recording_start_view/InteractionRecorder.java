@@ -40,10 +40,11 @@ public class InteractionRecorder {
     private final MouseWheelListener mouseWheelListener = new MouseWheelListener();
     private final MouseClicksListener mouseClicksListener = new MouseClicksListener();
     private final KeyBoardListener keyboardListener = new KeyBoardListener();
-    private long pauseStartTime = 0l;
+    private long pauseStartTime = 0L;
     private RecorderConfiguration recordConfiguration;
     private Recording recording;
-    private Long eventsTimeStampOffset = 0l;
+    private Long eventsTimeStampOffset = 0L;
+    private long recordingStartTime;
 
     /**
      * Instantiates a InteractionRecorder object
@@ -56,9 +57,9 @@ public class InteractionRecorder {
      * Starts a new recording using the given RecorderConfiguration
      *
      * @param recordConfiguration The recorder configuration specifying the
-     * events to be catch
+     *                            events to be catch
      * @throws NativeHookException If a problem occurs while enabling Native
-     * Hook
+     *                             Hook
      */
     public void startRecording(RecorderConfiguration recordConfiguration) throws NativeHookException {
         GlobalScreen.setEventDispatcher(new SwingDispatchService());// Force JNativeHook to use the Swing thread
@@ -66,6 +67,7 @@ public class InteractionRecorder {
 
         logger.log(Level.TRACE, "Creating new Recording");
         this.recording = new Recording();
+        this.recordingStartTime = this.recording.getRecordingStartTime();
 
         this.recordConfiguration = recordConfiguration;
         logger.log(Level.TRACE, "Loading configuration: {}", this.recordConfiguration);
@@ -96,7 +98,7 @@ public class InteractionRecorder {
     public void pauseRecording(long pauseTime) {
         this.removeListeners();
         this.pauseStartTime = pauseTime;
-        logger.log(Level.INFO, "Pause recording at {}", pauseTime/1_000_000_000.0f);
+        logger.log(Level.INFO, "Pause recording at {}", pauseTime / 1_000_000_000.0f);
     }
 
     /**
@@ -108,7 +110,7 @@ public class InteractionRecorder {
         this.loadRecordConfiguration();
         this.eventsTimeStampOffset = resumeTime - this.pauseStartTime;
         logger.log(Level.INFO, "Resume recording at {}, the recording remained paused for {} seconds"
-                , resumeTime/1_000_000_000.0f, this.eventsTimeStampOffset/1_000_000_000.0f);
+                , resumeTime / 1_000_000_000.0f, this.eventsTimeStampOffset / 1_000_000_000.0f);
     }
 
     /**
@@ -117,7 +119,7 @@ public class InteractionRecorder {
      * startRecording() method
      *
      * @throws NullPointerException if the recordConfiguration object has not
-     * been set
+     *                              been set
      */
     private void loadRecordConfiguration() {
         if (recordConfiguration == null) {
@@ -167,7 +169,7 @@ public class InteractionRecorder {
      */
     public Recording getlastRecording() {
         return recording;
-    }    
+    }
 
     /**
      * This class implements methods to catch Keyboard related events such as
@@ -297,13 +299,15 @@ public class InteractionRecorder {
      */
     private void addNativeEventToRecording(NativeInputEvent event) {
         try {
-                long eventTimeStamp = System.nanoTime() - this.eventsTimeStampOffset;                
-                this.recording.getInputEvents().put(eventTimeStamp, event);// adds the event and the current execution time
-                String paramString = event.paramString();
-                logger.log(Level.INFO, "Recorded : {}", paramString);
+            long eventTimeStamp = System.nanoTime() - this.eventsTimeStampOffset;
+            /* calculates the event timestamp relative to the recording start time */
+            var relativeTimeStamp = eventTimeStamp - recordingStartTime;
+            this.recording.getInputEvents().put(relativeTimeStamp, event); // Adds the event to recording events, with the specified time stamp
+            String paramString = event.paramString();
+            logger.log(Level.INFO, "Recorded : {}", paramString);
         } catch (NullPointerException nullPointerException) {
-                logger.log(Level.ERROR, "No available recording object to store events");
-                logger.log(Level.ERROR, nullPointerException);
+            logger.log(Level.ERROR, "No available recording object to store events");
+            logger.log(Level.ERROR, nullPointerException);
         }
     }
 }
