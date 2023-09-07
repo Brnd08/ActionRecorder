@@ -27,8 +27,8 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.awt.*;
-import java.awt.event.InputEvent;
+import java.awt.Robot;
+import java.awt.AWTException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executors;
@@ -36,7 +36,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Contains methods and functionalities to reproduce a list of InputEvents
+ * This class contains neeeded functionalities for actions reproducing 
  */
 public class ActionsPlayer {
     private static final Logger logger = LogManager.getLogger(ActionsPlayer.class);
@@ -44,12 +44,19 @@ public class ActionsPlayer {
     private final Robot robot;
     private final Map<Long, ReplayableAction> replayableActions = new HashMap<>();
 
+    /**
+     *
+     * Instantiates a new ActionPlayer object
+     *
+     * @param inputEventMap Map containing each action replay time as key and its related NativeInputEvent as value.
+     * @throws AWTException If the ActionPlayer could not be created due to application permissions
+     */
     public ActionsPlayer(Map<Long, NativeInputEvent> inputEventMap) throws AWTException {
         this.robot = new Robot();
         inputEventMap.forEach(
                 (executionTime, recordedAction) -> {
-                    var replayableAction = this.parseReplayableAction(recordedAction);
-                    this.replayableActions.put(executionTime, replayableAction);
+                    var replayableAction = this.parseReplayableAction(recordedAction); // convert each NativeInputEvent to a ReplayableAction object
+                    this.replayableActions.put(executionTime, replayableAction); // adds each action execution time an its related ReplayableAction
                     logger.log(Level.INFO, "New ReplayableAction processed. Execution Time: {}. Action: {}"
                             , executionTime, replayableAction
                     );
@@ -57,15 +64,27 @@ public class ActionsPlayer {
         );
     }
 
+    /*
+     * Starts actions replaying process
+     */
     public void startReplay(){
         logger.log(Level.INFO, "Starting Actions Replay");
         this.replayableActions.forEach(this::scheduleActionExecution);
     }
 
+    /**
+     * Stops the replaying of the actions which has not been already executed
+     */
     public void stopReplay(){
         logger.log(Level.INFO, "Unsupported functionality stopReplay");
     }
 
+    /**
+     * Schedules the given ReplayableAction for execution after given time
+     *
+     * @param executionTime the time the recording will wait from schedule time
+     * @param action The ReplayableAction to be scheduled
+     */
     private void scheduleActionExecution(long executionTime, ReplayableAction action) {
         this.actionsScheduler.schedule(
                 () -> {
@@ -74,6 +93,10 @@ public class ActionsPlayer {
                 }, executionTime, TimeUnit.NANOSECONDS);
     }
 
+    /**
+     * Returns the corresponding ReplayableAction of the given NativeInputEvent
+     * @param nativeEvent The NativeInputEvent to be parsed
+     */
     private ReplayableAction parseReplayableAction(NativeInputEvent nativeEvent) {
         ReplayableAction parsedAction = null;
         if (nativeEvent instanceof NativeMouseWheelEvent mouseWheelEvent) { // scroll events
