@@ -18,13 +18,23 @@ package com.brnd.action_recorder.views.replay_view.actions;
 
 import java.awt.*;
 
+/**
+ * Represents an user-computer interaction which can be reproduced by the program
+ */
 public abstract class ReplayableAction{
     protected ActionType actionType;
+
+    /**
+     * Executes needed steps to reproduce the ReplayableAction
+     * @param robot an Robot object which will be used to reproduce the action
+     */
     public abstract void replayAction(Robot robot);
 
+    /**
+     * Constants for each type of ReplayableAction types.
+     */
     enum ActionType {
         MOUSE_INPUT
         , KEYBOARD_INPUT
-        , MOUSE_MOVEMENT
     }
 }

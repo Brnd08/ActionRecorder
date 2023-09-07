@@ -16,14 +16,25 @@
  */
 package com.brnd.action_recorder.views.replay_view.actions;
 
+/**
+ * Represents a ReplayableAction which is related to the system mouse
+ */
 public abstract class MouseAction extends ReplayableAction{
+  /**
+   * Instantiates a new ReplayableAction type object with MOUSE_INPUT as it
+   * ActionType
+   */
   protected MouseAction(){
     super.actionType = ActionType.MOUSE_INPUT;
   }
     protected int mouseX;
     protected int mouseY;
     protected MouseEventType mouseEventType;
-    protected enum MouseEventType {
+
+  /**
+   * Constants describing the MouseAction Type
+   */
+  protected enum MouseEventType {
         BUTTON_CLICK, SCROLL, MOTION
     }
 }

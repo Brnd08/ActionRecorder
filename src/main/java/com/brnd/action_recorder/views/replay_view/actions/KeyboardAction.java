@@ -24,6 +24,9 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * A replayable user-computer interaction representing a keyboard key press or release
+ */
 public class KeyboardAction extends ReplayableAction {
 
     private static final Logger logger = LogManager.getLogger(KeyboardAction.class);
@@ -41,14 +44,18 @@ public class KeyboardAction extends ReplayableAction {
     protected KeyActionType keyActionType;
     protected KeyType keyType;
 
-    public KeyboardAction(NativeKeyEvent nativeKeyEvent) {
-        super.actionType = ActionType.KEYBOARD_INPUT;
-        
-        var nativeEventType = nativeKeyEvent.getID();
-        this.keyActionType = switch (nativeEventType) {
+    /**
+     * Creates a new KeyboardAction from the given NativeInputEvent
+     * @param nativeKeyEvent A NativeKeyEvent representing either a key release or key press.
+     * @throws IllegalStateException if the given NativeKeyEvent is other event type than key press or release
+     */
+    public KeyboardAction(NativeKeyEvent nativeKeyEvent) throws IllegalStateException{
+        super.actionType = ActionType.KEYBOARD_INPUT; // sets the actionType to keyboard input
+        var nativeEventType = nativeKeyEvent.getID(); // gets the id of the given NativeKeyEvent
+        this.keyActionType = switch (nativeEventType) { // assign the key action type based on the event id
             case NativeKeyEvent.NATIVE_KEY_PRESSED -> KeyActionType.PRESS;
             case NativeKeyEvent.NATIVE_KEY_RELEASED -> KeyActionType.RELEASE;
-            default -> {
+            default -> { // if the id is different from a key press or key release event throws an IllegalStateException
                 logger.log(
                         Level.FATAL
                         , "Invalid NativeKeyEvent id value: ({}). Expecting NATIVE_KEY_PRESSED({}) or NATIVE_KEY_RELEASED({})"
@@ -60,15 +67,26 @@ public class KeyboardAction extends ReplayableAction {
 
     }
 
+    /**
+     * Executes needed steps to reproduce the KeyboardAction
+     *
+     * @param robot an Robot object which will be used to reproduce the action
+     */
     @Override
     public void replayAction(Robot robot) {
         logger.log(Level.ALL, "Unimplemented functionality replayAction.");
     }
 
+    /**
+     * Constants describing each KeyboardAction type
+     */
     protected enum KeyActionType {
         PRESS, RELEASE
     }
 
+    /**
+     * Enum describing the KeyboardActions key type
+     */
     protected enum KeyType {
         ALPHANUMERICAL, CONTROL, FUNCTIONAL, NAVIGATIONAL, ESPECIAL, OTHER
     }
