@@ -55,13 +55,14 @@ public class ScrollAction extends MouseAction {
         };
     }
 
+    /**
+     * Executes needed steps to reproduce this ScrollAction
+     *
+     * @param robot a Robot object which will be used to reproduce the action
+     */
     @Override
     public void replayAction(Robot robot) {
         logger.log(Level.ALL, "Unimplemented functionality replayAction.");
-    }
-    
-    public enum ScrollDirection{
-        VERTICAL_POSITIVE, VERTICAL_NEGATIVE, HORIZONTAL_POSITIVE, HORIZONTAL_NEGATIVE
     }
 
     @Override
@@ -75,6 +76,33 @@ public class ScrollAction extends MouseAction {
         sb.append(", actionType=").append(actionType);
         sb.append('}');
         return sb.toString();
+    }
+
+    /**
+     * Constant Describing the a ScrollAction type
+     * @see #VERTICAL_NEGATIVE
+     * @see #VERTICAL_POSITIVE
+     * @see #HORIZONTAL_NEGATIVE
+     * @see #HORIZONTAL_POSITIVE
+     */
+    public enum ScrollDirection{
+        /**
+         * A vertical scroll from top to bottom
+         */
+        VERTICAL_POSITIVE,
+        /**
+         * A vertical scroll from bottom to top
+         */
+        VERTICAL_NEGATIVE,
+        /**
+         * A horizontal scroll from left to right
+         */
+        HORIZONTAL_POSITIVE,
+        /**
+         * An vertical scroll from right to left
+         */
+        HORIZONTAL_NEGATIVE
+
     }
 }
 
