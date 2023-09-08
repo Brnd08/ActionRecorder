@@ -28,22 +28,9 @@ import org.apache.logging.log4j.Logger;
  * A replayable user-computer interaction representing a keyboard key press or release
  */
 public class KeyboardAction extends ReplayableAction {
-
     private static final Logger logger = LogManager.getLogger(KeyboardAction.class);
-
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("KeyboardAction{");
-        sb.append("keyActionType=").append(keyActionType);
-        sb.append(", keyType=").append(keyType);
-        sb.append(", actionType=").append(actionType);
-        sb.append('}');
-        return sb.toString();
-    }
-
-    protected KeyActionType keyActionType;
-    protected KeyType keyType;
-
+    private final KeyActionType keyActionType;
+    private final KeyType keyType;
     /**
      * Creates a new KeyboardAction from the given NativeInputEvent
      * @param nativeKeyEvent A NativeKeyEvent representing either a key release or key press.
@@ -51,6 +38,7 @@ public class KeyboardAction extends ReplayableAction {
      */
     public KeyboardAction(NativeKeyEvent nativeKeyEvent) throws IllegalStateException{
         super.actionType = ActionType.KEYBOARD_INPUT; // sets the actionType to keyboard input
+        this.keyType = this.getKeyType(nativeKeyEvent);
         var nativeEventType = nativeKeyEvent.getID(); // gets the id of the given NativeKeyEvent
         this.keyActionType = switch (nativeEventType) { // assign the key action type based on the event id
             case NativeKeyEvent.NATIVE_KEY_PRESSED -> KeyActionType.PRESS;
@@ -66,6 +54,11 @@ public class KeyboardAction extends ReplayableAction {
         };
 
     }
+    
+    private KeyType getKeyType(NativeKeyEvent keyEvent){
+        logger.log(Level.ALL, "Unimplemented functionality getKeyType(NativeKeyEvent)");
+        return KeyType.ALPHANUMERICAL;
+    }
 
     /**
      * Executes needed steps to reproduce the KeyboardAction
@@ -77,20 +70,38 @@ public class KeyboardAction extends ReplayableAction {
         logger.log(Level.ALL, "Unimplemented functionality replayAction.");
     }
 
-    /**
-     * Constants describing each KeyboardAction type
-     */
-    protected enum KeyActionType {
-        PRESS, RELEASE
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("KeyboardAction{");
+        sb.append("keyActionType=").append(keyActionType);
+        sb.append(", keyType=").append(keyType);
+        sb.append(", actionType=").append(actionType);
+        sb.append('}');
+        return sb.toString();
     }
 
+    /**
+     * Constants describing the available KeyboardAction types
+     * @see #PRESS
+     * @see #RELEASE
+     */
+    protected enum KeyActionType {
+        /**
+         * Key actions describing a key press
+         */
+        PRESS,
+        /**
+         * Key actions describing a key release
+         */
+        RELEASE
+    }
     /**
      * Enum describing the KeyboardActions key type
      * @see #ALPHANUMERICAL
      * @see #CONTROL
      * @see #FUNCTIONAL
      * @see #NAVIGATIONAL
-     * @see #ESPECIAL
+     * @see #SPECIAL
      * @see #OTHER
      */
     protected enum KeyType {
@@ -98,10 +109,31 @@ public class KeyboardAction extends ReplayableAction {
          * An alphanumerical (numbers and letters only) key
          */
         ALPHANUMERICAL,
+        /**
+         * A control key (such as CTRL, ALT, ALT-GR, ESC, etc)
+         */
         CONTROL,
+        /**
+         * A Functional key including they keys from F1 up to F12
+         */
         FUNCTIONAL,
+        /**
+         * A navigational key are used to navigate through the contents of
+         * web pages or documents (start, end, av-pag, re-pag, insert, delete, and key arrows).
+         */
         NAVIGATIONAL,
-        ESPECIAL,
+        /**
+         * Keys with special function such as Caps-Lock, Tab, Num-Lock, etc
+         */
+        SPECIAL,
+        /**
+         * Keys not included in other key types
+         * @see #SPECIAL
+         * @see #FUNCTIONAL
+         * @see #CONTROL
+         * @see #ALPHANUMERICAL
+         * @see #NAVIGATIONAL
+         */
         OTHER
     }
 }
