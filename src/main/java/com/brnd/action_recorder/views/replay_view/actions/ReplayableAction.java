@@ -21,20 +21,30 @@ import java.awt.*;
 /**
  * Represents an user-computer interaction which can be reproduced by the program
  */
-public abstract class ReplayableAction{
+public abstract class ReplayableAction {
     protected ActionType actionType;
 
     /**
      * Executes needed steps to reproduce the ReplayableAction
+     *
      * @param robot an Robot object which will be used to reproduce the action
      */
     public abstract void replayAction(Robot robot);
 
     /**
      * Constants for each type of ReplayableAction types.
+     *
+     * @see #MOUSE_INPUT
+     * @see #KEYBOARD_INPUT
      */
     enum ActionType {
-        MOUSE_INPUT
-        , KEYBOARD_INPUT
+        /**
+         * Action type for mouse interactions
+         */
+        MOUSE_INPUT,
+        /**
+         * Action type for keyboard related interactions
+         */
+        KEYBOARD_INPUT
     }
 }
