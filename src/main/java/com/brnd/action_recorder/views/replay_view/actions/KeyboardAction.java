@@ -86,8 +86,22 @@ public class KeyboardAction extends ReplayableAction {
 
     /**
      * Enum describing the KeyboardActions key type
+     * @see #ALPHANUMERICAL
+     * @see #CONTROL
+     * @see #FUNCTIONAL
+     * @see #NAVIGATIONAL
+     * @see #ESPECIAL
+     * @see #OTHER
      */
     protected enum KeyType {
-        ALPHANUMERICAL, CONTROL, FUNCTIONAL, NAVIGATIONAL, ESPECIAL, OTHER
+        /**
+         * An alphanumerical (numbers and letters only) key
+         */
+        ALPHANUMERICAL,
+        CONTROL,
+        FUNCTIONAL,
+        NAVIGATIONAL,
+        ESPECIAL,
+        OTHER
     }
 }
