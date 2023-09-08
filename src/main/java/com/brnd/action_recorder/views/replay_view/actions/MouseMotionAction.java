@@ -29,22 +29,18 @@ public class MouseMotionAction extends MouseAction {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("MouseMotionAction{");
-        sb.append("mouseX=").append(mouseX);
-        sb.append(", mouseY=").append(mouseY);
-        sb.append(", mouseEventType=").append(mouseEventType);
+        sb.append("mouseX=").append(super.getMouseX());
+        sb.append(", mouseY=").append(super.getMouseY());
+        sb.append(", mouseEventType=").append(super.getMouseEventType());
         sb.append(", actionType=").append(actionType);
         sb.append('}');
         return sb.toString();
     }
 
     public MouseMotionAction(NativeMouseEvent nativeMouseEvent) {
+        super(MouseEventType.MOTION, nativeMouseEvent.getX(), nativeMouseEvent.getY());
         var nativeMouseEventId = nativeMouseEvent.getID();
-        if(nativeMouseEventId== NativeMouseEvent.NATIVE_MOUSE_MOVED){
-            super.mouseEventType = MouseEventType.MOTION;
-            super.mouseX = nativeMouseEvent.getX();
-            super.mouseY = nativeMouseEvent.getY();
-
-        }else{
+        if (nativeMouseEventId != NativeMouseEvent.NATIVE_MOUSE_MOVED) {
             logger.log(Level.ERROR
                     , "Unexpected NativeMouseEvent id, expecting NativeMouseEvent.NATIVE_MOUSE_MOVED:({}) and got: ({}) instead"
                     , NativeMouseEvent.NATIVE_MOUSE_MOVED, nativeMouseEventId
