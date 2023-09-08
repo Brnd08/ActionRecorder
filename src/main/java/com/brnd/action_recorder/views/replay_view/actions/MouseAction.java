@@ -19,22 +19,67 @@ package com.brnd.action_recorder.views.replay_view.actions;
 /**
  * Represents a ReplayableAction which is related to the system mouse
  */
-public abstract class MouseAction extends ReplayableAction{
-  /**
-   * Instantiates a new ReplayableAction type object with MOUSE_INPUT as it
-   * ActionType
-   */
-  protected MouseAction(){
-    super.actionType = ActionType.MOUSE_INPUT;
-  }
-    protected int mouseX;
-    protected int mouseY;
-    protected MouseEventType mouseEventType;
+public abstract class MouseAction extends ReplayableAction {
+    private final int mouseX;
+    private final int mouseY;
+    private final MouseEventType mouseEventType;
+
+    /**
+     * Instantiates a new ReplayableAction type object with MOUSE_INPUT as it
+     * ActionType
+     * @param mouseEventType a MouseAction.MouseEventType describing the MouseAction type.
+     * @param eventX the mouse X coordinate in which the action will be executed
+     * @param eventY the mouse Y coordinate in which the action will be executed
+     */
+    protected MouseAction(MouseEventType mouseEventType, int eventX, int eventY) {
+        super.actionType = ActionType.MOUSE_INPUT;
+        this.mouseEventType = mouseEventType;
+        this.mouseX = eventX;
+        this.mouseY = eventY;
+    }
 
   /**
-   * Constants describing the MouseAction Type
+   * Sets the X screen coordinate in which this MouseAction will be executed
+   * @return the screen X coordinate as int
    */
-  protected enum MouseEventType {
-        BUTTON_CLICK, SCROLL, MOTION
+  public int getMouseX() {
+        return mouseX;
+    }
+
+  /**
+   * Gets the Y screen coordinate where this MouseAction will be executed
+   * @return the screen Y coordinate as int
+   */
+  public int getMouseY() {
+        return mouseY;
+    }
+
+  /**
+   * The type of this MouseAction, it can be any of the declared constants in {@link MouseEventType}
+   * @return the MouseEventType corresponding to this MouseAction object
+   */
+  public MouseEventType getMouseEventType() {
+        return mouseEventType;
+    }
+
+    /**
+     * Constants describing the available types for {@link MouseAction} objects.
+     * @see #MOTION
+     * @see #BUTTON_CLICK
+     * @see #SCROLL
+     */
+    protected enum MouseEventType {
+      /**
+       * A {@link MouseAction} type describing a mouse press or release.
+       */
+        BUTTON_CLICK,
+      /**
+       * A {@link MouseAction} type describing a mouse scroll.
+       */
+      SCROLL,
+      /**
+       * A {@link MouseAction} type describing a mouse movement.
+       */
+      MOTION
     }
 }

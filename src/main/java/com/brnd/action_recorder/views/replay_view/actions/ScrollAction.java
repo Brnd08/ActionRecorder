@@ -23,30 +23,21 @@ import org.apache.logging.log4j.LogManager;
 
 import java.awt.*;
 
+/**
+ * A ReplayableAction representing a mouse scroll input
+ */
 public class ScrollAction extends MouseAction {
     private static final Logger logger = LogManager.getLogger(ScrollAction.class);
-
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("ScrollAction{");
-        sb.append("scrollDirection=").append(scrollDirection);
-        sb.append(", whellScroll=").append(whellScroll);
-        sb.append(", mouseX=").append(mouseX);
-        sb.append(", mouseY=").append(mouseY);
-        sb.append(", mouseEventType=").append(mouseEventType);
-        sb.append(", actionType=").append(actionType);
-        sb.append('}');
-        return sb.toString();
-    }
-
     private final ScrollDirection scrollDirection;
-    private final int whellScroll;
+    private final int wheelScroll;
 
+    /**
+     * Creates a new ScrollAction object using the given NativeInputEvent
+     * @param nativeMouseWheelEvent The NativeMouseWheelEvent to be used for the object instantiation
+     */
     public ScrollAction(NativeMouseWheelEvent nativeMouseWheelEvent) {
-        super.mouseEventType = MouseEventType.SCROLL;
-        super.mouseX = nativeMouseWheelEvent.getX();
-        super.mouseY = nativeMouseWheelEvent.getY();
-        this.whellScroll = nativeMouseWheelEvent.getScrollAmount();
+        super(MouseEventType.SCROLL, nativeMouseWheelEvent.getX(), nativeMouseWheelEvent.getY());
+        this.wheelScroll = nativeMouseWheelEvent.getScrollAmount();
 
         var wheelDirection = nativeMouseWheelEvent.getWheelDirection();
         var wheelRotation = nativeMouseWheelEvent.getWheelRotation();
@@ -71,6 +62,19 @@ public class ScrollAction extends MouseAction {
     
     public enum ScrollDirection{
         VERTICAL_POSITIVE, VERTICAL_NEGATIVE, HORIZONTAL_POSITIVE, HORIZONTAL_NEGATIVE
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("ScrollAction{");
+        sb.append("scrollDirection=").append(scrollDirection);
+        sb.append(", wheelScroll=").append(wheelScroll);
+        sb.append(", mouseX=").append(super.getMouseX());
+        sb.append(", mouseY=").append(super.getMouseY());
+        sb.append(", mouseEventType=").append(super.getMouseEventType());
+        sb.append(", actionType=").append(actionType);
+        sb.append('}');
+        return sb.toString();
     }
 }
 

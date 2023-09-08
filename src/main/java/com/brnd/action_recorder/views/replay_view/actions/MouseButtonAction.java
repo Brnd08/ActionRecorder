@@ -33,15 +33,17 @@ public class MouseButtonAction extends MouseAction {
         final StringBuilder sb = new StringBuilder("MouseButtonAction{");
         sb.append("buttonActionType=").append(buttonActionType);
         sb.append(", buttonId=").append(buttonId);
-        sb.append(", mouseX=").append(mouseX);
-        sb.append(", mouseY=").append(mouseY);
-        sb.append(", mouseEventType=").append(mouseEventType);
+        sb.append(", mouseX=").append(super.getMouseX());
+        sb.append(", mouseY=").append(super.getMouseY());
+        sb.append(", mouseEventType=").append(super.getMouseEventType());
         sb.append(", actionType=").append(actionType);
         sb.append('}');
         return sb.toString();
     }
 
     public MouseButtonAction(NativeMouseEvent nativeMouseEvent) {
+        super(MouseEventType.BUTTON_CLICK, nativeMouseEvent.getX(), nativeMouseEvent.getY());
+        this.buttonId = this.parseButtonId(nativeMouseEvent.getButton());
         var nativeMouseEventId = nativeMouseEvent.getID();
         switch (nativeMouseEventId) {
             case NativeMouseEvent.NATIVE_MOUSE_PRESSED -> this.buttonActionType = ButtonActionType.BUTTON_PRESS;
@@ -55,10 +57,6 @@ public class MouseButtonAction extends MouseAction {
                 throw new UnsupportedOperationException("Only mouse presses and releases are admitted.");
             }
         }
-        this.buttonId = this.parseButtonId(nativeMouseEvent.getButton());
-        super.mouseEventType = MouseEventType.BUTTON_CLICK;
-        super.mouseX = nativeMouseEvent.getX();
-        super.mouseY = nativeMouseEvent.getY();
     }
 
     private int parseButtonId(int nativeMouseButtonId) {
