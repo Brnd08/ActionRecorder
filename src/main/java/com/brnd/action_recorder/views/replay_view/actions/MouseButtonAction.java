@@ -28,23 +28,15 @@ public class MouseButtonAction extends MouseAction {
     private final ButtonActionType buttonActionType;
     private final int buttonId;
 
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("MouseButtonAction{");
-        sb.append("buttonActionType=").append(buttonActionType);
-        sb.append(", buttonId=").append(buttonId);
-        sb.append(", mouseX=").append(super.getMouseX());
-        sb.append(", mouseY=").append(super.getMouseY());
-        sb.append(", mouseEventType=").append(super.getMouseEventType());
-        sb.append(", actionType=").append(actionType);
-        sb.append('}');
-        return sb.toString();
-    }
-
+    /**
+     * Creates a new MouseButtonAction instance using the specified NativeMouseEvent
+     * @param nativeMouseEvent A NativeMouseEvent wrapping a mouse button press or release
+     * @throws IllegalStateException if the given NativeMouseEvent event type is other than a button press or release
+     */
     public MouseButtonAction(NativeMouseEvent nativeMouseEvent) {
         super(MouseEventType.BUTTON_CLICK, nativeMouseEvent.getX(), nativeMouseEvent.getY());
         this.buttonId = this.parseButtonId(nativeMouseEvent.getButton());
-        var nativeMouseEventId = nativeMouseEvent.getID();
+        var nativeMouseEventId = nativeMouseEvent.getID(); // gets the id of the mouse event
         switch (nativeMouseEventId) {
             case NativeMouseEvent.NATIVE_MOUSE_PRESSED -> this.buttonActionType = ButtonActionType.BUTTON_PRESS;
             case NativeMouseEvent.NATIVE_MOUSE_RELEASED -> this.buttonActionType = ButtonActionType.BUTTON_RELEASE;
@@ -59,17 +51,53 @@ public class MouseButtonAction extends MouseAction {
         }
     }
 
+    /**
+     * Parses the given button id from an NativeMouseButtonEvent to an id
+     * that can be used to identify this MouseButtonAction button
+     * @param nativeMouseButtonId
+     * @return
+     */
     private int parseButtonId(int nativeMouseButtonId) {
         logger.log(Level.ALL, "Unimplemented method functionality parseButtonId, using given buttonId: {}", nativeMouseButtonId);
         return nativeMouseButtonId;
     }
 
+    /**
+     * Executes needed steps to reproduce this MouseButtonAction
+     *
+     * @param robot a Robot object which will be used to reproduce the action
+     */
     @Override
     public void replayAction(Robot robot) {
         logger.log(Level.ALL, "Unimplemented functionality replayAction.");
     }
 
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("MouseButtonAction{");
+        sb.append("buttonActionType=").append(buttonActionType);
+        sb.append(", buttonId=").append(buttonId);
+        sb.append(", mouseX=").append(super.getMouseX());
+        sb.append(", mouseY=").append(super.getMouseY());
+        sb.append(", mouseEventType=").append(super.getMouseEventType());
+        sb.append(", actionType=").append(actionType);
+        sb.append('}');
+        return sb.toString();
+    }
+
+    /**
+     * Constant describing the button action type
+     * @see #BUTTON_PRESS
+     * @see #BUTTON_RELEASE
+     */
     private enum ButtonActionType {
-        BUTTON_PRESS, BUTTON_RELEASE
+        /**
+         * Action Type describing a mouse button press
+         */
+        BUTTON_PRESS,
+        /**
+         * Action Type describing a mouse button release
+         */
+        BUTTON_RELEASE
     }
 }
