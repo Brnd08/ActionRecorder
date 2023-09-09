@@ -26,6 +26,33 @@ import java.awt.*;
 public class MouseMotionAction extends MouseAction {
     private static final Logger logger = LogManager.getLogger(MouseMotionAction.class);
 
+    /**
+     * Creates a new MouseMotionAction instance using the specified NativeMouseEvent.
+     * @param nativeMouseEvent the NativeMouseEvent which will be used.
+     * @throws IllegalStateException if the given NativeMouseEvent has an ID different from NativeMouseEvent.NATIVE_MOUSE_MOVED
+     */
+    public MouseMotionAction(NativeMouseEvent nativeMouseEvent) throws IllegalStateException{
+        super(MouseEventType.MOTION, nativeMouseEvent.getX(), nativeMouseEvent.getY());
+        var nativeMouseEventId = nativeMouseEvent.getID();
+        if (nativeMouseEventId != NativeMouseEvent.NATIVE_MOUSE_MOVED) {
+            logger.log(Level.ERROR
+                    , "Unexpected NativeMouseEvent id, expecting NativeMouseEvent.NATIVE_MOUSE_MOVED:({}) and got: ({}) instead"
+                    , NativeMouseEvent.NATIVE_MOUSE_MOVED, nativeMouseEventId
+            );
+            throw new IllegalStateException("Only mouse presses and releases are admitted.");
+        }
+    }
+
+    /**
+     * Executes needed steps to reproduce this MouseMotionAction
+     *
+     * @param robot the Robot object which will be used to reproduce the action
+     */
+    @Override
+    public void replayAction(Robot robot) {
+        logger.log(Level.ALL, "Unimplemented functionality replayAction.");
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("MouseMotionAction{");
@@ -35,22 +62,5 @@ public class MouseMotionAction extends MouseAction {
         sb.append(", actionType=").append(actionType);
         sb.append('}');
         return sb.toString();
-    }
-
-    public MouseMotionAction(NativeMouseEvent nativeMouseEvent) {
-        super(MouseEventType.MOTION, nativeMouseEvent.getX(), nativeMouseEvent.getY());
-        var nativeMouseEventId = nativeMouseEvent.getID();
-        if (nativeMouseEventId != NativeMouseEvent.NATIVE_MOUSE_MOVED) {
-            logger.log(Level.ERROR
-                    , "Unexpected NativeMouseEvent id, expecting NativeMouseEvent.NATIVE_MOUSE_MOVED:({}) and got: ({}) instead"
-                    , NativeMouseEvent.NATIVE_MOUSE_MOVED, nativeMouseEventId
-            );
-            throw new UnsupportedOperationException("Only mouse presses and releases are admitted.");
-        }
-    }
-
-    @Override
-    public void replayAction(Robot robot) {
-        logger.log(Level.ALL, "Unimplemented functionality replayAction.");
     }
 }
