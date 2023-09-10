@@ -30,6 +30,7 @@ public class MouseButtonAction extends MouseAction {
 
     /**
      * Creates a new MouseButtonAction instance using the specified NativeMouseEvent
+     *
      * @param nativeMouseEvent A NativeMouseEvent wrapping a mouse button press or release
      * @throws IllegalStateException if the given NativeMouseEvent event type is other than a button press or release
      */
@@ -43,7 +44,7 @@ public class MouseButtonAction extends MouseAction {
             default -> {
                 logger.log(Level.ERROR
                         , "Unexpected NativeMouseEvent, expecting NativeMouseEvent.NATIVE_MOUSE_PRESSED:({}) or" +
-                            " NativeMouseEvent.NATIVE_MOUSE_RELEASED:({}) and got: ({}) instead "
+                                " NativeMouseEvent.NATIVE_MOUSE_RELEASED:({}) and got: ({}) instead "
                         , NativeMouseEvent.NATIVE_MOUSE_PRESSED, NativeMouseEvent.NATIVE_MOUSE_RELEASED, nativeMouseEventId
                 );
                 throw new UnsupportedOperationException("Only mouse presses and releases are admitted.");
@@ -54,8 +55,9 @@ public class MouseButtonAction extends MouseAction {
     /**
      * Parses the given button id from an NativeMouseButtonEvent to an id
      * that can be used to identify this MouseButtonAction button
-     * @param nativeMouseButtonId
-     * @return
+     *
+     * @param nativeMouseButtonId the id of the NativeInputEvent
+     * @return the parsed button id for Robot.mousePress() or Robot.mouseRelease() methods as int.
      */
     private int parseButtonId(int nativeMouseButtonId) {
         logger.log(Level.ALL, "Unimplemented method functionality parseButtonId, using given buttonId: {}", nativeMouseButtonId);
@@ -69,7 +71,13 @@ public class MouseButtonAction extends MouseAction {
      */
     @Override
     public void replayAction(Robot robot) {
-        logger.log(Level.ALL, "Unimplemented functionality replayAction.");
+        logger.log(Level.ALL, "Executing action: {}.", this);
+        super.positionMouse(robot); // positions the mouse cursor at the action coordinates
+        if (this.buttonActionType.equals(ButtonActionType.BUTTON_PRESS)) {// button press
+            robot.mousePress(this.buttonId);
+        } else {
+            robot.mouseRelease(this.buttonId);// button release
+        }
     }
 
     @Override
@@ -87,6 +95,7 @@ public class MouseButtonAction extends MouseAction {
 
     /**
      * Constant describing the button action type
+     *
      * @see #BUTTON_PRESS
      * @see #BUTTON_RELEASE
      */
