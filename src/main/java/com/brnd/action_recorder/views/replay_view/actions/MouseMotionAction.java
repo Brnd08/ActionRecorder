@@ -46,11 +46,12 @@ public class MouseMotionAction extends MouseAction {
     /**
      * Executes needed steps to reproduce this MouseMotionAction
      *
-     * @param robot the Robot object which will be used to reproduce the action
+     * @param robot a Robot object which will be used to reproduce the action
      */
     @Override
     public void replayAction(Robot robot) {
-        logger.log(Level.ALL, "Unimplemented functionality replayAction.");
+        logger.log(Level.ALL, "Executing action: {}.", this);
+        this.positionMouse(robot);
     }
 
     @Override
