@@ -16,6 +16,8 @@
  */
 package com.brnd.action_recorder.views.replay_view.actions;
 
+import java.awt.*;
+
 /**
  * Represents a ReplayableAction which is related to the system mouse
  */
@@ -27,9 +29,10 @@ public abstract class MouseAction extends ReplayableAction {
     /**
      * Instantiates a new ReplayableAction type object with MOUSE_INPUT as it
      * ActionType
+     *
      * @param mouseEventType a MouseAction.MouseEventType describing the MouseAction type.
-     * @param eventX the mouse X coordinate in which the action will be executed
-     * @param eventY the mouse Y coordinate in which the action will be executed
+     * @param eventX         the mouse X coordinate in which the action will be executed
+     * @param eventY         the mouse Y coordinate in which the action will be executed
      */
     protected MouseAction(MouseEventType mouseEventType, int eventX, int eventY) {
         super.actionType = ActionType.MOUSE_INPUT;
@@ -38,48 +41,62 @@ public abstract class MouseAction extends ReplayableAction {
         this.mouseY = eventY;
     }
 
-  /**
-   * Sets the X screen coordinate in which this MouseAction will be executed
-   * @return the screen X coordinate as int
-   */
-  public int getMouseX() {
+    /**
+     * Positions the mouse location on the screen using the given Robot
+     * at the mouse coordinates of this object
+     *
+     * @param robot the Robot object which will be used to position the mouse
+     */
+    protected void positionMouse(Robot robot) {
+        robot.mouseMove(this.mouseX, this.mouseY);
+    }
+
+    /**
+     * Sets the X screen coordinate in which this MouseAction will be executed
+     *
+     * @return the screen X coordinate as int
+     */
+    public int getMouseX() {
         return mouseX;
     }
 
-  /**
-   * Gets the Y screen coordinate where this MouseAction will be executed
-   * @return the screen Y coordinate as int
-   */
-  public int getMouseY() {
+    /**
+     * Gets the Y screen coordinate where this MouseAction will be executed
+     *
+     * @return the screen Y coordinate as int
+     */
+    public int getMouseY() {
         return mouseY;
     }
 
-  /**
-   * The type of this MouseAction, it can be any of the declared constants in {@link MouseEventType}
-   * @return the MouseEventType corresponding to this MouseAction object
-   */
-  public MouseEventType getMouseEventType() {
+    /**
+     * The type of this MouseAction, it can be any of the declared constants in {@link MouseEventType}
+     *
+     * @return the MouseEventType corresponding to this MouseAction object
+     */
+    public MouseEventType getMouseEventType() {
         return mouseEventType;
     }
 
     /**
      * Constants describing the available types for {@link MouseAction} objects.
+     *
      * @see #MOTION
      * @see #BUTTON_CLICK
      * @see #SCROLL
      */
     protected enum MouseEventType {
-      /**
-       * A {@link MouseAction} type describing a mouse press or release.
-       */
+        /**
+         * A {@link MouseAction} type describing a mouse press or release.
+         */
         BUTTON_CLICK,
-      /**
-       * A {@link MouseAction} type describing a mouse scroll.
-       */
-      SCROLL,
-      /**
-       * A {@link MouseAction} type describing a mouse movement.
-       */
-      MOTION
+        /**
+         * A {@link MouseAction} type describing a mouse scroll.
+         */
+        SCROLL,
+        /**
+         * A {@link MouseAction} type describing a mouse movement.
+         */
+        MOTION
     }
 }
