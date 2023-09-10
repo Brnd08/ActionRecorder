@@ -22,6 +22,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.awt.Robot;
+import java.awt.event.InputEvent;
 
 public class MouseButtonAction extends MouseAction {
     private static final Logger logger = LogManager.getLogger(MouseButtonAction.class);
@@ -60,8 +61,15 @@ public class MouseButtonAction extends MouseAction {
      * @return the parsed button id for Robot.mousePress() or Robot.mouseRelease() methods as int.
      */
     private int parseButtonId(int nativeMouseButtonId) {
-        logger.log(Level.ALL, "Unimplemented method functionality parseButtonId, using given buttonId: {}", nativeMouseButtonId);
-        return nativeMouseButtonId;
+        int parsedId = -1;
+        try {
+            parsedId = InputEvent.getMaskForButton(nativeMouseButtonId);
+            logger.log(Level.ALL, "Unimplemented method functionality parseButtonId, using given buttonId: {}", nativeMouseButtonId);
+        } catch (IllegalArgumentException error) {
+            logger.log(Level.ERROR, "Could not convert the mouseButtonId. Specified mouse button id: {}. Error: {}",
+                    nativeMouseButtonId, error.getMessage());
+        }
+        return parsedId;
     }
 
     /**
