@@ -62,9 +62,18 @@ public class MouseButtonAction extends MouseAction {
      */
     private int parseButtonId(int nativeMouseButtonId) {
         int parsedId = -1;
+        /*
+            System dependent button id modification
+            wheel button and right button are inverted
+         */
+        if(nativeMouseButtonId == 2){ // in my computer 2 is the right mouse button id
+            nativeMouseButtonId = 3;
+        }else if(nativeMouseButtonId == 3){ // 3 is the wheel button id
+            nativeMouseButtonId = 2;
+        }
         try {
             parsedId = InputEvent.getMaskForButton(nativeMouseButtonId);
-            logger.log(Level.ALL, "Unimplemented method functionality parseButtonId, using given buttonId: {}", nativeMouseButtonId);
+            logger.log(Level.ALL, "Mask obtained ({}) for button id: {}", parsedId, nativeMouseButtonId);
         } catch (IllegalArgumentException error) {
             logger.log(Level.ERROR, "Could not convert the mouseButtonId. Specified mouse button id: {}. Error: {}",
                     nativeMouseButtonId, error.getMessage());
