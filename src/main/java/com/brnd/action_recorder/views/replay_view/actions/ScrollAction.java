@@ -33,6 +33,7 @@ public class ScrollAction extends MouseAction {
 
     /**
      * Creates a new ScrollAction object using the given NativeInputEvent
+     *
      * @param nativeMouseWheelEvent The NativeMouseWheelEvent to be used for the object instantiation
      */
     public ScrollAction(NativeMouseWheelEvent nativeMouseWheelEvent) {
@@ -42,8 +43,10 @@ public class ScrollAction extends MouseAction {
         var wheelDirection = nativeMouseWheelEvent.getWheelDirection();
         var wheelRotation = nativeMouseWheelEvent.getWheelRotation();
         this.scrollDirection = switch (wheelDirection) {
-            case NativeMouseWheelEvent.WHEEL_VERTICAL_DIRECTION -> (wheelRotation < 0)? ScrollDirection.VERTICAL_NEGATIVE: ScrollDirection.VERTICAL_POSITIVE;
-            case NativeMouseWheelEvent.WHEEL_HORIZONTAL_DIRECTION -> (wheelRotation < 0)? ScrollDirection.HORIZONTAL_NEGATIVE: ScrollDirection.HORIZONTAL_POSITIVE;
+            case NativeMouseWheelEvent.WHEEL_VERTICAL_DIRECTION ->
+                    (wheelRotation < 0) ? ScrollDirection.VERTICAL_NEGATIVE : ScrollDirection.VERTICAL_POSITIVE;
+            case NativeMouseWheelEvent.WHEEL_HORIZONTAL_DIRECTION ->
+                    (wheelRotation < 0) ? ScrollDirection.HORIZONTAL_NEGATIVE : ScrollDirection.HORIZONTAL_POSITIVE;
             default -> {
                 logger.log(
                         Level.FATAL
@@ -62,7 +65,19 @@ public class ScrollAction extends MouseAction {
      */
     @Override
     public void replayAction(Robot robot) {
-        logger.log(Level.ALL, "Unimplemented functionality replayAction.");
+        switch (scrollDirection){
+            case VERTICAL_NEGATIVE, VERTICAL_POSITIVE -> {
+                logger.log(Level.ALL, "Executing action: {}", this);
+                robot.mouseWheel(this.wheelScroll);
+            }
+            case HORIZONTAL_NEGATIVE, HORIZONTAL_POSITIVE -> {
+                logger.log(Level.ALL, "Scroll inputs with a scroll direction of {} are currently unsupported for execution", scrollDirection);
+            }
+            default ->
+                logger.log(Level.ALL, "Unsupported scrollDirection {}", scrollDirection);
+
+        }
+
     }
 
     @Override
@@ -80,12 +95,13 @@ public class ScrollAction extends MouseAction {
 
     /**
      * Constant Describing the a ScrollAction type
+     *
      * @see #VERTICAL_NEGATIVE
      * @see #VERTICAL_POSITIVE
      * @see #HORIZONTAL_NEGATIVE
      * @see #HORIZONTAL_POSITIVE
      */
-    public enum ScrollDirection{
+    public enum ScrollDirection {
         /**
          * A vertical scroll from top to bottom
          */
