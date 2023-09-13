@@ -65,16 +65,19 @@ public class ScrollAction extends MouseAction {
      */
     @Override
     public void replayAction(Robot robot) {
-        switch (scrollDirection){
-            case VERTICAL_NEGATIVE, VERTICAL_POSITIVE -> {
+        switch (scrollDirection) {
+            case VERTICAL_NEGATIVE -> {
                 logger.log(Level.ALL, "Executing action: {}", this);
-                robot.mouseWheel(this.wheelScroll);
+                robot.mouseWheel(-1);
+            }
+            case VERTICAL_POSITIVE -> {
+                logger.log(Level.ALL, "Executing action: {}", this);
+                robot.mouseWheel(1);
             }
             case HORIZONTAL_NEGATIVE, HORIZONTAL_POSITIVE -> {
                 logger.log(Level.ALL, "Scroll inputs with a scroll direction of {} are currently unsupported for execution", scrollDirection);
             }
-            default ->
-                logger.log(Level.ALL, "Unsupported scrollDirection {}", scrollDirection);
+            default -> logger.log(Level.ALL, "Unsupported scrollDirection {}", scrollDirection);
 
         }
 
