@@ -118,7 +118,7 @@ public class ScrollAction extends MouseAction {
          */
         HORIZONTAL_POSITIVE,
         /**
-         * An vertical scroll from right to left
+         * A vertical scroll from right to left
          */
         HORIZONTAL_NEGATIVE
 

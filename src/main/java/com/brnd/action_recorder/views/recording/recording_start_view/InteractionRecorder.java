@@ -275,7 +275,7 @@ public class InteractionRecorder {
                     NativeMouseEvent.NATIVE_MOUSE_MOVED, nativeEvent.getModifiers(), nativeEvent.getX(),
                     nativeEvent.getY(), nativeEvent.getClickCount()
             );// create a new NativeMouseEvent for mouse movement with the same properties of the drag Event
-            
+
             /* Save the mouse move event instead of the drag event to catch mouse movements when mouse buttons
             are pressed */
             addNativeEventToRecording(mouseMoveEvent);
