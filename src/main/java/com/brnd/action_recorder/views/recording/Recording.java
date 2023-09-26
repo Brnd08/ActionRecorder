@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-/*
+/**
     This class is used to store the Recordings events as well as other useful information
  */
 public class Recording implements Serializable {
@@ -173,6 +173,25 @@ public class Recording implements Serializable {
         sb.append(", inputEvents=").append(interactionsString());
         sb.append('}');
         return sb.toString();
+    }
+
+    /**
+     * A String representation of the object excluding the recording input Events
+     * @return The String representation of this object
+     */
+    public String toShortString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("Recording{");
+        sb.append("id=").append(id);
+        sb.append(", recordingTitle=").append(recordingTitle);
+        sb.append(", recordingDescription=").append(recordingDescription);
+        sb.append(", recordingDate=").append(recordingDateTime);
+        sb.append(", recordingStartTime=").append(recordingStartTime);
+        sb.append(", recordingStopTime=").append(recordingStopTime);
+        sb.append(", recordingDuration=").append(recordingDuration);
+        sb.append('}');
+        return sb.toString();
+
     }
     
 }

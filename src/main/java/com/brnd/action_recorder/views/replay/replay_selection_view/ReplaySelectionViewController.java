@@ -55,11 +55,9 @@ public class ReplaySelectionViewController implements ViewController, Initializa
     @FXML
     TableView<Recording> recordingActionsTable;
 
-
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        logger.log(Level.ALL, "Stored Recordings: \n {}", storedRecordings);
+        logger.log(Level.ALL, "{} recording retrieved from database.", storedRecordings.size());
     }
 
 

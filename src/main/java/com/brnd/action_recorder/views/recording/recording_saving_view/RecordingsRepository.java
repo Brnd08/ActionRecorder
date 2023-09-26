@@ -22,6 +22,7 @@ import com.brnd.action_recorder.data.DatabaseTable;
 import com.brnd.action_recorder.views.recording.Recording;
 import com.brnd.action_recorder.views.recording.recording_saving_view.RecordingsRepository.RecordingMapper;
 import com.github.kwhat.jnativehook.NativeInputEvent;
+
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -34,6 +35,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -56,65 +58,65 @@ public class RecordingsRepository {
 
     private static final String SELECT_RECORDING_TITLE_BY_ID_SENTENCE
             = String.format("SELECT %s FROM %s WHERE %s = (?);",
-                    RECORDING_TITLE_FIELD,
-                    DatabaseTable.RECORDINGS.name(),
-                    RECORDING_ID_FIELD
-            );
+            RECORDING_TITLE_FIELD,
+            DatabaseTable.RECORDINGS.name(),
+            RECORDING_ID_FIELD
+    );
     private static final String SELECT_RECORDING_DESCRIPTION_BY_ID_SENTENCE
             = String.format("SELECT %s FROM %s WHERE %s = (?);",
-                    RECORDING_DESCRIPTION_FIELD,
-                    DatabaseTable.RECORDINGS.name(),
-                    RECORDING_ID_FIELD
-            );
+            RECORDING_DESCRIPTION_FIELD,
+            DatabaseTable.RECORDINGS.name(),
+            RECORDING_ID_FIELD
+    );
     private static final String SELECT_RECORDING_DATE_BY_ID_SENTENCE
             = String.format("SELECT %s FROM %s WHERE %s = (?);",
-                    RECORDING_DATE_FIELD,
-                    DatabaseTable.RECORDINGS.name(),
-                    RECORDING_ID_FIELD
-            );
+            RECORDING_DATE_FIELD,
+            DatabaseTable.RECORDINGS.name(),
+            RECORDING_ID_FIELD
+    );
     private static final String SELECT_RECORDING_DURATION_BY_ID_SENTENCE
             = String.format("SELECT %s FROM %s WHERE %s = (?);",
-                    RECORDING_DURATION_FIELD,
-                    DatabaseTable.RECORDINGS.name(),
-                    RECORDING_ID_FIELD
-            );
+            RECORDING_DURATION_FIELD,
+            DatabaseTable.RECORDINGS.name(),
+            RECORDING_ID_FIELD
+    );
     private static final String SELECT_INPUT_EVENTS_BY_ID_SENTENCE
             = String.format("SELECT %s FROM %s WHERE %s = (?);",
-                    RECORDING_INPUT_EVENTS_FIELD,
-                    DatabaseTable.RECORDINGS.name(),
-                    RECORDING_ID_FIELD
-            );
+            RECORDING_INPUT_EVENTS_FIELD,
+            DatabaseTable.RECORDINGS.name(),
+            RECORDING_ID_FIELD
+    );
 
     private static final String UPDATE_RECORDING_TITLE_WHERE_ID_SENTENCE
             = String.format("UPDATE %s SET %s = (?) WHERE %s = (?);",
-                    DatabaseTable.RECORDINGS.name(),
-                    RECORDING_TITLE_FIELD,
-                    RECORDING_ID_FIELD
-            );
+            DatabaseTable.RECORDINGS.name(),
+            RECORDING_TITLE_FIELD,
+            RECORDING_ID_FIELD
+    );
     private static final String UPDATE_RECORDING_DESCRIPTION_WHERE_ID_SENTENCE
             = String.format("UPDATE %s SET %s = (?) WHERE %s = (?);",
-                    DatabaseTable.RECORDINGS.name(),
-                    RECORDING_DESCRIPTION_FIELD,
-                    RECORDING_ID_FIELD
-            );
+            DatabaseTable.RECORDINGS.name(),
+            RECORDING_DESCRIPTION_FIELD,
+            RECORDING_ID_FIELD
+    );
     private static final String UPDATE_RECORDING_DATE_WHERE_ID_SENTENCE
             = String.format("UPDATE %s SET %s = (?) WHERE %s = (?);",
-                    DatabaseTable.RECORDINGS.name(),
-                    RECORDING_DATE_FIELD,
-                    RECORDING_ID_FIELD
-            );
+            DatabaseTable.RECORDINGS.name(),
+            RECORDING_DATE_FIELD,
+            RECORDING_ID_FIELD
+    );
     private static final String UPDATE_RECORDING_DURATION_WHERE_ID_SENTENCE
             = String.format("UPDATE %s SET %s = (?) WHERE %s = (?);",
-                    DatabaseTable.RECORDINGS.name(),
-                    RECORDING_DURATION_FIELD,
-                    RECORDING_ID_FIELD
-            );
+            DatabaseTable.RECORDINGS.name(),
+            RECORDING_DURATION_FIELD,
+            RECORDING_ID_FIELD
+    );
     private static final String UPDATE_INPUT_EVENTS_WHERE_ID_SENTENCE
             = String.format("UPDATE %s SET %s = (?) WHERE %s = (?);",
-                    DatabaseTable.RECORDINGS.name(),
-                    RECORDING_INPUT_EVENTS_FIELD,
-                    RECORDING_ID_FIELD
-            );
+            DatabaseTable.RECORDINGS.name(),
+            RECORDING_INPUT_EVENTS_FIELD,
+            RECORDING_ID_FIELD
+    );
 
     public RecordingsRepository() {
         try {
@@ -354,12 +356,12 @@ public class RecordingsRepository {
 
         /* Adds a new row on the recordings table with default values*/
         try (
-            PreparedStatement preparedStatement = connection.prepareStatement(insertSentence);
-            ResultSet resultSet = preparedStatement.executeQuery();
+                PreparedStatement preparedStatement = connection.prepareStatement(insertSentence);
+                ResultSet resultSet = preparedStatement.executeQuery();
         ) {
-             newRowId = resultSet.getInt(1);
-             if (newRowId == 0) {
-                 newRowId = resultSet.getInt(RECORDING_ID_FIELD);
+            newRowId = resultSet.getInt(1);
+            if (newRowId == 0) {
+                newRowId = resultSet.getInt(RECORDING_ID_FIELD);
             }
             logger.log(Level.ALL, "A new empty Recording was inserted on database with id: {}", newRowId);
         } catch (SQLException e) {
@@ -395,7 +397,11 @@ public class RecordingsRepository {
             while (resultSet.next()) {
                 recordingsList.add(RecordingMapper.mapRecordingFromResultSet(resultSet));
             }
-            logger.log(Level.ALL, "Return retrieved Recordings {}", recordingsList);
+            StringBuilder retrievedRecordings = new StringBuilder();
+            for (Recording recording : recordingsList) {
+                retrievedRecordings.append("\n ").append(recording.toShortString().replaceAll("\n", ""));
+            }
+            logger.log(Level.ALL, "Returning retrieved Recordings {}", retrievedRecordings);
         } catch (SQLException | IOException | ClassNotFoundException e) {
             logger.log(
                     Level.ERROR,
@@ -421,14 +427,14 @@ public class RecordingsRepository {
          * Maps a Recording using the given Result set
          *
          * @param resultSet the result set obtained after executing the select
-         * recording by id
+         *                  recording by id
          * @return Recording containing the information specified in the result
          * set
-         * @throws SQLException if an exception related to jdbc
-         * @throws IOException if an exception occur while deserializing the
-         * recording input events field content
+         * @throws SQLException           if an exception related to jdbc
+         * @throws IOException            if an exception occur while deserializing the
+         *                                recording input events field content
          * @throws ClassNotFoundException if the class containing the input
-         * events field can not be found
+         *                                events field can not be found
          */
         public static Recording mapRecordingFromResultSet(ResultSet resultSet) throws SQLException, IOException, ClassNotFoundException {
 
