@@ -14,10 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.brnd.action_recorder.views.replay_view;
+package com.brnd.action_recorder.views.replay.replay_start_view;
 
-import com.brnd.action_recorder.views.recording.Recording;
-import com.brnd.action_recorder.views.replay_view.actions.*;
+import com.brnd.action_recorder.views.replay.replay_start_view.actions.*;
 import com.github.kwhat.jnativehook.NativeInputEvent;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.brnd.action_recorder.views.replay_view.actions;
+package com.brnd.action_recorder.views.replay.replay_start_view.actions;
 
 import com.github.kwhat.jnativehook.mouse.NativeMouseEvent;
 import org.apache.logging.log4j.Level;

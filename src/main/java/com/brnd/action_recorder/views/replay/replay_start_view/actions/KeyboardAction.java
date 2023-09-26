@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.brnd.action_recorder.views.replay_view.actions;
+package com.brnd.action_recorder.views.replay.replay_start_view.actions;
 
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 
@@ -40,6 +40,8 @@ public class KeyboardAction extends ReplayableAction {
     private final KeyActionType keyActionType;
     private final KeyType keyType;
     private final int actionKeyCode;
+    private final String keyText;
+    private final String nativeKeyText;
 
     /**
      * Creates a new KeyboardAction from the given NativeInputEvent
@@ -50,9 +52,11 @@ public class KeyboardAction extends ReplayableAction {
     public KeyboardAction(NativeKeyEvent nativeKeyEvent) throws IllegalStateException {
         super.actionType = ActionType.KEYBOARD_INPUT; // sets the actionType to keyboard input
         this.keyType = this.getKeyType(nativeKeyEvent);
+        this.nativeKeyText = NativeKeyEvent.getKeyText(nativeKeyEvent.getKeyCode());
         this.actionKeyCode = KeyboardAction.keyCodesDictionary
                 .getOrDefault(nativeKeyEvent.getKeyCode(), KeyEvent.VK_UNDEFINED);
 
+        this.keyText = KeyEvent.getKeyText(this.actionKeyCode);
         var nativeEventType = nativeKeyEvent.getID(); // gets the id of the given NativeKeyEvent
         this.keyActionType = switch (nativeEventType) { // assign the key action type based on the event id
             case NativeKeyEvent.NATIVE_KEY_PRESSED -> KeyActionType.PRESS;
@@ -95,6 +99,9 @@ public class KeyboardAction extends ReplayableAction {
         final StringBuilder sb = new StringBuilder("KeyboardAction{");
         sb.append("keyActionType=").append(keyActionType);
         sb.append(", keyType=").append(keyType);
+        sb.append(", actionKeyCode=").append(actionKeyCode);
+        sb.append(", keyText='").append(keyText).append('\'');
+        sb.append(", nativeKeyText='").append(nativeKeyText).append('\'');
         sb.append(", actionType=").append(actionType);
         sb.append('}');
         return sb.toString();
