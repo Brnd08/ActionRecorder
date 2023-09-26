@@ -21,7 +21,7 @@ import com.brnd.action_recorder.views.recording.Recording;
 import com.brnd.action_recorder.views.recording.recording_saving_view.RecordingsRepository;
 import com.brnd.action_recorder.views.recording.recording_start_view.InteractionRecorder;
 import com.brnd.action_recorder.views.recording.recording_start_view.RecorderConfiguration;
-import com.brnd.action_recorder.views.replay_view.ActionsPlayer;
+import com.brnd.action_recorder.views.replay.replay_start_view.ActionsPlayer;
 import com.github.kwhat.jnativehook.NativeHookException;
 import org.apache.logging.log4j.Level;
 
@@ -45,8 +45,8 @@ public class ReplayTest {
         RecordingsRepository recordingsRepository = new RecordingsRepository();
 
         RecorderConfiguration recorderConfiguration = new RecorderConfiguration(
-                true
-                , false
+               true
+                , true
                 , true
                 , true
         );
@@ -61,8 +61,8 @@ public class ReplayTest {
                 interactionRecorder.stopRecording();
 
                 Recording recordedRecording = interactionRecorder.getlastRecording();
-                recordedRecording.setRecordingTitle("Recording test");
-                recordedRecording.setRecordingDescription("A recording to test correct recording functionality behavior");
+                recordedRecording.setRecordingTitle("First full recording test");
+                recordedRecording.setRecordingDescription("This the first recording with all the events listeners recording input event I'm so exited I worked and investigate for a long time to see this happen");
                 int recordingId = recordingsRepository.insertRecording(recordedRecording);
 
                 logger.log(Level.TRACE, "Recorded actions: {}", recordedRecording.interactionsString());
@@ -80,7 +80,7 @@ public class ReplayTest {
                     logger.log(Level.ALL, "Could not create the Robot instance. Error: {}", e.getMessage());
                 }
             }
-        }, (long) 8 * 1000);
+        }, (long) 10 * 1000);
 
     }
 }

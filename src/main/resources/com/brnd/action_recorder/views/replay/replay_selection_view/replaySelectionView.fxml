@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 
+Copyright (C) 2023 Brandon Velazquez & contributors
+ 
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>
+-->
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.effect.Reflection?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.RadialGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="165.0" prefWidth="600.0" stylesheets="@../../css/common.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.brnd.action_recorder.views.replay.replay_selection_view.ReplaySelectionViewController">
+     <children>
+        <GridPane layoutX="-2.0" layoutY="-5.0" prefHeight="165.0" prefWidth="600.0">
+            <columnConstraints>
+                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints maxHeight="160.0" minHeight="10.0" prefHeight="37.0" valignment="BOTTOM" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="179.0" minHeight="5.0" prefHeight="128.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+            <children>
+                <GridPane prefHeight="69.0" prefWidth="323.0">
+                    <columnConstraints>
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="545.0" minWidth="0.0" prefWidth="427.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="454.0" minWidth="0.0" prefWidth="173.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <children>
+                        <Label prefHeight="31.0" prefWidth="221.0" text="Reproducir Grabación">
+                            <font>
+                                <Font name="Leelawadee UI Bold" size="21.0" />
+                            </font>
+                            <textFill>
+                                <RadialGradient centerX="0.15555555555555556" centerY="0.2571428571428571" cycleMethod="REFLECT" focusAngle="-75.81" focusDistance="0.37209302325581395" radius="0.8604651162790697">
+                                    <stops>
+                                        <Stop color="BLACK" />
+                                        <Stop color="BLACK" offset="1.0" />
+                                    </stops>
+                                </RadialGradient>
+                            </textFill>
+                     <GridPane.margin>
+                        <Insets top="2.0" />
+                     </GridPane.margin>
+                     <effect>
+                        <Reflection fraction="0.6" topOffset="-2.0" topOpacity="0.73" />
+                     </effect>
+                        </Label>
+                        <GridPane prefHeight="37.0" prefWidth="190.0" GridPane.columnIndex="1">
+                            <columnConstraints>
+                                <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                            </rowConstraints>
+                     <children>
+                        <Button id="closeStageButton" fx:id="closeBttn" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#closeStage" prefHeight="37.0" prefWidth="38.0" text="x" textAlignment="CENTER" textFill="#000000">
+                           <font>
+                              <Font name="Corbel" size="20.0" />
+                           </font>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                           <tooltip>
+                              <Tooltip contentDisplay="TEXT_ONLY" text="Cerrar">
+                                 <font>
+                                    <Font size="9.0" />
+                                 </font>
+                              </Tooltip>
+                           </tooltip>
+                        </Button>
+                        <Button id="minimizeStageButton" fx:id="minimizeBttn" alignment="TOP_CENTER" contentDisplay="TEXT_ONLY" ellipsisString="" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#minimizeStage" prefHeight="35.0" prefWidth="38.0" text="_" textAlignment="CENTER" textFill="#000000">
+                           <font>
+                              <Font name="Corbel Bold" size="20.0" />
+                           </font>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                           <tooltip>
+                              <Tooltip text="Minimizar">
+                                 <font>
+                                    <Font size="9.0" />
+                                 </font>
+                              </Tooltip>
+                           </tooltip>
+                           <GridPane.margin>
+                              <Insets right="5.0" />
+                           </GridPane.margin>
+                        </Button>
+                     </children>
+                        </GridPane>
+                    </children>
+                </GridPane>
+            <GridPane GridPane.rowIndex="1">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="571.0" minWidth="10.0" prefWidth="509.0" />
+                  <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="423.0" minWidth="10.0" prefWidth="91.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="TOP" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <GridPane GridPane.columnIndex="1">
+                     <columnConstraints>
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="116.0" minWidth="10.0" prefWidth="116.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="TOP" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="45.0" minHeight="10.0" prefHeight="39.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="66.0" minHeight="10.0" prefHeight="58.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Button fx:id="returnButton" contentDisplay="CENTER" graphicTextGap="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#navigateToMainView" prefHeight="34.0" prefWidth="61.0" styleClass="primaryButton" translateX="-5.0">
+                           <tooltip>
+                              <Tooltip text="Volver" />
+                           </tooltip>
+                           <graphic>
+                              <ImageView fitHeight="25.0" fitWidth="21.0" pickOnBounds="true">
+                                 <image>
+                                    <Image url="@../../images/return.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Button>
+                        <Button fx:id="replaySelectedButton" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#selectRecording" prefHeight="51.0" prefWidth="86.0" styleClass="primaryButton" text="Reproducir Selección" textAlignment="CENTER" translateX="-5.0" wrapText="true" GridPane.rowIndex="2">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                           <tooltip>
+                              <Tooltip text="Guardar Grabación" />
+                           </tooltip>
+                        </Button>
+                     </children>
+                  </GridPane>
+                  <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="126.0" prefWidth="501.0" side="LEFT" tabClosingPolicy="UNAVAILABLE">
+                     <tabs>
+                        <Tab closable="false" text="Guardadas">
+                           <content>
+                              <VBox prefHeight="122.0" prefWidth="467.0">
+                                 <children>
+                                    <TableView fx:id="recordingsTable" prefHeight="200.0" prefWidth="200.0">
+                                       <columns>
+                                          <TableColumn editable="false" minWidth="0.0" prefWidth="130.0" text="Nombre" />
+                                          <TableColumn editable="false" minWidth="0.0" prefWidth="160.0" text="Descripción" />
+                                          <TableColumn editable="false" minWidth="3.0" prefWidth="92.0" text="Fecha" />
+                                          <TableColumn editable="false" minWidth="0.0" prefWidth="81.0" text="Duracion" />
+                                       </columns>
+                                       <VBox.margin>
+                                          <Insets bottom="54.0" top="1.0" />
+                                       </VBox.margin>
+                                    </TableView>
+                                 </children>
+                              </VBox>
+                           </content>
+                           <tooltip>
+                              <Tooltip text="Grabaciones registradas" />
+                           </tooltip>
+                        </Tab>
+                        <Tab closable="false" text="Acciones">
+                           <content>
+                              <VBox prefHeight="200.0" prefWidth="100.0">
+                                 <children>
+                                    <TableView fx:id="recordingActionsTable" editable="true" prefHeight="200.0" prefWidth="200.0">
+                                       <columns>
+                                          <TableColumn editable="false" minWidth="0.0" prefWidth="50.74999237060547" text="ID" />
+                                          <TableColumn editable="false" minWidth="0.0" prefWidth="51.25" text="Tiempo" />
+                                          <TableColumn editable="false" prefWidth="44.50000762939453" text="Tipo" />
+                                          <TableColumn editable="false" prefWidth="55.75" text="Botón" />
+                                          <TableColumn editable="false" prefWidth="85.5" text="Modificadores" />
+                                          <TableColumn editable="false" prefWidth="43.0" text="(X, Y)" />
+                                          <TableColumn editable="false" prefWidth="148.25" text="Eliminar" />
+                                       </columns>
+                                       <VBox.margin>
+                                          <Insets bottom="54.0" top="1.0" />
+                                       </VBox.margin>
+                                    </TableView>
+                                 </children>
+                              </VBox>
+                           </content>
+                           <tooltip>
+                              <Tooltip text="Acciones de la grabación" />
+                           </tooltip>
+                        </Tab>
+                     </tabs>
+                     <GridPane.margin>
+                        <Insets left="6.0" />
+                     </GridPane.margin>
+                     <padding>
+                        <Insets left="-6.0" />
+                     </padding>
+                  </TabPane>
+               </children>
+            </GridPane>
+            </children>
+        </GridPane>
+    </children>
+    <stylesheets>
+        <URL value="@../../css/common.css" />
+        <URL value="@replaySelection.css" />
+    </stylesheets>
+</AnchorPane>

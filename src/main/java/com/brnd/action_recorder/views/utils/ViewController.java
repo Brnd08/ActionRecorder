@@ -178,6 +178,11 @@ public interface ViewController {
     }
 
     @FXML
+    public default void navigateToReplayStartView(Event event) throws IOException {
+        navigateToView(event, ViewEnum.REPLAY_START);
+    }
+
+    @FXML
     public default void navigateToRecordView(Event event) throws IOException {
         navigateToView(event, ViewEnum.RECORDING_START);
     }

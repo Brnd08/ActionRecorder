@@ -29,10 +29,11 @@ module com.brnd.action_recorder {
     requires java.desktop;
 
     opens com.brnd.action_recorder.views.main_view to javafx.fxml, javafx.graphics;
-    opens com.brnd.action_recorder.views.replay_view to javafx.fxml;
     opens com.brnd.action_recorder.views.settings_view to javafx.fxml;
     opens com.brnd.action_recorder.views.recording.recording_start_view to javafx.fxml;
     opens com.brnd.action_recorder.views.recording.recording_saving_view to javafx.fxml;
     opens com.brnd.action_recorder.views.utils to javafx.fxml;
     opens com.brnd.action_recorder.record.capturing to javafx.fxml;
+    opens com.brnd.action_recorder.views.replay.replay_start_view to javafx.fxml;
+    opens com.brnd.action_recorder.views.replay.replay_selection_view to javafx.fxml;
 }

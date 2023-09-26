@@ -1,0 +1,91 @@
+/*
+ * Copyright (C) 2023 Brandon Velazquez & contributors
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+
+/********************************************
+ *                                                    *
+ * TabPane Styles                          *
+ *                                                    *
+ *******************************************/
+
+/************    TabPane header    *************/
+
+.tab-pane > .tab-header-area{
+    -fx-padding: 0 0 0 7;
+}
+
+.tab-pane > .tab-header-area > .tab-header-background {
+    -fx-background-color: transparent; /* Removes TapPane header background */
+}
+.tab-pane > .tab-header-area > .control-buttons-tab > .container > .tab-down-button
+, .tab-pane > .tab-header-area > .control-buttons-tab > .container > .tab-down-button > .arrow {
+    /* Removes TapPane header dropdown button */
+    -fx-padding: 0;
+}
+.tab-pane > .tab-header-area > .headers-region > .tab{ /* styles of the TapPane tabs */
+    -fx-border-color: #03a9f4;
+    -fx-faint-focus-color: transparent;
+    -fx-focus-color: transparent;
+    -fx-border-width: 4px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 12px;
+    -fx-cursor: hand;
+}
+.tab-pane > .tab-header-area > .headers-region > #firstTab{
+    -fx-padding: 0.5 10 0.1 10;
+}
+
+/************    TabPane content   *************/
+.tab-pane > .tab-content-area{
+    -fx-background-color: transparent;
+    -fx-border-color: rgba(3, 169, 244, .6);
+    -fx-border-width: 2px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 12px;
+}
+
+/********************************************
+ *                                                    *
+ * TableView Styles                        *
+ *                                                    *
+ *******************************************/
+.table-view{
+    -fx-background-color: transparent;
+}
+.table-view .column-header {
+    -fx-background-radius: 12px;
+}
+.table-view > .column-header-background{
+    -fx-background-color: transparent;
+}
+.table-view > .column-header-background > .filler {
+    -fx-background-color: transparent;
+}
+
+/********************************************
+ *                                                    *
+ * TextArea Styles                          *
+ *                                                    *
+ *******************************************/
+.text-area {
+    -fx-background-color: rgba(224,224,224,.7);
+    -fx-padding: 1px;
+    -fx-cursor: text;
+}
+.text-area .content {
+    -fx-background-color: rgba(224,224,224, .7);
+}

@@ -126,7 +126,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>com.brnd.action_recorder/com.brnd.action_recorder.views.main_view.Main</mainClass>
-                            <!--<mainClass>com.brnd.action_recorder/com.brnd.action_recorder.record.capturing.RecorderTest</mainClass>-->
+<!--                            <mainClass>com.brnd.action_recorder/com.brnd.action_recorder.record.capturing.ReplayTest</mainClass>-->
                             <launcher>ActionRecorder</launcher>
                             <jlinkImageName>ActionRecorder</jlinkImageName>
                             <noManPages>true</noManPages>

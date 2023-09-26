@@ -40,8 +40,11 @@ public enum ViewEnum {
             "Guardar Grabación - Grabadora de Acciones",
              "/recording/recording_saving_view/recordingSavingView.fxml"
     ), REPLAY(
-            "Reproducir Grabación- Grabadora de Acciones",
-             "/replay_view/replayView.fxml"
+            "Reproducir Grabación - Grabadora de Acciones",
+            "/replay/replay_selection_view/replaySelectionView.fxml"
+    ), REPLAY_START(
+            "Reproducir Grabación - Grabadora de Acciones",
+                    "/replay/replay_start_view/replayStartView.fxml"
     );
 
     private static final String PATH_TO_VIEWS_PACKAGE_FROM_SOURCE_ROOT
