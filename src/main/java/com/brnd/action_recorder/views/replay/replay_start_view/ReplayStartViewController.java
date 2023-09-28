@@ -42,8 +42,7 @@ public class ReplayStartViewController implements ViewController, Initializable 
     private static final Logger logger = LogManager.getLogger(ReplayStartViewController.class);
     private final RecordingsRepository recordingsRepository = new RecordingsRepository();
     private final List<Recording> storedRecordings = recordingsRepository.getAllRecordings();
-    @FXML
-    Button returnButton;
+    @FXML    Button returnButton;
     @FXML
     Button closeBttn;
     @FXML

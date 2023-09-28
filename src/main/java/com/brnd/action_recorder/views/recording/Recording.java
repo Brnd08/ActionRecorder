@@ -20,6 +20,7 @@ import com.github.kwhat.jnativehook.NativeInputEvent;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
 import java.util.stream.Collectors;
 import org.apache.logging.log4j.Level;
@@ -157,6 +158,11 @@ public class Recording implements Serializable {
 
     public void setRecordingDescription(String recordingDescription) {
         this.recordingDescription = recordingDescription;
+    }
+
+    public String getRecordingDate(){
+        var dateTimeFormatter = DateTimeFormatter.ofPattern(Recording.DATE_TIME_FORMAT);
+        return this.recordingDateTime.format(dateTimeFormatter);
     }
 
     @Override

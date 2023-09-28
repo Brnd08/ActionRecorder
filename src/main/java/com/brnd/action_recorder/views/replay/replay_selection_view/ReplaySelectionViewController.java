@@ -19,17 +19,23 @@ package com.brnd.action_recorder.views.replay.replay_selection_view;
 import com.brnd.action_recorder.views.recording.Recording;
 import com.brnd.action_recorder.views.recording.recording_saving_view.RecordingsRepository;
 import com.brnd.action_recorder.views.utils.ViewController;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import com.brnd.action_recorder.views.utils.ViewEnum;
+import com.github.kwhat.jnativehook.NativeInputEvent;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -42,6 +48,7 @@ public class ReplaySelectionViewController implements ViewController, Initializa
     private static final Logger logger = LogManager.getLogger(ReplaySelectionViewController.class);
     private final RecordingsRepository recordingsRepository = new RecordingsRepository();
     private final List<Recording> storedRecordings = recordingsRepository.getAllRecordings();
+    private Recording selectedRecording = null;
     @FXML
     Button returnButton;
     @FXML
@@ -53,13 +60,79 @@ public class ReplaySelectionViewController implements ViewController, Initializa
     @FXML
     TableView<Recording> recordingsTable;
     @FXML
-    TableView<Recording> recordingActionsTable;
+    TableColumn<Recording, String> recordingNameCol;
+    @FXML
+    TableColumn<Recording, String> recordingDescriptionCol;
+    @FXML
+    TableColumn<Recording, String> recordingDateCol;
+    @FXML
+    TableColumn<Recording, Float> recordingDurationCol;
+
+    @FXML
+    TableView<NativeInputEvent> recordingActionsTable;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         logger.log(Level.ALL, "{} recording retrieved from database.", storedRecordings.size());
+        this.addRowsToRecordingsTable();
     }
 
+    /**
+     * Fills the recordingsTable using the storedRecordings list
+     * by adding a new row for each recording contained in the storedRecordings
+     */
+    private void addRowsToRecordingsTable() {
+        /*
+         Links the table columns to the RecordingRow properties
+         */
+        recordingNameCol.setCellValueFactory(
+                new PropertyValueFactory<>("recordingTitle")
+        );
+        recordingDescriptionCol.setCellValueFactory(
+                new PropertyValueFactory<>("recordingDescription")
+        );
+        recordingDateCol.setCellValueFactory(
+                new PropertyValueFactory<>("recordingDate")
+        );
+        recordingDurationCol.setCellValueFactory(
+                new PropertyValueFactory<>("recordingDuration")
+        );
+        ObservableList<Recording> recordingRows = FXCollections.observableArrayList();
+        recordingRows.addAll(storedRecordings);
+        recordingsTable.setItems(recordingRows);
+        recordingsTable.selectionModelProperty().addListener((observable, oldValue, newValue) -> {
+            var oldRecording = oldValue.getSelectedItem();
+            var newRecording = newValue.getSelectedItem();
+            if(newRecording!= null && !newRecording.equals(oldRecording)){
+                this.selectedRecording = newRecording;
+            }
+        });
+    }
+
+    /**
+     * Displays the input events of the selected recording in the recordings action table
+     */
+    private void displayRecordingInputEvents(){
+
+        /*
+         Links the table columns to the RecordingRow properties
+         */
+//        recordingNameCol.setCellValueFactory(
+//                new PropertyValueFactory<>("recordingTitle")
+//        );
+//        recordingDescriptionCol.setCellValueFactory(
+//                new PropertyValueFactory<>("recordingDescription")
+//        );
+//        recordingDateCol.setCellValueFactory(
+//                new PropertyValueFactory<>("recordingDate")
+//        );
+//        recordingDurationCol.setCellValueFactory(
+//                new PropertyValueFactory<>("recordingDuration")
+//        );
+//        ObservableList<Recording> recordingEvents = FXCollections.observableArrayList();
+//        recordingRows.addAll(storedRecordings);
+//        recordingActionsTable.setItems(recordingRows);
+    }
 
 
     /**
@@ -67,8 +140,8 @@ public class ReplaySelectionViewController implements ViewController, Initializa
      * to it the specified recording to it.
      *
      * @param recordedRecording the recorded recording which is intended to be
-     * saved.
-     * @param currentStage the current stage to get the app position.
+     *                          saved.
+     * @param currentStage      the current stage to get the app position.
      */
     private void navigatetoStartReplayView(Recording recordedRecording, Stage currentStage) {
         try {
@@ -96,6 +169,7 @@ public class ReplaySelectionViewController implements ViewController, Initializa
     public void navigateToMainView(Event event) throws IOException {
         ViewController.super.navigateToMainView(event);
     }
+
     @FXML
     public void selectRecording(Event event) {
         logger.log(Level.ALL, "Unimplemented functionality selectRecording(Event)");

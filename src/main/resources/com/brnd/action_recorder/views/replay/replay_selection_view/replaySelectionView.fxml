@@ -171,14 +171,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
                      <tabs>
                         <Tab closable="false" text="Guardadas">
                            <content>
-                              <VBox prefHeight="122.0" prefWidth="467.0">
+                              <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="122.0" prefWidth="464.0">
                                  <children>
-                                    <TableView fx:id="recordingsTable" prefHeight="200.0" prefWidth="200.0">
+                                    <TableView fx:id="recordingsTable" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="120.0" prefWidth="464.0">
                                        <columns>
-                                          <TableColumn editable="false" minWidth="0.0" prefWidth="130.0" text="Nombre" />
-                                          <TableColumn editable="false" minWidth="0.0" prefWidth="160.0" text="Descripción" />
-                                          <TableColumn editable="false" minWidth="3.0" prefWidth="92.0" text="Fecha" />
-                                          <TableColumn editable="false" minWidth="0.0" prefWidth="81.0" text="Duracion" />
+                                          <TableColumn fx:id="recordingNameCol" editable="false" minWidth="0.0" prefWidth="130.0" text="Nombre" />
+                                          <TableColumn fx:id="recordingDescriptionCol" editable="false" minWidth="0.0" prefWidth="160.0" text="Descripción" />
+                                          <TableColumn fx:id="recordingDateCol" editable="false" minWidth="3.0" prefWidth="92.0" text="Fecha" />
+                                          <TableColumn fx:id="recordingDurationCol" editable="false" minWidth="0.0" prefWidth="81.0" text="Duracion (s)" />
                                        </columns>
                                        <VBox.margin>
                                           <Insets bottom="54.0" top="1.0" />

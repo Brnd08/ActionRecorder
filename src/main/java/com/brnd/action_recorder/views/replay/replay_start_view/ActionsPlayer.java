@@ -63,7 +63,7 @@ public class ActionsPlayer {
         );
     }
 
-    /*
+    /**
      * Starts actions replaying process
      */
     public void startReplay(){
