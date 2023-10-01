@@ -157,7 +157,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </Button>
-                        <Button fx:id="replaySelectedButton" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#selectRecording" prefHeight="51.0" prefWidth="86.0" styleClass="primaryButton" text="Reproducir Selección" textAlignment="CENTER" translateX="-5.0" wrapText="true" GridPane.rowIndex="2">
+                        <Button fx:id="replaySelectedButton" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#startSelectedReplay" prefHeight="51.0" prefWidth="86.0" styleClass="primaryButton" text="Reproducir Selección" textAlignment="CENTER" translateX="-5.0" wrapText="true" GridPane.rowIndex="2">
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
@@ -203,7 +203,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
                                           <TableColumn editable="false" prefWidth="55.75" text="Botón" />
                                           <TableColumn editable="false" prefWidth="85.5" text="Modificadores" />
                                           <TableColumn editable="false" prefWidth="43.0" text="(X, Y)" />
-                                          <TableColumn editable="false" prefWidth="148.25" text="Eliminar" />
                                        </columns>
                                        <VBox.margin>
                                           <Insets bottom="54.0" top="1.0" />

@@ -55,8 +55,8 @@ public class MainViewController implements ViewController {
     }
 
     @Override
-    public void navigateToReplayView(Event event) throws IOException {
-        ViewController.super.navigateToReplayView(event);
+    public void navigateToReplaySelectionView(Event event) throws IOException {
+        ViewController.super.navigateToReplaySelectionView(event);
     }
 
     @Override

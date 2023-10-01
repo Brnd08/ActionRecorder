@@ -70,7 +70,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
-                                <Button fx:id="playBttn" mnemonicParsing="false" onAction="#navigateToReplayView" prefHeight="33.0" prefWidth="159.0" styleClass="primaryButton" text="Reproducir Grabacion" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                <Button fx:id="playBttn" mnemonicParsing="false" onAction="#navigateToReplaySelectionView" prefHeight="33.0" prefWidth="159.0" styleClass="primaryButton" text="Reproducir Grabacion" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                     <cursor>
                                         <Cursor fx:constant="HAND" />
                                     </cursor>
@@ -168,17 +168,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
                                     <cursor>
                                         <Cursor fx:constant="HAND" />
                                     </cursor>
-<!--                                    <effect>-->
-<!--                                        <Lighting diffuseConstant="1.05" specularConstant="0.51" specularExponent="0.0"-->
-<!--                                                  surfaceScale="6.5">-->
-<!--                                            <bumpInput>-->
-<!--                                                <Shadow/>-->
-<!--                                            </bumpInput>-->
-<!--                                                                                        <light>-->
-<!--                                                                                            <Light.Distant azimuth="360.0" color="#090eff" elevation="360.0" />-->
-<!--                                                                                        </light>-->
-<!--                                        </Lighting>-->
-<!--                                    </effect>-->
                                     <tooltip>
                                         <Tooltip contentDisplay="TEXT_ONLY" text="Cerrar">
                                             <font>
@@ -194,17 +183,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
                                     <cursor>
                                         <Cursor fx:constant="HAND" />
                                     </cursor>
-<!--                                    <effect>-->
-<!--                                        <Lighting diffuseConstant="1.05" specularConstant="0.51" specularExponent="0.0"-->
-<!--                                                  surfaceScale="6.5">-->
-<!--                                            <bumpInput>-->
-<!--                                                <Shadow/>-->
-<!--                                            </bumpInput>-->
-<!--                                            <light>-->
-<!--                                                <Light.Distant azimuth="360.0" color="#090eff" elevation="360.0"/>-->
-<!--                                            </light>-->
-<!--                                        </Lighting>-->
-<!--                                    </effect>-->
                                     <tooltip>
                                         <Tooltip text="Minimizar">
                                             <font>

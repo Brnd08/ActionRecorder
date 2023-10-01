@@ -173,7 +173,7 @@ public interface ViewController {
     }
 
     @FXML
-    public default void navigateToReplayView(Event event) throws IOException {
+    public default void navigateToReplaySelectionView(Event event) throws IOException {
         navigateToView(event, ViewEnum.REPLAY);
     }
 

@@ -18,11 +18,13 @@ package com.brnd.action_recorder.views.replay.replay_selection_view;
 
 import com.brnd.action_recorder.views.recording.Recording;
 import com.brnd.action_recorder.views.recording.recording_saving_view.RecordingsRepository;
+import com.brnd.action_recorder.views.utils.StagePositioner;
 import com.brnd.action_recorder.views.utils.ViewController;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import com.brnd.action_recorder.views.utils.ViewEnum;
@@ -32,9 +34,7 @@ import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.Level;
@@ -48,7 +48,6 @@ public class ReplaySelectionViewController implements ViewController, Initializa
     private static final Logger logger = LogManager.getLogger(ReplaySelectionViewController.class);
     private final RecordingsRepository recordingsRepository = new RecordingsRepository();
     private final List<Recording> storedRecordings = recordingsRepository.getAllRecordings();
-    private Recording selectedRecording = null;
     @FXML
     Button returnButton;
     @FXML
@@ -69,7 +68,7 @@ public class ReplaySelectionViewController implements ViewController, Initializa
     TableColumn<Recording, Float> recordingDurationCol;
 
     @FXML
-    TableView<NativeInputEvent> recordingActionsTable;
+    TableView<Map.Entry<Double, NativeInputEvent>> recordingActionsTable;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -100,40 +99,23 @@ public class ReplaySelectionViewController implements ViewController, Initializa
         ObservableList<Recording> recordingRows = FXCollections.observableArrayList();
         recordingRows.addAll(storedRecordings);
         recordingsTable.setItems(recordingRows);
-        recordingsTable.selectionModelProperty().addListener((observable, oldValue, newValue) -> {
-            var oldRecording = oldValue.getSelectedItem();
-            var newRecording = newValue.getSelectedItem();
-            if(newRecording!= null && !newRecording.equals(oldRecording)){
-                this.selectedRecording = newRecording;
-            }
-        });
     }
 
-    /**
-     * Displays the input events of the selected recording in the recordings action table
-     */
-    private void displayRecordingInputEvents(){
+    @FXML
+    public void startSelectedReplay(Event event) {
+        Stage currentStage = StagePositioner.getStageFromEvent(event);
 
-        /*
-         Links the table columns to the RecordingRow properties
-         */
-//        recordingNameCol.setCellValueFactory(
-//                new PropertyValueFactory<>("recordingTitle")
-//        );
-//        recordingDescriptionCol.setCellValueFactory(
-//                new PropertyValueFactory<>("recordingDescription")
-//        );
-//        recordingDateCol.setCellValueFactory(
-//                new PropertyValueFactory<>("recordingDate")
-//        );
-//        recordingDurationCol.setCellValueFactory(
-//                new PropertyValueFactory<>("recordingDuration")
-//        );
-//        ObservableList<Recording> recordingEvents = FXCollections.observableArrayList();
-//        recordingRows.addAll(storedRecordings);
-//        recordingActionsTable.setItems(recordingRows);
+        var selectedRecording = recordingsTable.getSelectionModel().getSelectedItem(); // get selected recording
+        if (selectedRecording != null) {
+            logger.log(Level.INFO, "Selected recording: {}", selectedRecording.toShortString());
+            navigatetoStartReplayView(selectedRecording, currentStage);
+        }else{
+            var alertMessage = "Para continuar debes seleccionar una grabación para reproducir";
+            ViewController.createCustomAlert(
+                    Alert.AlertType.ERROR, alertMessage, "Reproducir Grabación - Grabadora de Acciones", currentStage, ButtonType.OK
+            ).show(); // styles and shows the alert
+        }
     }
-
 
     /**
      * Navigates to the saving view, position in the same coordinates and passes
@@ -150,6 +132,7 @@ public class ReplaySelectionViewController implements ViewController, Initializa
             nextStage.setY(currentStage.getY());
             nextStage.setUserData(recordedRecording);
             ViewController.openView(nextStage, ViewEnum.REPLAY_START);
+            currentStage.close();
         } catch (IOException ex) {
             logger.log(Level.ERROR, "Could not navigate to {} view. Exception message: {}", ViewEnum.REPLAY_START, ex.getMessage());
         }

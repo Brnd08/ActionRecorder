@@ -269,7 +269,7 @@ public class KeyboardAction extends ReplayableAction {
         keyCodesDictionary.put(NativeKeyEvent.VC_SHIFT, KeyEvent.VK_SHIFT);
         keyCodesDictionary.put(NativeKeyEvent.VC_CONTROL, KeyEvent.VK_CONTROL);
         keyCodesDictionary.put(NativeKeyEvent.VC_ALT, KeyEvent.VK_ALT);
-        keyCodesDictionary.put(NativeKeyEvent.VC_META, KeyEvent.VK_META);
+        keyCodesDictionary.put(NativeKeyEvent.VC_META, KeyEvent.VK_WINDOWS);
         keyCodesDictionary.put(NativeKeyEvent.VC_CONTEXT_MENU, KeyEvent.VK_CONTEXT_MENU);
         keyCodesDictionary.put(NativeKeyEvent.VC_KATAKANA, KeyEvent.VK_KATAKANA);
         keyCodesDictionary.put(NativeKeyEvent.VC_UNDERSCORE, KeyEvent.VK_UNDERSCORE);

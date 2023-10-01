@@ -74,8 +74,8 @@ public class ReplayTest {
 
                 ActionsPlayer recordingPlayer = null;
                 try {
-                    recordingPlayer = new ActionsPlayer(retrievedRecording.getInputEvents());
-                    recordingPlayer.startReplay();
+                    recordingPlayer = new ActionsPlayer(retrievedRecording.getInputEvents(), retrievedRecording.getRecordingDuration());
+                    recordingPlayer.startReplay(()->logger.log(Level.ALL, "Reach replay end"));
                 } catch (AWTException e) {
                     logger.log(Level.ALL, "Could not create the Robot instance. Error: {}", e.getMessage());
                 }

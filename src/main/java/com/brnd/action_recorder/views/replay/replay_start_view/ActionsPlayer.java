@@ -22,6 +22,7 @@ import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 
 import com.github.kwhat.jnativehook.mouse.NativeMouseEvent;
 import com.github.kwhat.jnativehook.mouse.NativeMouseWheelEvent;
+import javafx.application.Platform;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,29 +33,44 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /**
- * This class contains neeeded functionalities for actions reproducing 
+ * This class contains needed functionalities for actions reproducing
  */
 public class ActionsPlayer {
     private static final Logger logger = LogManager.getLogger(ActionsPlayer.class);
-    private final ScheduledExecutorService actionsScheduler = Executors.newScheduledThreadPool(1);
+    private ScheduledExecutorService actionsScheduler = Executors.newScheduledThreadPool(1);
     private final Robot robot;
     private final Map<Long, ReplayableAction> replayableActions = new HashMap<>();
+    private boolean mouseEvents = false;
+    private boolean keyboardEvents = false;
+    private boolean scrollEvents = false;
+    private boolean clickEvents = false;
+    private final float duration;
 
     /**
-     *
      * Instantiates a new ActionPlayer object
      *
      * @param inputEventMap Map containing each action replay time as key and its related NativeInputEvent as value.
      * @throws AWTException If the ActionPlayer could not be created due to application permissions
      */
-    public ActionsPlayer(Map<Long, NativeInputEvent> inputEventMap) throws AWTException {
+    public ActionsPlayer(Map<Long, NativeInputEvent> inputEventMap, float duration) throws AWTException {
         this.robot = new Robot();
+        this.duration = duration;
         inputEventMap.forEach(
                 (executionTime, recordedAction) -> {
                     var replayableAction = this.parseReplayableAction(recordedAction); // convert each NativeInputEvent to a ReplayableAction object
+                    if (replayableAction instanceof MouseMotionAction && !mouseEvents) {
+                        this.mouseEvents = true;
+                    } else if (replayableAction instanceof MouseButtonAction && !clickEvents) {
+                        this.clickEvents = true;
+                    } else if (replayableAction instanceof KeyboardAction && !keyboardEvents) {
+                        this.keyboardEvents = true;
+                    } else if (replayableAction instanceof ScrollAction && !scrollEvents) {
+                        this.scrollEvents = true;
+                    }
                     this.replayableActions.put(executionTime, replayableAction); // adds each action execution time an its related ReplayableAction
                     logger.log(Level.INFO, "New ReplayableAction processed. Execution Time: {}. Action: {}"
                             , executionTime, replayableAction
@@ -63,18 +79,31 @@ public class ActionsPlayer {
         );
     }
 
-    /**
-     * Starts actions replaying process
-     */
-    public void startReplay(){
-        logger.log(Level.INFO, "Starting Actions Replay");
-        this.replayableActions.forEach(this::scheduleActionExecution);
+    public void pauseRecording(long replayPauseTime) {
+        logger.log(Level.ALL, "Unimplemented functionality pauseRecording(long)");
     }
 
     /**
-     * Stops the replaying of the actions which has not been already executed
+     * Starts actions replaying process
+     *
+     * @Param finalizationCallback A runnable to execute when all events have been executed
      */
-    public void stopReplay(){
+    public void startReplay(Runnable finalizationCallback) {
+        if(this.actionsScheduler.isShutdown()){ // if the scheduler was shutdown create another instance
+            this.actionsScheduler = new ScheduledThreadPoolExecutor(1);
+        }
+        this.replayableActions.forEach(this::scheduleActionExecution);
+        this.actionsScheduler.schedule(() -> {
+            Platform.runLater(
+                    finalizationCallback
+            );
+            logger.log(Level.TRACE, "Replay Finalization reached. System time: {}", System.nanoTime());
+        }, Math.round(duration) + 2, TimeUnit.SECONDS);
+    }
+
+    /**
+     */
+    public void stopReplay() {
         logger.log(Level.INFO, "Unsupported functionality stopReplay");
     }
 
@@ -82,7 +111,7 @@ public class ActionsPlayer {
      * Schedules the given ReplayableAction for execution after given time
      *
      * @param executionTime the time the recording will wait from schedule time
-     * @param action The ReplayableAction to be scheduled
+     * @param action        The ReplayableAction to be scheduled
      */
     private void scheduleActionExecution(long executionTime, ReplayableAction action) {
         this.actionsScheduler.schedule(
@@ -94,6 +123,7 @@ public class ActionsPlayer {
 
     /**
      * Returns the corresponding ReplayableAction of the given NativeInputEvent
+     *
      * @param nativeEvent The NativeInputEvent to be parsed
      */
     private ReplayableAction parseReplayableAction(NativeInputEvent nativeEvent) {
@@ -107,5 +137,43 @@ public class ActionsPlayer {
                     new MouseMotionAction(mouseEvent) : new MouseButtonAction(mouseEvent);
         }
         return parsedAction;
+    }
+
+    public void resumeRecording() {
+        logger.log(Level.ALL, "Unimplemented functionality resumeRecording(long)");
+    }
+
+    /**
+     * Stops the replaying of the actions which has not been already executed
+     * @return true if the replaying was correctly stopped
+     */
+    public boolean stopReplaying() {
+        logger.log(Level.ALL, "Stoping events replay");
+        this.actionsScheduler.shutdownNow();
+        var shutdowned = this.actionsScheduler.isShutdown();
+        if (shutdowned) {
+            logger.log(Level.ALL, "Successfully shutdown replaying");
+        } else {
+            logger.log(Level.ALL, "Could not shutdown replaying");
+        }
+
+        return shutdowned;
+
+    }
+
+    public boolean containsMouseEvents() {
+        return mouseEvents;
+    }
+
+    public boolean containsKeyboardEvents() {
+        return keyboardEvents;
+    }
+
+    public boolean containsScrollEvents() {
+        return scrollEvents;
+    }
+
+    public boolean containsClickEvents() {
+        return clickEvents;
     }
 }
