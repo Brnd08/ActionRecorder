@@ -20,7 +20,7 @@ import com.brnd.action_recorder.data.Database;
 import com.brnd.action_recorder.views.recording.Recording;
 import com.brnd.action_recorder.views.recording.recording_saving_view.RecordingsRepository;
 import com.brnd.action_recorder.views.recording.recording_start_view.InteractionRecorder;
-import com.brnd.action_recorder.views.recording.recording_start_view.RecorderConfiguration;
+import com.brnd.action_recorder.views.recording.recording_start_view.RecordingConfiguration;
 import com.brnd.action_recorder.views.replay.replay_start_view.ActionsPlayer;
 import com.github.kwhat.jnativehook.NativeHookException;
 import org.apache.logging.log4j.Level;
@@ -44,14 +44,14 @@ public class ReplayTest {
         InteractionRecorder interactionRecorder = new InteractionRecorder();
         RecordingsRepository recordingsRepository = new RecordingsRepository();
 
-        RecorderConfiguration recorderConfiguration = new RecorderConfiguration(
+        RecordingConfiguration recordingConfiguration = new RecordingConfiguration(
                true
                 , true
                 , true
                 , true
         );
 
-        interactionRecorder.startRecording(recorderConfiguration);
+        interactionRecorder.startRecording(recordingConfiguration);
 
 
         Timer timer = new Timer();

@@ -22,9 +22,8 @@ package com.brnd.action_recorder.views.recording.recording_start_view;
  * @param recordingMouseMotionInteractions whether record Mouse Motion events (Mouse movement)
  * @param recordingMouseClickInteractions whether record Mouse Clicks events (Right, left, mouse, etc clicks)
  * @param recordingMouseWheelInteractions whether record Mouse Wheel events (Mouse wheel scroll)
- * @param recordingTitle the name associated to the record
  */
-public record RecorderConfiguration(
+public record RecordingConfiguration(
         boolean recordingKeyboardInteractions,
         boolean recordingMouseMotionInteractions,
         boolean recordingMouseClickInteractions,

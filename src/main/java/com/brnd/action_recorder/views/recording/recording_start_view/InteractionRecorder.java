@@ -17,7 +17,6 @@
 package com.brnd.action_recorder.views.recording.recording_start_view;
 
 import com.brnd.action_recorder.views.recording.Recording;
-import com.brnd.action_recorder.views.recording.recording_start_view.RecorderConfiguration;
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
 import com.github.kwhat.jnativehook.NativeInputEvent;
@@ -41,7 +40,7 @@ public class InteractionRecorder {
     private final MouseClicksListener mouseClicksListener = new MouseClicksListener();
     private final KeyBoardListener keyboardListener = new KeyBoardListener();
     private long pauseStartTime = 0L;
-    private RecorderConfiguration recordConfiguration;
+    private RecordingConfiguration recordConfiguration;
     private Recording recording;
     private Long eventsTimeStampOffset = 0L;
     private long recordingStartTime;
@@ -54,14 +53,14 @@ public class InteractionRecorder {
     }
 
     /**
-     * Starts a new recording using the given RecorderConfiguration
+     * Starts a new recording using the given RecordingConfiguration
      *
      * @param recordConfiguration The recorder configuration specifying the
      *                            events to be catch
      * @throws NativeHookException If a problem occurs while enabling Native
      *                             Hook
      */
-    public void startRecording(RecorderConfiguration recordConfiguration) throws NativeHookException {
+    public void startRecording(RecordingConfiguration recordConfiguration) throws NativeHookException {
         GlobalScreen.setEventDispatcher(new SwingDispatchService());// Force JNativeHook to use the Swing thread
         GlobalScreen.registerNativeHook(); // Enables native hook
 

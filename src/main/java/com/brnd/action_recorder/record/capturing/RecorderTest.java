@@ -21,7 +21,7 @@ import com.brnd.action_recorder.views.recording.Recording;
 import com.brnd.action_recorder.views.recording.recording_saving_view.RecordingsRepository;
 import com.brnd.action_recorder.views.recording.recording_start_view.InteractionRecorder;
 import static com.brnd.action_recorder.views.recording.recording_start_view.InteractionRecorder.logger;
-import com.brnd.action_recorder.views.recording.recording_start_view.RecorderConfiguration;
+import com.brnd.action_recorder.views.recording.recording_start_view.RecordingConfiguration;
 import com.github.kwhat.jnativehook.NativeHookException;
 import java.sql.SQLException;
 import java.util.Timer;
@@ -40,14 +40,14 @@ public class RecorderTest {
         InteractionRecorder interactionRecorder = new InteractionRecorder();
         RecordingsRepository recordingsRepository = new RecordingsRepository();
 
-        RecorderConfiguration recorderConfiguration = new RecorderConfiguration(
+        RecordingConfiguration recordingConfiguration = new RecordingConfiguration(
                 true
                 , false
                 , true
                 , true
         );
 
-        interactionRecorder.startRecording(recorderConfiguration);
+        interactionRecorder.startRecording(recordingConfiguration);
         
         
         Timer timer = new Timer();
