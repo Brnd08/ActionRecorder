@@ -16,12 +16,13 @@
  */
 package com.brnd.action_recorder.views.recording;
 
-import com.github.kwhat.jnativehook.NativeInputEvent;
+import com.brnd.action_recorder.views.replay.replay_start_view.actions.ReplayableAction;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -35,7 +36,7 @@ public class Recording implements Serializable {
     @Serial
     private static final long serialVersionUID = 4265898901141738551L;
     private int id;
-    private final LinkedHashMap<Long, NativeInputEvent> inputEvents;
+    private final Map<Long, ReplayableAction> inputEvents;
     private final LocalDateTime recordingDateTime;
     private String recordingTitle;
     private String recordingDescription; 
@@ -76,7 +77,7 @@ public class Recording implements Serializable {
                         .stream()
                         .map(entry -> {
                             long time = entry.getKey();
-                            String event = entry.getValue().paramString();
+                            String event = entry.getValue().toString();
                             return String.format("time: %d -> %s %n", time, event);
                         })
                         .collect(Collectors.joining());
@@ -89,8 +90,8 @@ public class Recording implements Serializable {
         logger.log(Level.INFO, "Recording started at {} s", this.recordingStartTime/1_000_000_000.0f);
     }
 
-    public Recording(// used to retrieve Recordings from database
-            int id, LinkedHashMap<Long, NativeInputEvent> inputEvents, String recordingTitle, String recordingDescription, 
+    public Recording(// used to retrieve Recordings from the database
+            int id, Map<Long, ReplayableAction> inputEvents, String recordingTitle, String recordingDescription,
             float recordingDuration, LocalDateTime recordingDateTime
     ) {
         this.id = id;
@@ -107,11 +108,11 @@ public class Recording implements Serializable {
         return id;
     }
 
-    public LinkedHashMap<Long, NativeInputEvent> getInputEvents() {
+    public Map<Long, ReplayableAction> getInputEvents() {
         return inputEvents;
     }
     
-    public void setInputEvents(LinkedHashMap<Long, NativeInputEvent> inputEvents){
+    public void setInputEvents(Map<Long, ReplayableAction> inputEvents){
         this.inputEvents.putAll(inputEvents);
     }
     
@@ -195,6 +196,7 @@ public class Recording implements Serializable {
         sb.append(", recordingStartTime=").append(recordingStartTime);
         sb.append(", recordingStopTime=").append(recordingStopTime);
         sb.append(", recordingDuration=").append(recordingDuration);
+        sb.append(", inputEventsCount=").append(inputEvents.size());
         sb.append('}');
         return sb.toString();
 

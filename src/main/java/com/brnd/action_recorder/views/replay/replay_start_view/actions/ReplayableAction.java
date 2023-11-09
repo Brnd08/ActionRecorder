@@ -17,17 +17,21 @@
 package com.brnd.action_recorder.views.replay.replay_start_view.actions;
 
 import java.awt.*;
+import java.io.Serial;
+import java.io.Serializable;
 
 /**
- * Represents an user-computer interaction which can be reproduced by the program
+ * Represents a user-computer interaction which can be reproduced by the program
  */
-public abstract class ReplayableAction {
+public abstract class ReplayableAction implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -8544470766687535649L;
     protected ActionType actionType;
 
     /**
      * Executes needed steps to reproduce the ReplayableAction
      *
-     * @param robot an Robot object which will be used to reproduce the action
+     * @param robot a Robot object which will be used to reproduce the action
      */
     public abstract void replayAction(Robot robot);
 
@@ -46,5 +50,17 @@ public abstract class ReplayableAction {
          * Action type for keyboard related interactions
          */
         KEYBOARD_INPUT
+    }
+
+    /**
+     * Returns a string representation of the object.
+     */
+    @Override
+    public String toString() {
+        var sb = new StringBuilder();
+        sb.append("ReplayableAction{");
+        sb.append("actionType=").append(this.actionType);
+        sb.append("}");
+        return sb.toString();
     }
 }
