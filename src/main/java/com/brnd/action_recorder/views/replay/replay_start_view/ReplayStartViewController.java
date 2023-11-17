@@ -200,7 +200,7 @@ public class ReplayStartViewController implements ViewController, Initializable 
     }
 
     /**
-     * Resume the current recording intended to be use after pausing a recording
+     * Resume the current recording intended to be used after pausing a recording
      */
     @FXML
     private void resumeRecording() {
