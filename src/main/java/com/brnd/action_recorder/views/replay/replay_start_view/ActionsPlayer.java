@@ -44,10 +44,6 @@ public class ActionsPlayer {
     private ScheduledExecutorService actionsScheduler = Executors.newScheduledThreadPool(1);
     private final Robot robot;
     private final Map<Long, ReplayableAction> replayableActions = new HashMap<>();
-    private boolean mouseEvents = false;
-    private boolean keyboardEvents = false;
-    private boolean scrollEvents = false;
-    private boolean clickEvents = false;
     private final float duration;
 
     /**
@@ -60,22 +56,6 @@ public class ActionsPlayer {
         this.robot = new Robot();
         this.duration = duration;
         this.replayableActions.putAll(inputEventMap);
-        inputEventMap.forEach(
-                (executionTime, replayableAction) -> {
-                    if (replayableAction instanceof MouseMotionAction && !mouseEvents) {
-                        this.mouseEvents = true;
-                    } else if (replayableAction instanceof MouseButtonAction && !clickEvents) {
-                        this.clickEvents = true;
-                    } else if (replayableAction instanceof KeyboardAction && !keyboardEvents) {
-                        this.keyboardEvents = true;
-                    } else if (replayableAction instanceof ScrollAction && !scrollEvents) {
-                        this.scrollEvents = true;
-                    }
-                    logger.log(Level.INFO, "New ReplayableAction processed. Execution Time: {}. Action: {}"
-                            , executionTime, replayableAction
-                    );
-                }
-        );
     }
 
     /**
@@ -147,19 +127,4 @@ public class ActionsPlayer {
 
     }
 
-    public boolean containsMouseEvents() {
-        return mouseEvents;
-    }
-
-    public boolean containsKeyboardEvents() {
-        return keyboardEvents;
-    }
-
-    public boolean containsScrollEvents() {
-        return scrollEvents;
-    }
-
-    public boolean containsClickEvents() {
-        return clickEvents;
-    }
 }

@@ -49,6 +49,11 @@ public class ReplayStartViewController implements ViewController, Initializable 
     private FXTrayIcon trayIcon;
     private ActionsPlayer actionsPlayer;
     private final ToggleGroup replayModeToggleGroup = new ToggleGroup();
+    private boolean mouseEvents = false;
+    private boolean keyboardEvents = false;
+    private boolean scrollEvents = false;
+    private boolean clickEvents = false;
+
     @FXML
     private ToggleButton systemTrayToggleButton, windowToggleButton;
     @FXML
@@ -83,10 +88,10 @@ public class ReplayStartViewController implements ViewController, Initializable 
      * Show the information of the replay in the screen controls and
      */
     public void displayReplayInfo(Recording recording) {
-        this.mouseCheck.setSelected(actionsPlayer.containsMouseEvents());
-        this.keyboardCheck.setSelected(actionsPlayer.containsKeyboardEvents());
-        this.scrollCheck.setSelected(actionsPlayer.containsScrollEvents());
-        this.clickCheck.setSelected(actionsPlayer.containsClickEvents());
+        this.mouseCheck.setSelected(recording.isMouseEvents());
+        this.keyboardCheck.setSelected(recording.isKeyboardEvents());
+        this.scrollCheck.setSelected(recording.isScrollEvents());
+        this.clickCheck.setSelected(recording.isClickEvents());
         this.inputsText.setText(String.valueOf(recording.getInputEvents().size()));
         this.durationText.setText(String.format("%.2f s", recording.getRecordingDuration()));
     }

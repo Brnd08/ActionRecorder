@@ -83,12 +83,18 @@ public class ReplayableNativeRecorder implements NativeRecorder {
         GlobalScreen.setEventDispatcher(new SwingDispatchService());// Force JNativeHook to use the Swing thread
         GlobalScreen.registerNativeHook(); // Enables native hook
 
-        logger.log(Level.TRACE, "Creating new Recording");
-        this.recording = new Recording();
-        this.recordingStartTime = this.recording.getRecordingStartTime();
-
         this.recordingConfiguration = recordingConfiguration;
         logger.log(Level.TRACE, "Loading configuration: {}", this.recordingConfiguration);
+
+        logger.log(Level.TRACE, "Creating new Recording");
+        this.recording = new Recording();
+        this.recording.setClickEvents(this.recordingConfiguration.recordingMouseClickInteractions());
+        this.recording.setMouseEvents(this.recordingConfiguration.recordingMouseMotionInteractions());
+        this.recording.setKeyboardEvents(this.recordingConfiguration.recordingKeyboardInteractions());
+        this.recording.setScrollEvents(this.recordingConfiguration.recordingMouseWheelInteractions());
+        this.recordingStartTime = this.recording.getRecordingStartTime();
+
+
         loadRecordingConfiguration(); // loads the specified configuration
 
         logger.log(Level.TRACE, "Recording Started");
