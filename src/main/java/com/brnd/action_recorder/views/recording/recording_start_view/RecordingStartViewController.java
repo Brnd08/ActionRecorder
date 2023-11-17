@@ -17,7 +17,6 @@
 package com.brnd.action_recorder.views.recording.recording_start_view;
 
 import com.brnd.action_recorder.views.recording.Recording;
-import com.brnd.action_recorder.views.recording.recording_start_view.RecorderConfiguration;
 import com.brnd.action_recorder.views.utils.StagePositioner;
 import com.brnd.action_recorder.views.utils.ViewController;
 import com.brnd.action_recorder.views.utils.ViewEnum;
@@ -75,7 +74,7 @@ public class RecordingStartViewController implements Initializable, ViewControll
     private Button closeBttn;
 
     private static final Logger logger = LogManager.getLogger(RecordingStartViewController.class);
-    private final InteractionRecorder interactionRecorder = new InteractionRecorder();
+    private final NativeRecorder actionsRecorder = new ReplayableNativeRecorder();
     private final ToggleGroup recordModeToggleGroup = new ToggleGroup();
     private boolean isRecording = false;
     private FXTrayIcon trayIcon;
@@ -93,17 +92,17 @@ public class RecordingStartViewController implements Initializable, ViewControll
     @FXML
     public void startRecording(InputEvent event) {
         var currentStage = StagePositioner.getStageFromEvent(event);
-        RecorderConfiguration recorderConfiguration = this.obtainRecordingConfigurationFromGUI();
+        RecordingConfiguration recordingConfiguration = this.obtainRecordingConfigurationFromGUI();
 
-        if (recorderConfiguration.isAtLeastOneListenerEnabled()) {
+        if (recordingConfiguration.isAtLeastOneListenerEnabled()) {
             try {
-                logger.log(Level.INFO, "Starting Recording with following configuration: {}", recorderConfiguration);
-                this.interactionRecorder.startRecording(recorderConfiguration);
+                logger.log(Level.INFO, "Starting Recording with following configuration: {}", recordingConfiguration);
+                this.actionsRecorder.startRecording(recordingConfiguration);
                 this.isRecording = true;
                 this.switchToRecordingMode(currentStage);
             } catch (NativeHookException exception) {
                 logger.log(Level.ERROR, "Fail to start Recording with following configuration: {}",
-                        recorderConfiguration, exception);
+                        recordingConfiguration, exception);
             }
         } else {
             /* if no listeners were selected shows an alert requesting to select at leat one*/
@@ -124,10 +123,10 @@ public class RecordingStartViewController implements Initializable, ViewControll
 
         this.removeTrayIconIfExits();
 
-        this.interactionRecorder.stopRecording();
+        this.actionsRecorder.stopRecording();
         this.isRecording = false;
 
-        var recordedRecording = this.interactionRecorder.getlastRecording();
+        var recordedRecording = this.actionsRecorder.getLastRecording();
         this.navigateToSavingView(recordedRecording, StagePositioner.getStageFromEvent(event));
         StagePositioner.getStageFromEvent(event).close(); // closes the current stage after opening saving view
     }
@@ -252,10 +251,10 @@ public class RecordingStartViewController implements Initializable, ViewControll
      * Obtains a recording configuration based on the inserted values on the GUI
      * inputs
      *
-     * @return RecorderConfiguration containing the configurations
+     * @return RecordingConfiguration containing the configurations
      */
-    private RecorderConfiguration obtainRecordingConfigurationFromGUI() {
-        return new RecorderConfiguration(
+    private RecordingConfiguration obtainRecordingConfigurationFromGUI() {
+        return new RecordingConfiguration(
                 recordKeyboardCheckBox.isSelected(),
                 recordMouseMotionCheckBox.isSelected(),
                 recordMouseClicksCheckBox.isSelected(),
@@ -269,7 +268,7 @@ public class RecordingStartViewController implements Initializable, ViewControll
     @FXML
     private void pauseRecording() {
         logger.log(Level.ALL, "Pausing recording");
-        this.interactionRecorder.pauseRecording(System.nanoTime());
+        this.actionsRecorder.pauseRecording();
     }
 
     /**
@@ -278,7 +277,7 @@ public class RecordingStartViewController implements Initializable, ViewControll
     @FXML
     private void resumeRecording() {
         logger.log(Level.ALL, "Resuming recording");
-        this.interactionRecorder.resumeRecording(System.nanoTime());
+        this.actionsRecorder.resumeRecording();
     }
 
     /**

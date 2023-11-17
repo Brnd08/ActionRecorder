@@ -196,11 +196,11 @@ public class ReplayStartViewController implements ViewController, Initializable 
     @FXML
     private void pauseRecording() {
         logger.log(Level.ALL, "Pausing recording");
-        this.actionsPlayer.pauseRecording(System.nanoTime());
+        this.actionsPlayer.pauseReplay();
     }
 
     /**
-     * Resume the current recording intended to be use after pausing a recording
+     * Resume the current recording intended to be used after pausing a recording
      */
     @FXML
     private void resumeRecording() {

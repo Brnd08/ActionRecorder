@@ -20,10 +20,10 @@ import com.brnd.action_recorder.data.DataUtils;
 import com.brnd.action_recorder.data.Database;
 import com.brnd.action_recorder.data.DatabaseTable;
 import com.brnd.action_recorder.views.recording.Recording;
-import com.brnd.action_recorder.views.recording.recording_saving_view.RecordingsRepository.RecordingMapper;
-import com.github.kwhat.jnativehook.NativeInputEvent;
+import com.brnd.action_recorder.views.replay.replay_start_view.actions.ReplayableAction;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -34,6 +34,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.Level;
@@ -282,9 +283,9 @@ public class RecordingsRepository {
         }
     }
 
-    public LinkedHashMap<Long, NativeInputEvent> obtainInputEvents(int recordingId) {
+    public Map<Long, ReplayableAction> obtainInputEvents(int recordingId) {
         logger.log(Level.ALL, "Retrieving Recording input events from database. Recording id: {}", recordingId);
-        LinkedHashMap<Long, NativeInputEvent> inputEvents = null;
+        Map<Long, ReplayableAction> inputEvents = null;
         byte[] serializedInputEvent;
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_INPUT_EVENTS_BY_ID_SENTENCE)) {
@@ -295,7 +296,7 @@ public class RecordingsRepository {
         } catch (SQLException | IOException | ClassNotFoundException e) {
             logger.log(
                     Level.ERROR,
-                    "Could not retrieve Recording input events, using default value: {}. Exception message: {}. Excecuted query {}",
+                    "Could not retrieve Recording input events, using default value: {}. Exception message: {}. Executed query {}",
                     inputEvents, e.getMessage(), SELECT_INPUT_EVENTS_BY_ID_SENTENCE
             );
             DataUtils.logSuppressedExceptions(logger, e.getSuppressed());
@@ -304,8 +305,8 @@ public class RecordingsRepository {
         return inputEvents;
     }
 
-    public void updateRecordingInputEvents(LinkedHashMap<Long, NativeInputEvent> inputEvents, int recordingId) {
-        String inputEventsString = inputEvents.values().stream().map(entry -> entry.paramString()).collect(Collectors.joining("\t"));
+    public <T extends Map<Long, ReplayableAction>  & Serializable> void updateRecordingInputEvents(T inputEvents, int recordingId) {
+        String inputEventsString = inputEvents.values().stream().map(ReplayableAction::toString).collect(Collectors.joining("\t"));
         logger.log(Level.ALL, "Updating database Recording input events: ({}). \n Recording id: {}", inputEventsString, recordingId);
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_INPUT_EVENTS_WHERE_ID_SENTENCE)) {
@@ -313,15 +314,16 @@ public class RecordingsRepository {
             preparedStatement.setInt(2, recordingId);
             int modifiedRows = preparedStatement.executeUpdate();
 
-            logger.log(Level.ALL, "Succesfully execute script with a {} modified rows count", modifiedRows);
+            logger.log(Level.ALL, "Sucessfully execute script with a {} modified rows count", modifiedRows);
         } catch (SQLException | IOException e) {
             logger.log(
                     Level.ERROR,
-                    "Could not update Recording input events value. Excecuted query {}. Exception message: {}",
+                    "Could not update Recording input events value. Executed query {}. Exception message: {}",
                     UPDATE_INPUT_EVENTS_WHERE_ID_SENTENCE, e.getMessage()
             );
             DataUtils.logSuppressedExceptions(logger, e.getSuppressed());
         }
+
     }
 
     public Recording getRecordingById(int recordingId) {
@@ -379,7 +381,7 @@ public class RecordingsRepository {
             this.updateRecordingDescription(recordingToInsert.getRecordingDescription(), newRowId);
             this.updateRecordingDate(recordingToInsert.getRecordingDateTime(), newRowId);
             this.updateRecordingDuration(recordingToInsert.getRecordingDuration(), newRowId);
-            this.updateRecordingInputEvents(recordingToInsert.getInputEvents(), newRowId);
+            this.updateRecordingInputEvents((LinkedHashMap<Long, ReplayableAction>) recordingToInsert.getInputEvents(), newRowId);
         }
         return newRowId;
     }
