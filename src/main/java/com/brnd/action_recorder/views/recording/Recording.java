@@ -22,8 +22,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.Level;
@@ -39,7 +38,7 @@ public class Recording implements Serializable {
     @Serial
     private static final long serialVersionUID = 4265898901141738551L;
     private int id;
-    private final Map<Long, ReplayableAction> inputEvents;
+    private final Queue<ReplayableAction> inputEvents;
     private final LocalDateTime recordingDateTime;
     private String recordingTitle;
     private boolean mouseEvents = false;
@@ -113,27 +112,21 @@ public class Recording implements Serializable {
      * @return a String representation of the map containing the events.
      */
     public String interactionsString() {
-
         return
-                inputEvents.entrySet()
-                        .stream()
-                        .map(entry -> {
-                            long time = entry.getKey();
-                            String event = entry.getValue().toString();
-                            return String.format("time: %d -> %s %n", time, event);
-                        })
-                        .collect(Collectors.joining());
+                inputEvents.stream().map(
+                            event -> String.format("time: %d -> %s %n", event.getRelativeExecutionTime(), event)
+                        ).collect(Collectors.joining());
     }
 
     public Recording() { // used to create new Recordings
         this.recordingStartTime = System.nanoTime();
-        this.inputEvents = new LinkedHashMap<>();
+        this.inputEvents = new LinkedList<>();
         this.recordingDateTime = LocalDateTime.now();
         logger.log(Level.INFO, "Recording started at {} s", this.recordingStartTime / 1_000_000_000.0f);
     }
 
     public Recording(// used to retrieve Recordings from the database
-                     int id, Map<Long, ReplayableAction> inputEvents, String recordingTitle, String recordingDescription,
+                     int id, Queue<ReplayableAction> inputEvents, String recordingTitle, String recordingDescription,
                      float recordingDuration, LocalDateTime recordingDateTime
     ) {
         this.id = id;
@@ -150,12 +143,12 @@ public class Recording implements Serializable {
         return id;
     }
 
-    public Map<Long, ReplayableAction> getInputEvents() {
+    public Queue<ReplayableAction> getInputEvents() {
         return inputEvents;
     }
 
-    public void setInputEvents(Map<Long, ReplayableAction> inputEvents) {
-        this.inputEvents.putAll(inputEvents);
+    public void setInputEvents(Queue<ReplayableAction> inputEvents) {
+        this.inputEvents.addAll(inputEvents);
     }
 
 

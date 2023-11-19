@@ -31,8 +31,8 @@ public class MouseMotionAction extends MouseAction {
      * @param nativeMouseEvent the NativeMouseEvent which will be used.
      * @throws IllegalStateException if the given NativeMouseEvent has an ID different from NativeMouseEvent.NATIVE_MOUSE_MOVED
      */
-    public MouseMotionAction(NativeMouseEvent nativeMouseEvent) throws IllegalStateException{
-        super(MouseEventType.MOTION, nativeMouseEvent.getX(), nativeMouseEvent.getY());
+    public MouseMotionAction(NativeMouseEvent nativeMouseEvent, long protectedExecutionTime) throws IllegalStateException{
+        super(MouseEventType.MOTION, nativeMouseEvent.getX(), nativeMouseEvent.getY(), protectedExecutionTime);
         var nativeMouseEventId = nativeMouseEvent.getID();
         if (nativeMouseEventId != NativeMouseEvent.NATIVE_MOUSE_MOVED) {
             logger.log(Level.ERROR

@@ -35,8 +35,8 @@ public class MouseButtonAction extends MouseAction {
      * @param nativeMouseEvent A NativeMouseEvent wrapping a mouse button press or release
      * @throws IllegalStateException if the given NativeMouseEvent event type is other than a button press or release
      */
-    public MouseButtonAction(NativeMouseEvent nativeMouseEvent) {
-        super(MouseEventType.BUTTON_CLICK, nativeMouseEvent.getX(), nativeMouseEvent.getY());
+    public MouseButtonAction(NativeMouseEvent nativeMouseEvent, long protectedExecutionTime) {
+        super(MouseEventType.BUTTON_CLICK, nativeMouseEvent.getX(), nativeMouseEvent.getY(), protectedExecutionTime);
         this.buttonId = this.parseButtonId(nativeMouseEvent.getButton());
         var nativeMouseEventId = nativeMouseEvent.getID(); // gets the id of the mouse event
         switch (nativeMouseEventId) {
