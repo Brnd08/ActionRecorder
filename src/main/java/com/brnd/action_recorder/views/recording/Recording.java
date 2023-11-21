@@ -16,18 +16,21 @@
  */
 package com.brnd.action_recorder.views.recording;
 
-import com.github.kwhat.jnativehook.NativeInputEvent;
+import com.brnd.action_recorder.views.replay.replay_start_view.actions.ReplayableAction;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.LinkedHashMap;
+import java.util.*;
 import java.util.stream.Collectors;
+
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 /**
-    This class is used to store the Recordings events as well as other useful information
+ * This class is used to store the Recordings events as well as other useful information
  */
 public class Recording implements Serializable {
     private static final Logger logger = LogManager.getLogger(Recording.class);
@@ -35,10 +38,47 @@ public class Recording implements Serializable {
     @Serial
     private static final long serialVersionUID = 4265898901141738551L;
     private int id;
-    private final LinkedHashMap<Long, NativeInputEvent> inputEvents;
+    private final Queue<ReplayableAction> inputEvents;
     private final LocalDateTime recordingDateTime;
     private String recordingTitle;
-    private String recordingDescription; 
+    private boolean mouseEvents = false;
+    private boolean keyboardEvents = false;
+    private boolean scrollEvents = false;
+    private boolean clickEvents = false;
+
+    public boolean isMouseEvents() {
+        return mouseEvents;
+    }
+
+    public void setMouseEvents(boolean mouseEvents) {
+        this.mouseEvents = mouseEvents;
+    }
+
+    public boolean isKeyboardEvents() {
+        return keyboardEvents;
+    }
+
+    public void setKeyboardEvents(boolean keyboardEvents) {
+        this.keyboardEvents = keyboardEvents;
+    }
+
+    public boolean isScrollEvents() {
+        return scrollEvents;
+    }
+
+    public void setScrollEvents(boolean scrollEvents) {
+        this.scrollEvents = scrollEvents;
+    }
+
+    public boolean isClickEvents() {
+        return clickEvents;
+    }
+
+    public void setClickEvents(boolean clickEvents) {
+        this.clickEvents = clickEvents;
+    }
+
+    private String recordingDescription;
     /**
      * Recording Execution start time in nanoseconds.
      */
@@ -55,43 +95,39 @@ public class Recording implements Serializable {
     /**
      * This method is intended to be called in Recording finalization
      * Sets the stopTime and calculates Recording duration.
+     *
      * @param pausedTime The time that the recording remained paused
      */
     public void closeRecording(float pausedTime) {
         this.recordingStopTime = System.nanoTime();
         float nanoSecondsInOneSecond = 1_000_000_000.0f;// 1 second = 1x10^9 nanoseconds.
         this.recordingDuration = ((recordingStopTime - recordingStartTime) - pausedTime) / nanoSecondsInOneSecond;
-        
-        logger.log(Level.INFO, "Recording stoped at {} s", this.recordingStopTime/1_000_000_000.0f);
+
+        logger.log(Level.INFO, "Recording stoped at {} s", this.recordingStopTime / 1_000_000_000.0f);
     }
 
     /**
      * The string representation of the stored events
+     *
      * @return a String representation of the map containing the events.
      */
     public String interactionsString() {
-
         return
-                inputEvents.entrySet()
-                        .stream()
-                        .map(entry -> {
-                            long time = entry.getKey();
-                            String event = entry.getValue().paramString();
-                            return String.format("time: %d -> %s %n", time, event);
-                        })
-                        .collect(Collectors.joining());
+                inputEvents.stream().map(
+                            event -> String.format("time: %d -> %s %n", event.getRelativeExecutionTime(), event)
+                        ).collect(Collectors.joining());
     }
 
     public Recording() { // used to create new Recordings
         this.recordingStartTime = System.nanoTime();
-        this.inputEvents = new LinkedHashMap<>();
+        this.inputEvents = new LinkedList<>();
         this.recordingDateTime = LocalDateTime.now();
-        logger.log(Level.INFO, "Recording started at {} s", this.recordingStartTime/1_000_000_000.0f);
+        logger.log(Level.INFO, "Recording started at {} s", this.recordingStartTime / 1_000_000_000.0f);
     }
 
-    public Recording(// used to retrieve Recordings from database
-            int id, LinkedHashMap<Long, NativeInputEvent> inputEvents, String recordingTitle, String recordingDescription, 
-            float recordingDuration, LocalDateTime recordingDateTime
+    public Recording(// used to retrieve Recordings from the database
+                     int id, Queue<ReplayableAction> inputEvents, String recordingTitle, String recordingDescription,
+                     float recordingDuration, LocalDateTime recordingDateTime
     ) {
         this.id = id;
         this.inputEvents = inputEvents;
@@ -101,20 +137,20 @@ public class Recording implements Serializable {
         this.recordingDateTime = recordingDateTime;
         this.recordingStartTime = 0;
     }
-    
+
 
     public int getId() {
         return id;
     }
 
-    public LinkedHashMap<Long, NativeInputEvent> getInputEvents() {
+    public Queue<ReplayableAction> getInputEvents() {
         return inputEvents;
     }
-    
-    public void setInputEvents(LinkedHashMap<Long, NativeInputEvent> inputEvents){
-        this.inputEvents.putAll(inputEvents);
+
+    public void setInputEvents(Queue<ReplayableAction> inputEvents) {
+        this.inputEvents.addAll(inputEvents);
     }
-    
+
 
     public LocalDateTime getRecordingDateTime() {
         return recordingDateTime;
@@ -151,7 +187,7 @@ public class Recording implements Serializable {
     public void setRecordingTitle(String recordingTitle) {
         this.recordingTitle = recordingTitle;
     }
-    
+
     public String getRecordingDescription() {
         return recordingDescription;
     }
@@ -160,7 +196,7 @@ public class Recording implements Serializable {
         this.recordingDescription = recordingDescription;
     }
 
-    public String getRecordingDate(){
+    public String getRecordingDate() {
         var dateTimeFormatter = DateTimeFormatter.ofPattern(Recording.DATE_TIME_FORMAT);
         return this.recordingDateTime.format(dateTimeFormatter);
     }
@@ -183,9 +219,10 @@ public class Recording implements Serializable {
 
     /**
      * A String representation of the object excluding the recording input Events
+     *
      * @return The String representation of this object
      */
-    public String toShortString(){
+    public String toShortString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Recording{");
         sb.append("id=").append(id);
@@ -195,9 +232,10 @@ public class Recording implements Serializable {
         sb.append(", recordingStartTime=").append(recordingStartTime);
         sb.append(", recordingStopTime=").append(recordingStopTime);
         sb.append(", recordingDuration=").append(recordingDuration);
+        sb.append(", inputEventsCount=").append(inputEvents.size());
         sb.append('}');
         return sb.toString();
 
     }
-    
+
 }

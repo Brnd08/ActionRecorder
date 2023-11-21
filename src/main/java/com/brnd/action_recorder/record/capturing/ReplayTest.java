@@ -19,8 +19,8 @@ package com.brnd.action_recorder.record.capturing;
 import com.brnd.action_recorder.data.Database;
 import com.brnd.action_recorder.views.recording.Recording;
 import com.brnd.action_recorder.views.recording.recording_saving_view.RecordingsRepository;
-import com.brnd.action_recorder.views.recording.recording_start_view.InteractionRecorder;
-import com.brnd.action_recorder.views.recording.recording_start_view.RecorderConfiguration;
+import com.brnd.action_recorder.views.recording.recording_start_view.ReplayableNativeRecorder;
+import com.brnd.action_recorder.views.recording.recording_start_view.RecordingConfiguration;
 import com.brnd.action_recorder.views.replay.replay_start_view.ActionsPlayer;
 import com.github.kwhat.jnativehook.NativeHookException;
 import org.apache.logging.log4j.Level;
@@ -30,7 +30,7 @@ import java.sql.SQLException;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static com.brnd.action_recorder.views.recording.recording_start_view.InteractionRecorder.logger;
+import static com.brnd.action_recorder.views.recording.recording_start_view.ReplayableNativeRecorder.logger;
 
 /**
  * This class serves a quick way to check verify recording creation functionality
@@ -41,17 +41,17 @@ public class ReplayTest {
 //        Database.deleteDatabase();// deletes previous databases
         Database.initializeDatabase(); // Initialize database
 
-        InteractionRecorder interactionRecorder = new InteractionRecorder();
+        ReplayableNativeRecorder interactionRecorder = new ReplayableNativeRecorder();
         RecordingsRepository recordingsRepository = new RecordingsRepository();
 
-        RecorderConfiguration recorderConfiguration = new RecorderConfiguration(
+        RecordingConfiguration recordingConfiguration = new RecordingConfiguration(
                true
                 , true
                 , true
                 , true
         );
 
-        interactionRecorder.startRecording(recorderConfiguration);
+        interactionRecorder.startRecording(recordingConfiguration);
 
 
         Timer timer = new Timer();
@@ -60,7 +60,7 @@ public class ReplayTest {
             public void run() {
                 interactionRecorder.stopRecording();
 
-                Recording recordedRecording = interactionRecorder.getlastRecording();
+                Recording recordedRecording = interactionRecorder.getLastRecording();
                 recordedRecording.setRecordingTitle("First full recording test");
                 recordedRecording.setRecordingDescription("This the first recording with all the events listeners recording input event I'm so exited I worked and investigate for a long time to see this happen");
                 int recordingId = recordingsRepository.insertRecording(recordedRecording);

@@ -36,8 +36,8 @@ public class ScrollAction extends MouseAction {
      *
      * @param nativeMouseWheelEvent The NativeMouseWheelEvent to be used for the object instantiation
      */
-    public ScrollAction(NativeMouseWheelEvent nativeMouseWheelEvent) {
-        super(MouseEventType.SCROLL, nativeMouseWheelEvent.getX(), nativeMouseWheelEvent.getY());
+    public ScrollAction(NativeMouseWheelEvent nativeMouseWheelEvent, long relativeExecutionTime) {
+        super(MouseEventType.SCROLL, nativeMouseWheelEvent.getX(), nativeMouseWheelEvent.getY(), relativeExecutionTime);
         this.wheelScroll = nativeMouseWheelEvent.getScrollAmount();
 
         var wheelDirection = nativeMouseWheelEvent.getWheelDirection();

@@ -31,6 +31,7 @@ import java.awt.Robot;
 import java.awt.AWTException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Queue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -43,53 +44,35 @@ public class ActionsPlayer {
     private static final Logger logger = LogManager.getLogger(ActionsPlayer.class);
     private ScheduledExecutorService actionsScheduler = Executors.newScheduledThreadPool(1);
     private final Robot robot;
-    private final Map<Long, ReplayableAction> replayableActions = new HashMap<>();
-    private boolean mouseEvents = false;
-    private boolean keyboardEvents = false;
-    private boolean scrollEvents = false;
-    private boolean clickEvents = false;
+    private final Queue<ReplayableAction> replayableActions;
     private final float duration;
 
     /**
      * Instantiates a new ActionPlayer object
      *
-     * @param inputEventMap Map containing each action replay time as key and its related NativeInputEvent as value.
+     * @param inputEvents Queue containing each action to be replayed
      * @throws AWTException If the ActionPlayer could not be created due to application permissions
      */
-    public ActionsPlayer(Map<Long, NativeInputEvent> inputEventMap, float duration) throws AWTException {
+    public ActionsPlayer(Queue<ReplayableAction> inputEvents, float duration) throws AWTException {
         this.robot = new Robot();
         this.duration = duration;
-        inputEventMap.forEach(
-                (executionTime, recordedAction) -> {
-                    var replayableAction = this.parseReplayableAction(recordedAction); // convert each NativeInputEvent to a ReplayableAction object
-                    if (replayableAction instanceof MouseMotionAction && !mouseEvents) {
-                        this.mouseEvents = true;
-                    } else if (replayableAction instanceof MouseButtonAction && !clickEvents) {
-                        this.clickEvents = true;
-                    } else if (replayableAction instanceof KeyboardAction && !keyboardEvents) {
-                        this.keyboardEvents = true;
-                    } else if (replayableAction instanceof ScrollAction && !scrollEvents) {
-                        this.scrollEvents = true;
-                    }
-                    this.replayableActions.put(executionTime, replayableAction); // adds each action execution time an its related ReplayableAction
-                    logger.log(Level.INFO, "New ReplayableAction processed. Execution Time: {}. Action: {}"
-                            , executionTime, replayableAction
-                    );
-                }
-        );
+        this.replayableActions = inputEvents;
     }
 
-    public void pauseRecording(long replayPauseTime) {
-        logger.log(Level.ALL, "Unimplemented functionality pauseRecording(long)");
+    /**
+     * Pauses the current replay process
+     */
+    public void pauseReplay() {
+        logger.log(Level.ALL, "Unimplemented functionality pauseRecording()");
     }
 
     /**
      * Starts actions replaying process
      *
-     * @Param finalizationCallback A runnable to execute when all events have been executed
+     * @param finalizationCallback A runnable to execute when all events have been executed
      */
     public void startReplay(Runnable finalizationCallback) {
-        if(this.actionsScheduler.isShutdown()){ // if the scheduler was shutdown create another instance
+        if(this.actionsScheduler.isShutdown()){ // if the scheduler was shutdown, create another instance
             this.actionsScheduler = new ScheduledThreadPoolExecutor(1);
         }
         this.replayableActions.forEach(this::scheduleActionExecution);
@@ -98,10 +81,11 @@ public class ActionsPlayer {
                     finalizationCallback
             );
             logger.log(Level.TRACE, "Replay Finalization reached. System time: {}", System.nanoTime());
-        }, Math.round(duration) + 2, TimeUnit.SECONDS);
+        }, Math.round(duration) + 2L, TimeUnit.SECONDS);
     }
 
     /**
+     * Finalizes the current replay process
      */
     public void stopReplay() {
         logger.log(Level.INFO, "Unsupported functionality stopReplay");
@@ -110,34 +94,16 @@ public class ActionsPlayer {
     /**
      * Schedules the given ReplayableAction for execution after given time
      *
-     * @param executionTime the time the recording will wait from schedule time
-     * @param action        The ReplayableAction to be scheduled
+     * @param action The ReplayableAction to be scheduled
      */
-    private void scheduleActionExecution(long executionTime, ReplayableAction action) {
+    private void scheduleActionExecution(ReplayableAction action) {
         this.actionsScheduler.schedule(
                 () -> {
                     action.replayAction(robot);
                     logger.log(Level.TRACE, "Execute Action: {}. System time: {}", action, System.nanoTime());
-                }, executionTime, TimeUnit.NANOSECONDS);
+                }, action.getRelativeExecutionTime(), TimeUnit.NANOSECONDS);
     }
 
-    /**
-     * Returns the corresponding ReplayableAction of the given NativeInputEvent
-     *
-     * @param nativeEvent The NativeInputEvent to be parsed
-     */
-    private ReplayableAction parseReplayableAction(NativeInputEvent nativeEvent) {
-        ReplayableAction parsedAction = null;
-        if (nativeEvent instanceof NativeMouseWheelEvent mouseWheelEvent) { // scroll events
-            parsedAction = new ScrollAction(mouseWheelEvent);
-        } else if (nativeEvent instanceof NativeKeyEvent keyEvent) { // keyboard events
-            parsedAction = new KeyboardAction(keyEvent);
-        } else if (nativeEvent instanceof NativeMouseEvent mouseEvent) { // mouse clicks and movements
-            parsedAction = (mouseEvent.getID() == NativeMouseEvent.NATIVE_MOUSE_MOVED) ?
-                    new MouseMotionAction(mouseEvent) : new MouseButtonAction(mouseEvent);
-        }
-        return parsedAction;
-    }
 
     public void resumeRecording() {
         logger.log(Level.ALL, "Unimplemented functionality resumeRecording(long)");
@@ -161,19 +127,4 @@ public class ActionsPlayer {
 
     }
 
-    public boolean containsMouseEvents() {
-        return mouseEvents;
-    }
-
-    public boolean containsKeyboardEvents() {
-        return keyboardEvents;
-    }
-
-    public boolean containsScrollEvents() {
-        return scrollEvents;
-    }
-
-    public boolean containsClickEvents() {
-        return clickEvents;
-    }
 }

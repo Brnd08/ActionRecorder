@@ -32,7 +32,7 @@ import org.apache.logging.log4j.Logger;
 public class KeyboardAction extends ReplayableAction {
     private static final Logger logger = LogManager.getLogger(KeyboardAction.class);
     /**
-     * Contains every VC keycode constants declared on the @{link NativeInputEvent} class as keys and it corresponding
+     * Contains every VC keycode constants declared on the @{link NativeInputEvent} class as keys and it's corresponding
      * JWT VK constants representation declared on @{link KeyEvent} class.
      * NOTE: Only contains the VC keycodes that has a direct representation as a VK keycode
      */
@@ -49,7 +49,8 @@ public class KeyboardAction extends ReplayableAction {
      * @param nativeKeyEvent A NativeKeyEvent representing either a key release or key press.
      * @throws IllegalStateException if the given NativeKeyEvent is other event type than key press or release
      */
-    public KeyboardAction(NativeKeyEvent nativeKeyEvent) throws IllegalStateException {
+    public KeyboardAction(NativeKeyEvent nativeKeyEvent, long relativeExecutionTime) throws IllegalStateException {
+        super(relativeExecutionTime);
         super.actionType = ActionType.KEYBOARD_INPUT; // sets the actionType to keyboard input
         this.keyType = this.getKeyType(nativeKeyEvent);
         this.nativeKeyText = NativeKeyEvent.getKeyText(nativeKeyEvent.getKeyCode());

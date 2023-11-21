@@ -19,9 +19,10 @@ package com.brnd.action_recorder.record.capturing;
 import com.brnd.action_recorder.data.Database;
 import com.brnd.action_recorder.views.recording.Recording;
 import com.brnd.action_recorder.views.recording.recording_saving_view.RecordingsRepository;
-import com.brnd.action_recorder.views.recording.recording_start_view.InteractionRecorder;
-import static com.brnd.action_recorder.views.recording.recording_start_view.InteractionRecorder.logger;
-import com.brnd.action_recorder.views.recording.recording_start_view.RecorderConfiguration;
+import com.brnd.action_recorder.views.recording.recording_start_view.NativeRecorder;
+import com.brnd.action_recorder.views.recording.recording_start_view.ReplayableNativeRecorder;
+import static com.brnd.action_recorder.views.recording.recording_start_view.ReplayableNativeRecorder.logger;
+import com.brnd.action_recorder.views.recording.recording_start_view.RecordingConfiguration;
 import com.github.kwhat.jnativehook.NativeHookException;
 import java.sql.SQLException;
 import java.util.Timer;
@@ -37,26 +38,26 @@ public class RecorderTest {
 //        Database.deleteDatabase();// deletes previous databases
         Database.initializeDatabase(); // Initialize database
 
-        InteractionRecorder interactionRecorder = new InteractionRecorder();
+        NativeRecorder actionsRecorder = new ReplayableNativeRecorder();
         RecordingsRepository recordingsRepository = new RecordingsRepository();
 
-        RecorderConfiguration recorderConfiguration = new RecorderConfiguration(
+        RecordingConfiguration recordingConfiguration = new RecordingConfiguration(
                 true
                 , false
                 , true
                 , true
         );
 
-        interactionRecorder.startRecording(recorderConfiguration);
+        actionsRecorder.startRecording(recordingConfiguration);
         
         
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                interactionRecorder.stopRecording();
+                actionsRecorder.stopRecording();
                 
-                Recording recordedRecording = interactionRecorder.getlastRecording();
+                Recording recordedRecording = actionsRecorder.getLastRecording();
                 recordedRecording.setRecordingTitle("Recording test");
                 recordedRecording.setRecordingDescription("A recording to test correct recording functionality behavior");
                 int recordingId = recordingsRepository.insertRecording(recordedRecording);

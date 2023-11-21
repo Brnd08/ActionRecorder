@@ -34,7 +34,8 @@ public abstract class MouseAction extends ReplayableAction {
      * @param eventX         the mouse X coordinate in which the action will be executed
      * @param eventY         the mouse Y coordinate in which the action will be executed
      */
-    protected MouseAction(MouseEventType mouseEventType, int eventX, int eventY) {
+    protected MouseAction(MouseEventType mouseEventType, int eventX, int eventY, long relativeExecutionTime) {
+        super(relativeExecutionTime);
         super.actionType = ActionType.MOUSE_INPUT;
         this.mouseEventType = mouseEventType;
         this.mouseX = eventX;
