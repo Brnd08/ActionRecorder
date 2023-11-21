@@ -38,7 +38,11 @@ public enum DatabaseTable {
             new String[]{"recording_description", "VARCHAR(30)"},
             new String[]{"recording_timestamp", "VARCHAR(20)"},
             new String[]{"recording_duration", "FLOAT"},
-            new String[]{"recording_input_events", "BLOB"}
+            new String[]{"recording_input_events", "BLOB"},
+            new String[]{"recording_mouse_events", "BOOLEAN DEFAULT FALSE"},
+            new String[]{"recording_keyboard_events", "BOOLEAN DEFAULT FALSE"},
+            new String[]{"recording_scroll_events", "BOOLEAN DEFAULT FALSE"},
+            new String[]{"recording_click_events", "BOOLEAN DEFAULT FALSE"}
     );
 	
     private final LinkedHashMap<String, String> fieldsMap = new LinkedHashMap<>();

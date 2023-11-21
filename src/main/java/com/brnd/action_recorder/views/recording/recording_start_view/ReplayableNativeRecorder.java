@@ -83,12 +83,18 @@ public class ReplayableNativeRecorder implements NativeRecorder {
         GlobalScreen.setEventDispatcher(new SwingDispatchService());// Force JNativeHook to use the Swing thread
         GlobalScreen.registerNativeHook(); // Enables native hook
 
-        logger.log(Level.TRACE, "Creating new Recording");
-        this.recording = new Recording();
-        this.recordingStartTime = this.recording.getRecordingStartTime();
-
         this.recordingConfiguration = recordingConfiguration;
         logger.log(Level.TRACE, "Loading configuration: {}", this.recordingConfiguration);
+
+        logger.log(Level.TRACE, "Creating new Recording");
+        this.recording = new Recording();
+        this.recording.setClickEvents(this.recordingConfiguration.recordingMouseClickInteractions());
+        this.recording.setMouseEvents(this.recordingConfiguration.recordingMouseMotionInteractions());
+        this.recording.setKeyboardEvents(this.recordingConfiguration.recordingKeyboardInteractions());
+        this.recording.setScrollEvents(this.recordingConfiguration.recordingMouseWheelInteractions());
+        this.recordingStartTime = this.recording.getRecordingStartTime();
+
+
         loadRecordingConfiguration(); // loads the specified configuration
 
         logger.log(Level.TRACE, "Recording Started");
@@ -145,7 +151,7 @@ public class ReplayableNativeRecorder implements NativeRecorder {
             long eventTime = System.nanoTime() - this.eventsTimeOffset;
             // Adds the event to recording events along its timestamp (relative to the recording start time)
             long eventRelativeTime = eventTime - recordingStartTime;
-            this.recording.getInputEvents().put(eventRelativeTime, parseReplayableAction(event));
+            this.recording.getInputEvents().add(parseReplayableAction(event, eventRelativeTime));
 
             String paramString = event.toString();
             logger.log(Level.INFO, "Recorded : {}", paramString);
@@ -159,16 +165,17 @@ public class ReplayableNativeRecorder implements NativeRecorder {
      * Returns the corresponding ReplayableAction of the given NativeInputEvent
      *
      * @param nativeEvent The NativeInputEvent to be parsed
+     * @param relativeEventTime The event execution time relative to the Recording's start
      */
-    private ReplayableAction parseReplayableAction(NativeInputEvent nativeEvent) {
+    private ReplayableAction parseReplayableAction(NativeInputEvent nativeEvent,long relativeEventTime) {
         ReplayableAction parsedAction = null;
         if (nativeEvent instanceof NativeMouseWheelEvent mouseWheelEvent) { // scroll events
-            parsedAction = new ScrollAction(mouseWheelEvent);
+            parsedAction = new ScrollAction(mouseWheelEvent, relativeEventTime);
         } else if (nativeEvent instanceof NativeKeyEvent keyEvent) { // keyboard events
-            parsedAction = new KeyboardAction(keyEvent);
+            parsedAction = new KeyboardAction(keyEvent, relativeEventTime);
         } else if (nativeEvent instanceof NativeMouseEvent mouseEvent) { // mouse clicks and movements
             parsedAction = (mouseEvent.getID() == NativeMouseEvent.NATIVE_MOUSE_MOVED) ?
-                    new MouseMotionAction(mouseEvent) : new MouseButtonAction(mouseEvent);
+                    new MouseMotionAction(mouseEvent, relativeEventTime) : new MouseButtonAction(mouseEvent, relativeEventTime);
         }
         return parsedAction;
     }

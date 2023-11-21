@@ -31,10 +31,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.Level;
@@ -56,6 +53,10 @@ public class RecordingsRepository {
     private static final String RECORDING_DATE_FIELD = "recording_timestamp";
     private static final String RECORDING_DURATION_FIELD = "recording_duration";
     private static final String RECORDING_INPUT_EVENTS_FIELD = "recording_input_events";
+    private static final String RECORDING_MOUSE_EVENTS_FIELD= "recording_mouse_events";
+    private static final String RECORDING_KEYBOARD_EVENTS_FIELD = "recording_keyboard_events";
+    private static final String RECORDING_SCROLL_EVENTS_FIELD = "recording_scroll_events";
+    private static final String RECORDING_CLICK_EVENTS_FIELD = "recording_click_events";
 
     private static final String SELECT_RECORDING_TITLE_BY_ID_SENTENCE
             = String.format("SELECT %s FROM %s WHERE %s = (?);",
@@ -84,6 +85,30 @@ public class RecordingsRepository {
     private static final String SELECT_INPUT_EVENTS_BY_ID_SENTENCE
             = String.format("SELECT %s FROM %s WHERE %s = (?);",
             RECORDING_INPUT_EVENTS_FIELD,
+            DatabaseTable.RECORDINGS.name(),
+            RECORDING_ID_FIELD
+    );
+    private static final String SELECT_MOUSE_EVENTS_WHERE_ID_SENTENCE
+            = String.format("SELECT %s FROM %s WHERE %s = (?);",
+            RECORDING_MOUSE_EVENTS_FIELD,
+            DatabaseTable.RECORDINGS.name(),
+            RECORDING_ID_FIELD
+    );
+    private static final String SELECT_SCROLL_EVENTS_WHERE_ID_SENTENCE
+            = String.format("SELECT %s FROM %s WHERE %s = (?);",
+            RECORDING_SCROLL_EVENTS_FIELD,
+            DatabaseTable.RECORDINGS.name(),
+            RECORDING_ID_FIELD
+    );
+    private static final String SELECT_CLICK_EVENTS_WHERE_ID_SENTENCE
+            = String.format("SELECT %s FROM %s WHERE %s = (?);",
+            RECORDING_CLICK_EVENTS_FIELD,
+            DatabaseTable.RECORDINGS.name(),
+            RECORDING_ID_FIELD
+    );
+    private static final String SELECT_KEYBOARD_EVENTS_WHERE_ID_SENTENCE
+            = String.format("SELECT %s FROM %s WHERE %s = (?);",
+            RECORDING_KEYBOARD_EVENTS_FIELD,
             DatabaseTable.RECORDINGS.name(),
             RECORDING_ID_FIELD
     );
@@ -119,10 +144,35 @@ public class RecordingsRepository {
             RECORDING_ID_FIELD
     );
 
+    private static final String UPDATE_MOUSE_EVENTS_WHERE_ID_SENTENCE
+            = String.format("UPDATE %s SET %s = (?) WHERE %s = (?);",
+            DatabaseTable.RECORDINGS.name(),
+            RECORDING_MOUSE_EVENTS_FIELD,
+            RECORDING_ID_FIELD
+    );
+    private static final String UPDATE_SCROLL_EVENTS_WHERE_ID_SENTENCE
+            = String.format("UPDATE %s SET %s = (?) WHERE %s = (?);",
+            DatabaseTable.RECORDINGS.name(),
+            RECORDING_SCROLL_EVENTS_FIELD,
+            RECORDING_ID_FIELD
+    );
+    private static final String UPDATE_CLICK_EVENTS_WHERE_ID_SENTENCE
+            = String.format("UPDATE %s SET %s = (?) WHERE %s = (?);",
+            DatabaseTable.RECORDINGS.name(),
+            RECORDING_CLICK_EVENTS_FIELD,
+            RECORDING_ID_FIELD
+    );
+    private static final String UPDATE_KEYBOARD_EVENTS_WHERE_ID_SENTENCE
+            = String.format("UPDATE %s SET %s = (?) WHERE %s = (?);",
+            DatabaseTable.RECORDINGS.name(),
+            RECORDING_KEYBOARD_EVENTS_FIELD,
+            RECORDING_ID_FIELD
+    );
+
     public RecordingsRepository() {
         try {
             connection = Database.getSqliteConnection();
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
     }
@@ -135,7 +185,7 @@ public class RecordingsRepository {
             preparedStatement.setInt(1, recordingId);
             ResultSet resultSet = preparedStatement.executeQuery();
             recordingTitle = resultSet.getString(1);
-        } catch (SQLException e) {
+        } catch (Exception e) {
             logger.log(
                     Level.ERROR,
                     "Could not retrieve Recording title, using default value: {}. Exception message: {}. Excecuted query {}",
@@ -154,7 +204,7 @@ public class RecordingsRepository {
             preparedStatement.setInt(2, recordingId);
             int modifiedRows = preparedStatement.executeUpdate();
             logger.log(Level.ALL, "Succesfully execute script with a {} modified rows count", modifiedRows);
-        } catch (SQLException e) {
+        } catch (Exception e) {
             logger.log(
                     Level.ERROR,
                     "Could not update Recording title. Excecuted query {}. Exception message: {}",
@@ -163,7 +213,151 @@ public class RecordingsRepository {
             DataUtils.logSuppressedExceptions(logger, e.getSuppressed());
         }
     }
+    public boolean obtainClickEvents(int recordingId) {
+        logger.log(Level.ALL, "Retrieving recording click events boolean from database. Recording id: {}", recordingId);
+        boolean hasClickEvents= false;
 
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_CLICK_EVENTS_WHERE_ID_SENTENCE)) {
+            preparedStatement.setInt(1, recordingId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            hasClickEvents= resultSet.getBoolean(1);
+        } catch (Exception e) {
+            logger.log(
+                    Level.ERROR,
+                    "Could not retrieve Recording click events boolean , using default value: {}. Exception message: {}. Excecuted query {}",
+                    hasClickEvents, e.getMessage(), SELECT_CLICK_EVENTS_WHERE_ID_SENTENCE
+            );
+            DataUtils.logSuppressedExceptions(logger, e.getSuppressed());
+        }
+        return hasClickEvents;
+    }
+
+    public void updateClickEvents(boolean newClickEvents, int recordingId) {
+        logger.log(Level.ALL, "Updating Recording Click events boolean: ({}). Recording id: {}", newClickEvents, recordingId);
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_CLICK_EVENTS_WHERE_ID_SENTENCE)) {
+            preparedStatement.setBoolean(1, newClickEvents);
+            preparedStatement.setInt(2, recordingId);
+            int modifiedRows = preparedStatement.executeUpdate();
+            logger.log(Level.ALL, "Successfully execute script with a {} modified rows count", modifiedRows);
+        } catch (Exception e) {
+            logger.log(
+                    Level.ERROR,
+                    "Could not update Recording click events boolean. Executed query {}. Exception message: {}",
+                    UPDATE_CLICK_EVENTS_WHERE_ID_SENTENCE, e.getMessage()
+            );
+            DataUtils.logSuppressedExceptions(logger, e.getSuppressed());
+        }
+    }
+
+    public boolean obtainScrollEvents(int recordingId) {
+        logger.log(Level.ALL, "Retrieving recording scroll events boolean from database. Recording id: {}", recordingId);
+        boolean hasScrollEvents= false;
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_SCROLL_EVENTS_WHERE_ID_SENTENCE)) {
+            preparedStatement.setInt(1, recordingId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            hasScrollEvents = resultSet.getBoolean(1);
+        } catch (Exception e) {
+            logger.log(
+                    Level.ERROR,
+                    "Could not retrieve Recording scroll events boolean , using default value: {}. Exception message: {}. Excecuted query {}",
+                    hasScrollEvents, e.getMessage(), SELECT_SCROLL_EVENTS_WHERE_ID_SENTENCE
+            );
+            DataUtils.logSuppressedExceptions(logger, e.getSuppressed());
+        }
+        return hasScrollEvents;
+    }
+
+    public void updateScrollEvents(boolean newScrollEvents, int recordingId) {
+        logger.log(Level.ALL, "Updating Recording MouseEvents boolean: ({}). Recording id: {}", newScrollEvents, recordingId);
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_SCROLL_EVENTS_WHERE_ID_SENTENCE)) {
+            preparedStatement.setBoolean(1, newScrollEvents);
+            preparedStatement.setInt(2, recordingId);
+            int modifiedRows = preparedStatement.executeUpdate();
+            logger.log(Level.ALL, "Succesfully execute script with a {} modified rows count", modifiedRows);
+        } catch (Exception e) {
+            logger.log(
+                    Level.ERROR,
+                    "Could not update Recording scroll events boolean. Executed query {}. Exception message: {}",
+                    UPDATE_SCROLL_EVENTS_WHERE_ID_SENTENCE, e.getMessage()
+            );
+            DataUtils.logSuppressedExceptions(logger, e.getSuppressed());
+        }
+    }
+    public boolean obtainMouseEvents(int recordingId) {
+        logger.log(Level.ALL, "Retrieving recording mouse events boolean from database. Recording id: {}", recordingId);
+        boolean hasMouseEvents = false;
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_MOUSE_EVENTS_WHERE_ID_SENTENCE)) {
+            preparedStatement.setInt(1, recordingId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            hasMouseEvents = resultSet.getBoolean(1);
+        } catch (Exception e) {
+            logger.log(
+                    Level.ERROR,
+                    "Could not retrieve Recording mouse events boolean , using default value: {}. Exception message: {}. Excecuted query {}",
+                    hasMouseEvents, e.getMessage(), SELECT_MOUSE_EVENTS_WHERE_ID_SENTENCE
+            );
+            DataUtils.logSuppressedExceptions(logger, e.getSuppressed());
+        }
+        return hasMouseEvents;
+    }
+
+    public void updateMouseEvents(boolean newMouseEvents, int recordingId) {
+        logger.log(Level.ALL, "Updating Recording MouseEvents boolean: ({}). Recording id: {}", newMouseEvents, recordingId);
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_MOUSE_EVENTS_WHERE_ID_SENTENCE)) {
+            preparedStatement.setBoolean(1, newMouseEvents);
+            preparedStatement.setInt(2, recordingId);
+            int modifiedRows = preparedStatement.executeUpdate();
+            logger.log(Level.ALL, "Succesfully execute script with a {} modified rows count", modifiedRows);
+        } catch (Exception e) {
+            logger.log(
+                    Level.ERROR,
+                    "Could not update Recording mouseEvents boolean. Excecuted query {}. Exception message: {}",
+                    UPDATE_MOUSE_EVENTS_WHERE_ID_SENTENCE, e.getMessage()
+            );
+            DataUtils.logSuppressedExceptions(logger, e.getSuppressed());
+        }
+    }
+    public boolean obtainKeyboardEvents(int recordingId) {
+        logger.log(Level.ALL, "Retrieving recording keyboard events boolean from database. Recording id: {}", recordingId);
+        boolean hasKeyboardEvents= false;
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_KEYBOARD_EVENTS_WHERE_ID_SENTENCE)) {
+            preparedStatement.setInt(1, recordingId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            hasKeyboardEvents= resultSet.getBoolean(1);
+        } catch (Exception e) {
+            logger.log(
+                    Level.ERROR,
+                    "Could not retrieve Recording keyboard events boolean , using default value: {}. Exception message: {}. Executed query {}",
+                    hasKeyboardEvents, e.getMessage(), SELECT_KEYBOARD_EVENTS_WHERE_ID_SENTENCE
+            );
+            DataUtils.logSuppressedExceptions(logger, e.getSuppressed());
+        }
+        return hasKeyboardEvents;
+    }
+
+    public void updateKeyboardEvents(boolean newKeyboardEvents, int recordingId) {
+        logger.log(Level.ALL, "Updating Recording Keyboard events boolean: ({}). Recording id: {}", newKeyboardEvents, recordingId);
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_KEYBOARD_EVENTS_WHERE_ID_SENTENCE)) {
+            preparedStatement.setBoolean(1, newKeyboardEvents);
+            preparedStatement.setInt(2, recordingId);
+            int modifiedRows = preparedStatement.executeUpdate();
+            logger.log(Level.ALL, "Succesfully execute script with a {} modified rows count", modifiedRows);
+        } catch (Exception e) {
+            logger.log(
+                    Level.ERROR,
+                    "Could not update Recording keyboard events boolean. Executed query {}. Exception message: {}",
+                    SELECT_KEYBOARD_EVENTS_WHERE_ID_SENTENCE, e.getMessage()
+            );
+            DataUtils.logSuppressedExceptions(logger, e.getSuppressed());
+        }
+    }
     public String obtainRecordingDescription(int recordingId) {
         logger.log(Level.ALL, "Retrieving recording description from database. Recording id: {}", recordingId);
         String recordingDescription = null;
@@ -172,7 +366,7 @@ public class RecordingsRepository {
             preparedStatement.setInt(1, recordingId);
             ResultSet resultSet = preparedStatement.executeQuery();
             recordingDescription = resultSet.getString(1);
-        } catch (SQLException e) {
+        } catch (Exception e) {
             logger.log(
                     Level.ERROR,
                     "Could not retrieve Recording description, using default value: {}. Exception message: {}. Excecuted query {}",
@@ -191,7 +385,7 @@ public class RecordingsRepository {
             preparedStatement.setInt(2, recordingId);
             int modifiedRows = preparedStatement.executeUpdate();
             logger.log(Level.ALL, "Succesfully execute script with a {} modified rows count", modifiedRows);
-        } catch (SQLException e) {
+        } catch (Exception e) {
             logger.log(
                     Level.ERROR,
                     "Could not update Recording description. Excecuted query {}. Exception message: {}",
@@ -210,7 +404,7 @@ public class RecordingsRepository {
             ResultSet resultSet = preparedStatement.executeQuery();
             String retrievedDate = resultSet.getString(1);
             recordingDate = LocalDate.parse(retrievedDate, DateTimeFormatter.ofPattern(Recording.DATE_TIME_FORMAT));
-        } catch (SQLException e) {
+        } catch (Exception e) {
             logger.log(
                     Level.ERROR,
                     "Could not retrieve Recording  date, using default value: {}. Exception message: {}. Excecuted query {}",
@@ -235,7 +429,7 @@ public class RecordingsRepository {
             int modifiedRows = preparedStatement.executeUpdate();
             logger.log(Level.ALL, "Succesfully execute script with a {} modified rows count",
                     modifiedRows);
-        } catch (SQLException e) {
+        } catch (Exception e) {
             logger.log(
                     Level.ERROR,
                     "Could not update Recording date value. Excecuted query {}. Exception message: {}",
@@ -253,7 +447,7 @@ public class RecordingsRepository {
             preparedStatement.setInt(1, recordingId);
             ResultSet resultSet = preparedStatement.executeQuery();
             recordingDuration = resultSet.getFloat(1);
-        } catch (SQLException e) {
+        } catch (Exception e) {
             logger.log(
                     Level.ERROR,
                     "Could not retrieve Recording duration, using default value: {}. Exception message: {}. Excecuted query {}",
@@ -273,7 +467,7 @@ public class RecordingsRepository {
             int modifiedRows = preparedStatement.executeUpdate();
 
             logger.log(Level.ALL, "Succesfully execute script with a {} modified rows count", modifiedRows);
-        } catch (SQLException e) {
+        } catch (Exception e) {
             logger.log(
                     Level.ERROR,
                     "Could not update Recording duration value. Excecuted query {}. Exception message: {}",
@@ -305,8 +499,8 @@ public class RecordingsRepository {
         return inputEvents;
     }
 
-    public <T extends Map<Long, ReplayableAction>  & Serializable> void updateRecordingInputEvents(T inputEvents, int recordingId) {
-        String inputEventsString = inputEvents.values().stream().map(ReplayableAction::toString).collect(Collectors.joining("\t"));
+    public <T extends Queue<ReplayableAction>  & Serializable> void updateRecordingInputEvents(T inputEvents, int recordingId) {
+        String inputEventsString = inputEvents.stream().map(ReplayableAction::toString).collect(Collectors.joining("\t"));
         logger.log(Level.ALL, "Updating database Recording input events: ({}). \n Recording id: {}", inputEventsString, recordingId);
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_INPUT_EVENTS_WHERE_ID_SENTENCE)) {
@@ -337,7 +531,7 @@ public class RecordingsRepository {
             preparedStatement.setInt(1, recordingId);
             try (ResultSet resultSet = preparedStatement.executeQuery()) { //obtains the resultset from the query execution
                 resultSet.next(); // moves iterator to first result
-                retrievedRecording = RecordingMapper.mapRecordingFromResultSet(resultSet);//asign the retrievedRecording usin the Recording mapper
+                retrievedRecording = RecordingMapper.mapRecordingFromResultSet(resultSet);//assigns the retrievedRecording using the Recording mapper
             }
             logger.log(Level.ALL, "Return retrieved Recording {}", retrievedRecording);
         } catch (SQLException | IOException | ClassNotFoundException e) {
@@ -366,7 +560,7 @@ public class RecordingsRepository {
                 newRowId = resultSet.getInt(RECORDING_ID_FIELD);
             }
             logger.log(Level.ALL, "A new empty Recording was inserted on database with id: {}", newRowId);
-        } catch (SQLException e) {
+        } catch (Exception e) {
             logger.log(
                     Level.ERROR,
                     "Could not insert the Recording. Returning default value for insertedId {}. Excecuted query {}. Exception message: {}",
@@ -381,7 +575,11 @@ public class RecordingsRepository {
             this.updateRecordingDescription(recordingToInsert.getRecordingDescription(), newRowId);
             this.updateRecordingDate(recordingToInsert.getRecordingDateTime(), newRowId);
             this.updateRecordingDuration(recordingToInsert.getRecordingDuration(), newRowId);
-            this.updateRecordingInputEvents((LinkedHashMap<Long, ReplayableAction>) recordingToInsert.getInputEvents(), newRowId);
+            this.updateMouseEvents(recordingToInsert.isMouseEvents(), newRowId);
+            this.updateClickEvents(recordingToInsert.isClickEvents(), newRowId);
+            this.updateKeyboardEvents(recordingToInsert.isKeyboardEvents(), newRowId);
+            this.updateScrollEvents(recordingToInsert.isScrollEvents(), newRowId);
+            this.updateRecordingInputEvents((LinkedList<ReplayableAction>)recordingToInsert.getInputEvents(), newRowId);
         }
         return newRowId;
     }
@@ -433,22 +631,23 @@ public class RecordingsRepository {
          * @return Recording containing the information specified in the result
          * set
          * @throws SQLException           if an exception related to jdbc
-         * @throws IOException            if an exception occur while deserializing the
+         * @throws IOException            if an exception occurs while deserializing the
          *                                recording input events field content
          * @throws ClassNotFoundException if the class containing the input
-         *                                events field can not be found
+         *                                events field could not be found
          */
         public static Recording mapRecordingFromResultSet(ResultSet resultSet) throws SQLException, IOException, ClassNotFoundException {
 
             Recording mappedRecording;
             var recordingInputEvents = DataUtils.objectFromBytes(
-                    resultSet.getBytes(RECORDING_INPUT_EVENTS_FIELD), LinkedHashMap.class
+                    resultSet.getBytes(RECORDING_INPUT_EVENTS_FIELD), LinkedList.class
             );
             var recordingDuration = resultSet.getFloat(RECORDING_DURATION_FIELD);
             var retrievedDateTime = resultSet.getString(RECORDING_DATE_FIELD);
             var recordingTitle = resultSet.getString(RECORDING_TITLE_FIELD);
             var recordingDescription = resultSet.getString(RECORDING_DESCRIPTION_FIELD);
             var recordingId = resultSet.getInt(RECORDING_ID_FIELD);
+
             mappedRecording = new Recording(
                     recordingId,
                     recordingInputEvents,
@@ -457,6 +656,17 @@ public class RecordingsRepository {
                     recordingDuration,
                     LocalDateTime.parse(retrievedDateTime, DateTimeFormatter.ofPattern(Recording.DATE_TIME_FORMAT))
             );
+
+            var hasMouseEvents = resultSet.getBoolean(RECORDING_MOUSE_EVENTS_FIELD);
+            var hasKeyboardEvents = resultSet.getBoolean(RECORDING_KEYBOARD_EVENTS_FIELD);
+            var hasScrollEvents= resultSet.getBoolean(RECORDING_SCROLL_EVENTS_FIELD);
+            var hasClickEvents= resultSet.getBoolean(RECORDING_CLICK_EVENTS_FIELD);
+
+            mappedRecording.setMouseEvents(hasMouseEvents);
+            mappedRecording.setKeyboardEvents(hasKeyboardEvents);
+            mappedRecording.setScrollEvents(hasScrollEvents);
+            mappedRecording.setClickEvents(hasClickEvents);
+
             return mappedRecording;
         }
     }

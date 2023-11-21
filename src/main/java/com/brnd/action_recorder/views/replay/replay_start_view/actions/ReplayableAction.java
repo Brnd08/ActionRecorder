@@ -24,6 +24,13 @@ import java.io.Serializable;
  * Represents a user-computer interaction which can be reproduced by the program
  */
 public abstract class ReplayableAction implements Serializable {
+
+    private final long relativeExecutionTime;
+
+    protected ReplayableAction(long relativeExecutionTime) {
+        this.relativeExecutionTime = relativeExecutionTime;
+    }
+
     @Serial
     private static final long serialVersionUID = -8544470766687535649L;
     protected ActionType actionType;
@@ -62,5 +69,8 @@ public abstract class ReplayableAction implements Serializable {
         sb.append("actionType=").append(this.actionType);
         sb.append("}");
         return sb.toString();
+    }
+    public long getRelativeExecutionTime() {
+        return relativeExecutionTime;
     }
 }
