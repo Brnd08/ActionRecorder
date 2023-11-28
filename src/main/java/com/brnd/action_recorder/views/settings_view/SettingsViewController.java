@@ -18,14 +18,13 @@ package com.brnd.action_recorder.views.settings_view;
 
 import com.brnd.action_recorder.views.main_view.Main;
 import com.brnd.action_recorder.views.utils.StageLocation;
+import com.brnd.action_recorder.views.utils.StagePositioner;
 import com.brnd.action_recorder.views.utils.ViewController;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.stage.Stage;
 import org.apache.logging.log4j.Level;
 
 import java.io.IOException;
@@ -51,6 +50,8 @@ public class SettingsViewController implements ViewController, Initializable {
     @FXML
     CheckBox alwaysOnTopCheckBox;
     @FXML
+    CheckBox rememberRecordingConfig;
+    @FXML
     ChoiceBox<String> positionChoiceBox;
 
     
@@ -58,6 +59,7 @@ public class SettingsViewController implements ViewController, Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         loadSavedSettings();
         configurePositionChoiceFunctionality();
+        configureRememberRecordConfig();
         configureAlwaysOnTopFunctionality();
     }
 
@@ -82,6 +84,20 @@ public class SettingsViewController implements ViewController, Initializable {
     }
 
     /**
+     * Sets the needed configuration for remember last record config
+     */
+    private void configureRememberRecordConfig() {
+
+        // sets selecting depending on showAlways on top value
+        rememberRecordingConfig.setSelected(currentSettings.isRemberRecordConfig());
+
+        rememberRecordingConfig.setOnAction(actionEvent -> {
+            currentSettings.setRememberRecordConfig(rememberRecordingConfig.isSelected());
+            logger.log(Level.INFO, "Remember record config selected value: {}" , currentSettings.isShowAlwaysOnTopEnabled() );
+        });
+    }
+
+    /**
      * Sets the needed configuration for the show always on top feature
      */
     private void configureAlwaysOnTopFunctionality() {
@@ -94,20 +110,20 @@ public class SettingsViewController implements ViewController, Initializable {
             currentSettings.setShowAlwaysOnTop(alwaysOnTopCheckBox.isSelected());
             logger.log(Level.INFO, "Always on top selected value: {}" , currentSettings.isShowAlwaysOnTopEnabled() );
         });
-
+        rememberRecordingConfig.setOnAction(actionEvent ->{
+            currentSettings.setRememberRecordConfig(rememberRecordingConfig.isSelected());
+            logger.log(Level.INFO, "Remember record config selected value: {}" , currentSettings.isShowAlwaysOnTopEnabled() );
+        });
     }
-    
-
 
     /**
      * Saves the current settings in the database
      */
     @FXML
-    public void saveConfigurationOnDatabase() {
-
-        saveSettings(currentSettings);
-
+    public void saveConfigurationOnDatabase(Event event) throws IOException {
+        this.saveSettings(currentSettings);
         logger.log(Level.INFO, "SAVED SETTINGS {}", currentSettings);
+        this.navigateToMainView(event);
     }
 
     /**
@@ -116,7 +132,8 @@ public class SettingsViewController implements ViewController, Initializable {
      */
     private void saveSettings(Settings settings){
         Main.settingsRepository.saveInitialStageLocation(settings.getInitialViewLocation());
-        Main.settingsRepository.saveShowOnTopValue(settings.isShowAlwaysOnTopEnabled());        
+        Main.settingsRepository.saveShowOnTopValue(settings.isShowAlwaysOnTopEnabled());
+        Main.settingsRepository.saveRememberRecordConfig(settings.isRemberRecordConfig());
     }
 
     /**
@@ -124,10 +141,11 @@ public class SettingsViewController implements ViewController, Initializable {
      */
     private void loadSavedSettings(){
         this.currentSettings = new Settings (
-                Main.settingsRepository.obtainInitialStageLocation()
-                ,Main.settingsRepository.obtainShowOnTopValue()
+                Main.settingsRepository.obtainInitialStageLocation(),
+                Main.settingsRepository.obtainShowOnTopValue(),
+                Main.settingsRepository.obtainRememberRecordConfig()
         );
-        logger.log(Level.INFO, "Successfully load settings ({}) from database", this.currentSettings.toString() );
+        logger.log(Level.INFO, "Successfully load settings ({}) from database", this.currentSettings);
 
     }
     @FXML
