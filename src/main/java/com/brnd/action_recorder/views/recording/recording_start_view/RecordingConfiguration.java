@@ -16,6 +16,8 @@
  */
 package com.brnd.action_recorder.views.recording.recording_start_view;
 
+import java.io.Serializable;
+
 /**
  * This record class is used to store recording configurations
  * @param recordingKeyboardInteractions whether record Keyboard events (Key presses and releases)
@@ -28,7 +30,7 @@ public record RecordingConfiguration(
         boolean recordingMouseMotionInteractions,
         boolean recordingMouseClickInteractions,
         boolean recordingMouseWheelInteractions
-        ) {
+        )  implements Serializable {
     
     /**
      * Verifies if at least one of the available boolean variables corresponding to the native listeners 

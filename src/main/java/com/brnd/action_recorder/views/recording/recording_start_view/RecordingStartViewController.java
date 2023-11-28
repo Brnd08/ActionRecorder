@@ -16,6 +16,7 @@
  */
 package com.brnd.action_recorder.views.recording.recording_start_view;
 
+import com.brnd.action_recorder.views.main_view.Main;
 import com.brnd.action_recorder.views.recording.Recording;
 import com.brnd.action_recorder.views.utils.StagePositioner;
 import com.brnd.action_recorder.views.utils.ViewController;
@@ -78,10 +79,26 @@ public class RecordingStartViewController implements Initializable, ViewControll
     private final ToggleGroup recordModeToggleGroup = new ToggleGroup();
     private boolean isRecording = false;
     private FXTrayIcon trayIcon;
+    private boolean rememberRecordingConfig;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) { //runs at controller initialization
         configureRecordModeToogleGroup();
+        this.rememberRecordingConfig = Main.settingsRepository.obtainRememberRecordConfig();
+        loadLastRecordConfigs();
+    }
+
+    /**
+     * Loads the last recording settings if enabled.
+     */
+    private void loadLastRecordConfigs() {
+        if(!this.rememberRecordingConfig)
+            return;
+        RecordingConfiguration lastRecordConfig = Main.settingsRepository.obtainLastRecordConfig();
+        this.recordKeyboardCheckBox.setSelected(lastRecordConfig.recordingKeyboardInteractions());
+        this.recordMouseClicksCheckBox.setSelected(lastRecordConfig.recordingMouseClickInteractions());
+        this.recordMouseWheelCheckBox.setSelected(lastRecordConfig.recordingMouseWheelInteractions());
+        this.recordMouseMotionCheckBox.setSelected(lastRecordConfig.recordingMouseMotionInteractions());
     }
 
     /**
@@ -95,6 +112,7 @@ public class RecordingStartViewController implements Initializable, ViewControll
         RecordingConfiguration recordingConfiguration = this.obtainRecordingConfigurationFromGUI();
 
         if (recordingConfiguration.isAtLeastOneListenerEnabled()) {
+            Main.settingsRepository.saveLastRecordConfig(recordingConfiguration);
             try {
                 logger.log(Level.INFO, "Starting Recording with following configuration: {}", recordingConfiguration);
                 this.actionsRecorder.startRecording(recordingConfiguration);
@@ -105,7 +123,7 @@ public class RecordingStartViewController implements Initializable, ViewControll
                         recordingConfiguration, exception);
             }
         } else {
-            /* if no listeners were selected shows an alert requesting to select at leat one*/
+            /* if no listeners were selected shows an alert requesting to select at least one*/
             ViewController.createCustomAlert(
                     Alert.AlertType.WARNING, "Selecciona al menos un evento para grabar", "Configuración inválida - Action Recorder", currentStage, ButtonType.OK
             ).show();
