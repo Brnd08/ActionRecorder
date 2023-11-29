@@ -25,13 +25,17 @@ public class Settings {
     public static final Settings DEFAULT_SETTINGS = new Settings(StageLocation.CENTER, true);
     private StageLocation initialViewLocation;
     private boolean showAlwaysOnTop;
+    private boolean rememberRecordConfig;
+
     public Settings(StageLocation initialViewLocation, boolean showAlwaysOnTop) {
         this.initialViewLocation = initialViewLocation;
         this.showAlwaysOnTop = showAlwaysOnTop;
     }
-    public Settings(StageLocation initialViewLocation, boolean showAlwaysOnTop, boolean useSystemTray){
+
+    public Settings(StageLocation initialViewLocation, boolean showAlwaysOnTop, boolean rememberRecordConfig) {
         this.initialViewLocation = initialViewLocation;
         this.showAlwaysOnTop = showAlwaysOnTop;
+        this.rememberRecordConfig = rememberRecordConfig;
     }
 
     @Override
@@ -39,6 +43,7 @@ public class Settings {
         final StringBuilder sb = new StringBuilder("Settings{");
         sb.append("initialViewLocation=").append(initialViewLocation);
         sb.append(", showAlwaysOnTop=").append(showAlwaysOnTop);
+        sb.append(", rememberRecordConfig=").append(rememberRecordConfig);
         sb.append('}');
         return sb.toString();
     }
@@ -77,5 +82,16 @@ public class Settings {
         this.showAlwaysOnTop = showAlwaysOnTop;
     }
 
+    public boolean isShowAlwaysOnTop() {
+        return showAlwaysOnTop;
+    }
+
+    public void setRememberRecordConfig(boolean remberRecordConfig) {
+        this.rememberRecordConfig = remberRecordConfig;
+    }
+
+    public boolean isRemberRecordConfig() {
+        return rememberRecordConfig;
+    }
 
 }

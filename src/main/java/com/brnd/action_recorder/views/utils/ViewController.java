@@ -24,6 +24,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.paint.Color;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.apache.logging.log4j.Level;
@@ -45,11 +46,11 @@ import javafx.scene.input.InputEvent;
 public interface ViewController {
 
     /**
-     * Configures, loads and show a specific view in to the specified Stage
+     * Configures, styles, loads and show a specific view in to the specified Stage.
      *
-     * @param stage the Stage to be used to display the view
+     * @param stage the Stage to be used to display the view. This Stage should never have been set visible
      * @param view the desired view constant to be showed
-     * @throws IOException if and exception occurs when loading the fxml file of
+     * @throws IOException if and exception occur when loading the fxml file of
      * the view
      */
 
@@ -61,12 +62,12 @@ public interface ViewController {
         try {
             fxmlLoader
                     = new FXMLLoader(
-                            Objects.requireNonNull(
-                                    ViewEnum.class.getResource(
-                                            view.getFxmlPath() // get the fxml file path from View constant
-                                    )
+                    Objects.requireNonNull(
+                            ViewEnum.class.getResource(
+                                    view.getFxmlPath() // get the fxml file path from View constant
                             )
-                    );
+                    )
+            );
         } catch (NullPointerException e) {
             logger.log(Level.FATAL, "Could not find fxml file. fxml specified path: {}", view.getFxmlPath(), e);
             throw e;
@@ -79,7 +80,7 @@ public interface ViewController {
             logger.log(Level.FATAL, "Something went wrong while loading FXML file, verify its declared controller class or sintax:", e);
             throw e;
         }
-        
+
         logger.log(Level.TRACE, "Configuring {} view", view.name());
         // Add the fxml view to a new scene with the previous scene width and height
         Scene newScene = new Scene(root);
@@ -114,6 +115,69 @@ public interface ViewController {
     }
 
     /**
+     * Configures, loads and show a specific scene in to the specified Stage.
+     *
+     * @param stage the Stage to be used to display the scene.
+     * @param view the desired view constant to be showed
+     * @throws IOException if and exception occur when loading the fxml file of
+     * the view
+     */
+
+    public static void loadScene(Stage stage, ViewEnum view) throws IOException {
+        logger.log(Level.TRACE, "Opening {} view", view.name());
+        // Load Fxml view
+        FXMLLoader fxmlLoader;
+        logger.log(Level.TRACE, "Creating FXMLLoader for {} view with fxml path {}", view.name(), view.getFxmlPath());
+        try {
+            fxmlLoader
+                    = new FXMLLoader(
+                    Objects.requireNonNull(
+                            ViewEnum.class.getResource(
+                                    view.getFxmlPath() // get the fxml file path from View constant
+                            )
+                    )
+            );
+        } catch (NullPointerException e) {
+            logger.log(Level.FATAL, "Could not find fxml file. fxml specified path: {}", view.getFxmlPath(), e);
+            throw e;
+        }
+
+        Parent root;
+        try {
+            root = fxmlLoader.load();
+        } catch (Exception e) {
+            logger.log(Level.FATAL, "Something went wrong while loading FXML file, verify its declared controller class or sintax:", e);
+            throw e;
+        }
+
+        logger.log(Level.TRACE, "Configuring {} view", view.name());
+        // Add the fxml view to a new scene with the previous scene width and height
+        Scene newScene = new Scene(root);
+
+        // Needed configuration to make the application background transparent
+        newScene.setFill(Color.TRANSPARENT);
+
+        // Modify the stage title
+        stage.setTitle(view.getStageTitle());
+
+        // Adds the new scene to the Stage
+        stage.setScene(newScene);
+
+        // Sets show on view enabled or disabled depending on specific value
+        boolean alwaysOnTop = Main.settingsRepository.obtainShowOnTopValue();
+
+        // makes stage draggable by mouse interaction
+        StagePositioner.addDragFunctionalityToStage(stage, newScene);
+
+        logger.log(Level.TRACE, "Using alwaysOnTop value {} for the view.", alwaysOnTop);
+        stage.setAlwaysOnTop(alwaysOnTop);
+
+        logger.log(Level.TRACE, "Showing {} view", view.name());
+        // display the stage on the screen
+        stage.show();
+    }
+
+    /**
      * Opens the desired view and closes the view from where this method was
      * called
      *
@@ -129,14 +193,8 @@ public interface ViewController {
 
         logger.log(Level.TRACE, "Navigating to {} view from {} view", nextView.name(), ViewEnum.fromTitle(previousStage.getTitle()));
 
-        Stage nextStage = new Stage(); // instantiates the new stage
-
-        openView(nextStage, nextView); // configures and displays the new stage
-        // positions the new stage in the same place as the previous stage
-        nextStage.setX(previousStage.getX());
-        nextStage.setY(previousStage.getY());
+        loadScene(previousStage, nextView); // configures and displays the new scene
         logger.log(Level.TRACE, "Closing {} view ", ViewEnum.fromTitle(previousStage.getTitle()));
-        previousStage.close();
     }
 
     /**
@@ -210,8 +268,13 @@ public interface ViewController {
     private static Alert  styleAlert(Alert alert) {
         DialogPane alertPane = alert.getDialogPane();
         alertPane.setStyle(
-                "-fx-background-color: #e0e0e0;" + "-fx-border-color: #03a9f4;"
-                + "-fx-border-width: 4px;" + "-border-radius: 8px;" + "-fx-background-radius: 12px;"
+                """
+                        -fx-backgound-color: #e0e0e0;
+                        -fx-border-color: #03a9f4;
+                        -fx-border-width: 4px;
+                        -fx-border-radius: 8px;
+                        -fx-background-radius: 12px;
+                """
         );
         Scene alertScene = alertPane.getScene();
         Stage alertStage = (Stage) alertScene.getWindow();

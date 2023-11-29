@@ -27,7 +27,7 @@ import javafx.stage.Stage;
 
 /**
  * This class provides methods for Window positioning, as window drag implementation or
- * positioning the stage based on specified location
+ * positioning the stage based on a specified location
  */
 public abstract class StagePositioner {
     // Coordinates Offsets for window drag action/motion
@@ -42,6 +42,7 @@ public abstract class StagePositioner {
     /**
      * Makes the specified Stage draggable based on given scene interactions
      *
+     * @param stage The Stage to make draggable
      * @param scene The scene to link to the drag motion/action
      */
     public static void addDragFunctionalityToStage(Stage stage, Scene scene) {
@@ -95,8 +96,8 @@ public abstract class StagePositioner {
                 stageXCoordinate = screenWidth - stageWidth;
             }
             case CENTER -> {
-                stageYCoordinate = (screenHeight - stageHeight) / 2;
-                stageXCoordinate = (screenWidth - stageWidth) / 2;
+                stageYCoordinate = (screenHeight - stageHeight) / 2d;
+                stageXCoordinate = (screenWidth - stageWidth) / 2d;
             }
         }
         // set calculated coordinates to the stage
@@ -107,7 +108,7 @@ public abstract class StagePositioner {
     /**
      * Gets the specific stage from where this event was triggered
      * @param event The input event
-     * @return a The corresponding stage to the input event
+     * @return The corresponding stage for the input event
      */
     public static Stage getStageFromEvent(Event event){
         return ((Stage) (((Node) event.getSource()).getScene().getWindow()));

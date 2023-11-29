@@ -198,7 +198,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
                               </Label>
                               <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="39.0" prefWidth="324.0">
                                  <children>
-                                    <CheckBox fx:id="recordKeyboardCheckBox" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="41.0" prefWidth="86.0" selected="true" styleClass="primaryButton" text="Teclado" textAlignment="CENTER">
+                                    <CheckBox fx:id="recordKeyboardCheckBox" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="41.0" prefWidth="86.0" styleClass="primaryButton" text="Teclado" textAlignment="CENTER">
                                        <HBox.margin>
                                           <Insets left="3.0" />
                                        </HBox.margin>
